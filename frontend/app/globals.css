@@ -296,3 +296,11 @@ body {
 .animate-donut-segment {
   animation: donutSegmentDraw 1.2s ease-out forwards;
 }
+
+/* Line clamp utility for text truncation */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

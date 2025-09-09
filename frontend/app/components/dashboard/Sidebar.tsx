@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { useSidebar } from '../../contexts/SidebarContext';
 
 const navigation = [
+  { name: 'Dashboard', href: '/dashboard', icon: '📊' },
   { name: 'Problems', href: '/problems', icon: '💻' },
   { name: 'Applications', href: '/applications', icon: '📝' },
   { name: 'Statistics', href: '/statistics', icon: '📈' },
@@ -71,7 +72,7 @@ export default function Sidebar() {
               General
             </h3>
           )}
-          {navigation.slice(0, 2).map((item) => {
+          {navigation.slice(0, 3).map((item) => {
             const isActive = pathname === item.href;
             return (
               <Link
@@ -79,13 +80,13 @@ export default function Sidebar() {
                 href={item.href}
                 className={`flex items-center ${isCollapsed ? 'justify-center px-2' : 'space-x-3 px-3'} py-2 rounded-lg text-sm font-medium transition-colors ${
                   isActive
-                    ? 'bg-primary text-white'
+                    ? 'bg-black text-white shadow-lg border border-gray-600'
                     : 'text-gray-700 hover:bg-gray-100'
                 }`}
                 title={isCollapsed ? item.name : undefined}
               >
                 <span className="text-lg">{item.icon}</span>
-                {!isCollapsed && <span>{item.name}</span>}
+                {!isCollapsed && <span className={isActive ? 'font-semibold' : ''}>{item.name}</span>}
               </Link>
             );
           })}
@@ -97,7 +98,7 @@ export default function Sidebar() {
               Tools
             </h3>
           )}
-          {navigation.slice(2).map((item) => {
+          {navigation.slice(3).map((item) => {
             const isActive = pathname === item.href;
             return (
               <Link
@@ -105,13 +106,13 @@ export default function Sidebar() {
                 href={item.href}
                 className={`flex items-center ${isCollapsed ? 'justify-center px-2' : 'space-x-3 px-3'} py-2 rounded-lg text-sm font-medium transition-colors ${
                   isActive
-                    ? 'bg-primary text-white'
+                    ? 'bg-black text-white shadow-lg border border-gray-600'
                     : 'text-gray-700 hover:bg-gray-100'
                 }`}
                 title={isCollapsed ? item.name : undefined}
               >
                 <span className="text-lg">{item.icon}</span>
-                {!isCollapsed && <span>{item.name}</span>}
+                {!isCollapsed && <span className={isActive ? 'font-semibold' : ''}>{item.name}</span>}
               </Link>
             );
           })}
