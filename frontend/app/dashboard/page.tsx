@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { SidebarProvider, useSidebar } from '../contexts/SidebarContext';
 import ProtectedRoute from '../components/ProtectedRoute';
 import Sidebar from '../components/dashboard/Sidebar';
 import Header from '../components/dashboard/Header';
@@ -11,10 +12,9 @@ import TimeSpentChart from '../components/dashboard/TimeSpentChart';
 import ProblemDistribution from '../components/dashboard/ProblemDistribution';
 import ApplicationsTable from '../components/dashboard/ApplicationsTable';
 
-export default function Dashboard() {
+function DashboardContent() {
   const { user, logout } = useAuth();
-  const [selectedTimeRange, setSelectedTimeRange] = useState('7days');
-  const [selectedPeriod, setSelectedPeriod] = useState('weekly');
+  const { isCollapsed } = useSidebar();
 
   // Mock data - in a real app, this would come from your backend
   const dashboardData = {
@@ -64,39 +64,35 @@ export default function Dashboard() {
             <Header 
               user={user} 
               onLogout={logout}
-              selectedTimeRange={selectedTimeRange}
-              onTimeRangeChange={setSelectedTimeRange}
-              selectedPeriod={selectedPeriod}
-              onPeriodChange={setSelectedPeriod}
             />
             
             {/* Dashboard Content */}
-            <main className="flex-1 p-6">
+            <main className="flex-1 p-8">
               {/* KPI Cards */}
               <KPICards data={dashboardData} />
               
               {/* Charts Row */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
                 {/* Progress Overview */}
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+                <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-200">
                   <ProgressChart data={dashboardData.dailyProgress} />
                 </div>
                 
                 {/* Time Spent Coding */}
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+                <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-200">
                   <TimeSpentChart data={dashboardData.dailyProgress} />
                 </div>
               </div>
               
               {/* Bottom Row */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
                 {/* Problem Distribution */}
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+                <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-200">
                   <ProblemDistribution data={dashboardData.problemsByTopic} />
                 </div>
                 
                 {/* Applications Timeline */}
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+                <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-200">
                   <ApplicationsTable data={dashboardData.recentApplications} />
                 </div>
               </div>
@@ -105,5 +101,13 @@ export default function Dashboard() {
         </div>
       </div>
     </ProtectedRoute>
+  );
+}
+
+export default function Dashboard() {
+  return (
+    <SidebarProvider>
+      <DashboardContent />
+    </SidebarProvider>
   );
 }

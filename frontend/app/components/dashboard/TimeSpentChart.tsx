@@ -15,7 +15,7 @@ export default function TimeSpentChart({ data }: TimeSpentChartProps) {
   const change = ((totalHours - previousWeekHours) / previousWeekHours) * 100;
 
   return (
-    <div>
+    <div className="animate-on-load animate-slide-in-right" style={{ animationDelay: '4.3s' }}>
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
@@ -25,12 +25,15 @@ export default function TimeSpentChart({ data }: TimeSpentChartProps) {
             <span className="text-sm text-gray-500 ml-2">this week</span>
           </div>
         </div>
-        <div className="flex items-center space-x-2">
-          <select className="text-sm border border-gray-300 rounded-lg px-3 py-1 focus:ring-2 focus:ring-primary focus:border-transparent">
-            <option>Weekly</option>
-            <option>Daily</option>
-            <option>Monthly</option>
-          </select>
+        <div className="flex items-center space-x-3">
+          <div className="relative">
+            <button className="flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors">
+              <span>Weekly</span>
+              <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -60,31 +63,37 @@ export default function TimeSpentChart({ data }: TimeSpentChartProps) {
         </span>
       </div>
 
-      {/* Chart */}
-      <div className="space-y-4">
-        {data.map((item, index) => (
-          <div key={index} className="flex items-center space-x-4">
-            <div className="w-12 text-sm text-gray-600 font-medium">
-              {item.day}
-            </div>
-            <div className="flex-1">
-              <div className="flex items-center space-x-2 mb-1">
-                <div className="flex-1 bg-gray-200 rounded-full h-2">
-                  <div 
-                    className="bg-accent h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${(item.hours / maxHours) * 100}%` }}
-                  ></div>
-                </div>
-                <span className="text-sm font-medium text-gray-900 w-12">
-                  {item.hours}h
-                </span>
+
+      {/* Vertical Bar Chart */}
+      <div className="mt-8">
+        <h4 className="text-base font-semibold text-gray-800 mb-10">Hours Spent This Week</h4>
+        <div className="flex items-end justify-between space-x-4 h-96 bg-gradient-to-br from-green-50 to-emerald-100 rounded-xl p-12 shadow-inner">
+          {data.map((item, index) => {
+            const colors = [
+              'bg-gradient-to-t from-emerald-600 to-emerald-400',
+              'bg-gradient-to-t from-teal-600 to-teal-400',
+              'bg-gradient-to-t from-cyan-600 to-cyan-400',
+              'bg-gradient-to-t from-blue-600 to-blue-400',
+              'bg-gradient-to-t from-indigo-600 to-indigo-400',
+              'bg-gradient-to-t from-violet-600 to-violet-400',
+              'bg-gradient-to-t from-purple-600 to-purple-400'
+            ];
+            return (
+              <div key={index} className="flex-1 flex flex-col items-center justify-end group">
+                <div className="text-lg font-bold text-gray-900 mb-8 group-hover:text-emerald-600 transition-colors">{item.hours}h</div>
+                <div 
+                  className={`w-full ${colors[index]} rounded-t-xl transition-all duration-1000 ease-out shadow-lg hover:shadow-xl transform hover:scale-105 cursor-pointer animate-on-load animate-scale-in`}
+                  style={{ 
+                    height: `${(item.hours / maxHours) * 220}px`,
+                    minHeight: '20px',
+                    animationDelay: `${5.1 + index * 0.1}s`
+                  }}
+                ></div>
+                <div className="text-sm text-gray-600 mt-6 font-medium group-hover:text-gray-800 transition-colors">{item.day}</div>
               </div>
-              <div className="text-xs text-gray-500">
-                {item.problems} problems
-              </div>
-            </div>
-          </div>
-        ))}
+            );
+          })}
+        </div>
       </div>
 
       {/* Summary */}

@@ -1,6 +1,6 @@
 "use client";
 
-import Avatar from '../Avatar';
+// import Avatar from '../Avatar'; // Unused for now
 
 interface ApplicationsTableProps {
   data: Array<{
@@ -43,7 +43,7 @@ export default function ApplicationsTable({ data }: ApplicationsTableProps) {
   };
 
   return (
-    <div>
+    <div className="animate-on-load animate-slide-in-left" style={{ animationDelay: '9.0s' }}>
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
@@ -82,7 +82,7 @@ export default function ApplicationsTable({ data }: ApplicationsTableProps) {
           </thead>
           <tbody className="divide-y divide-gray-200">
             {data.map((application, index) => (
-              <tr key={index} className="hover:bg-gray-50">
+              <tr key={index} className="hover:bg-gray-50 animate-on-load animate-fade-in-up" style={{ animationDelay: `${10.8 + index * 0.1}s` }}>
                 <td className="px-0 py-4">
                   <input
                     type="checkbox"

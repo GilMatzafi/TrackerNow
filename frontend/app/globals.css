@@ -98,3 +98,201 @@ body {
 .animate-pulse-extra-slow {
   animation: pulse 5s ease-in-out infinite;
 }
+
+/* Dashboard animations */
+@keyframes slideInFromTop {
+  0% {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromRight {
+  0% {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes chartGrow {
+  0% {
+    opacity: 0;
+    transform: scaleY(0);
+    transform-origin: bottom;
+  }
+  100% {
+    opacity: 1;
+    transform: scaleY(1);
+    transform-origin: bottom;
+  }
+}
+
+@keyframes progressFill {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: var(--progress-width);
+  }
+}
+
+@keyframes donutGrow {
+  0% {
+    stroke-dashoffset: var(--circumference);
+  }
+  100% {
+    stroke-dashoffset: var(--final-offset);
+  }
+}
+
+/* Animation utility classes */
+.animate-slide-in-top {
+  animation: slideInFromTop 1.8s ease-out forwards;
+}
+
+.animate-slide-in-left {
+  animation: slideInFromLeft 1.8s ease-out forwards;
+}
+
+.animate-slide-in-right {
+  animation: slideInFromRight 1.8s ease-out forwards;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 1.0s ease-out forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 1.0s ease-out forwards;
+}
+
+.animate-chart-grow {
+  animation: chartGrow 0.8s ease-out forwards;
+}
+
+.animate-progress-fill {
+  animation: progressFill 1.2s ease-out forwards;
+}
+
+/* Staggered animation delays */
+.delay-100 {
+  animation-delay: 0.2s;
+}
+
+.delay-200 {
+  animation-delay: 0.4s;
+}
+
+.delay-300 {
+  animation-delay: 0.6s;
+}
+
+.delay-400 {
+  animation-delay: 0.8s;
+}
+
+.delay-500 {
+  animation-delay: 1.0s;
+}
+
+.delay-600 {
+  animation-delay: 1.2s;
+}
+
+.delay-700 {
+  animation-delay: 1.4s;
+}
+
+.delay-800 {
+  animation-delay: 1.6s;
+}
+
+.delay-900 {
+  animation-delay: 0.9s;
+}
+
+.delay-1000 {
+  animation-delay: 1.0s;
+}
+
+/* Initial state for animations - hide all animated elements */
+.animate-on-load {
+  opacity: 0;
+}
+
+/* Show content after animation completes */
+.animate-on-load.animate-slide-in-top,
+.animate-on-load.animate-slide-in-left,
+.animate-on-load.animate-slide-in-right,
+.animate-on-load.animate-fade-in-up,
+.animate-on-load.animate-scale-in,
+.animate-on-load.animate-progress-fill {
+  opacity: 1;
+}
+
+/* Animation classes are now handled inline with Tailwind */
+
+/* Custom text shadow for better avatar text visibility */
+.text-shadow-lg {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Donut chart segment animation */
+@keyframes donutSegmentDraw {
+  0% {
+    stroke-dashoffset: 100%;
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    stroke-dashoffset: var(--final-offset);
+    opacity: 1;
+  }
+}
+
+.animate-donut-segment {
+  animation: donutSegmentDraw 1.2s ease-out forwards;
+}

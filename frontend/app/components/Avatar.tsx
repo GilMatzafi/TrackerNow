@@ -37,13 +37,13 @@ export default function Avatar({
   };
 
   return (
-    <div className={`${sizeClasses[size]} bg-gradient-to-br from-primary to-accent rounded-full flex items-center justify-center relative ${className}`}>
+    <div className={`${sizeClasses[size]} bg-gradient-to-br from-primary-600 to-accent-600 rounded-full flex items-center justify-center relative border-2 border-gray-300 shadow-lg ${className}`}>
       {user?.first_name && user?.last_name ? (
-        <span className="text-white font-semibold">
+        <span className="text-white font-black drop-shadow-md text-shadow-lg">
           {user.first_name[0]}{user.last_name[0]}
         </span>
       ) : (
-        <svg className={`${iconSizes[size]} text-white`} fill="currentColor" viewBox="0 0 20 20">
+        <svg className={`${iconSizes[size]} text-white drop-shadow-md`} fill="currentColor" viewBox="0 0 20 20">
           <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
         </svg>
       )}
