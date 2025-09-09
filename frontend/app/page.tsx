@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Background from './components/Background';
 import Button from './components/Button';
+import Avatar from './components/Avatar';
 import { useAuth } from './contexts/AuthContext';
 
 export default function Home() {
@@ -49,14 +50,33 @@ export default function Home() {
               Track your progress and manage your applications with ease.
             </p>
 
-            {/* Dashboard buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button variant="primary">
-                Go to Dashboard
-              </Button>
-              <Button variant="secondary" onClick={logout}>
-                Logout
-              </Button>
+            {/* User info and Dashboard buttons */}
+            <div className="flex flex-col items-center space-y-6">
+              {/* User Avatar */}
+              <div className="flex items-center space-x-4">
+                <Avatar user={user} size="xl" showOnlineIndicator={true} />
+                <div className="text-left">
+                  <p className="text-lg font-medium text-white">
+                    {user?.first_name && user?.last_name 
+                      ? `${user.first_name} ${user.last_name}`
+                      : 'User'
+                    }
+                  </p>
+                  <p className="text-sm text-gray-300">Ready to code!</p>
+                </div>
+              </div>
+              
+              {/* Action buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <Link href="/dashboard">
+                  <Button variant="primary">
+                    Go to Dashboard
+                  </Button>
+                </Link>
+                <Button variant="secondary" onClick={logout}>
+                  Logout
+                </Button>
+              </div>
             </div>
           </div>
         </div>
