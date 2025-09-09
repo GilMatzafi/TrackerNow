@@ -1,12 +1,17 @@
 "use client";
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Background from '../../components/Background';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
+import { useAuth } from '../../contexts/AuthContext';
 
 export default function SignupPage() {
+  const router = useRouter();
+  const { register, isLoading, error, clearError } = useAuth();
+  
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -15,6 +20,7 @@ export default function SignupPage() {
     confirmPassword: ''
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -29,9 +35,13 @@ export default function SignupPage() {
         [name]: ''
       }));
     }
+    // Clear auth error when user starts typing
+    if (error) {
+      clearError();
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const newErrors: Record<string, string> = {};
 
@@ -64,8 +74,22 @@ export default function SignupPage() {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      // Handle signup logic here
-      console.log('Signup data:', formData);
+      setIsSubmitting(true);
+      try {
+        await register({
+          email: formData.email,
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          password: formData.password,
+        });
+        // Redirect to dashboard or home page after successful registration
+        router.push('/');
+      } catch (error) {
+        // Error is handled by the auth context
+        console.error('Registration failed:', error);
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -88,6 +112,13 @@ export default function SignupPage() {
 
           {/* Signup Form */}
           <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-10">
+            {/* Error Message */}
+            {error && (
+              <div className="mb-6 p-4 bg-red-500/20 border border-red-500/30 rounded-lg">
+                <p className="text-red-300 text-lg">{error}</p>
+              </div>
+            )}
+            
             <form onSubmit={handleSubmit} className="space-y-8">
               <div className="grid grid-cols-2 gap-5">
                 <Input
@@ -158,8 +189,12 @@ export default function SignupPage() {
                 </label>
               </div>
 
-              <Button type="submit" variant="primary">
-                Create Account
+              <Button 
+                type="submit" 
+                variant="primary"
+                disabled={isSubmitting || isLoading}
+              >
+                {isSubmitting ? 'Creating Account...' : 'Create Account'}
               </Button>
             </form>
 

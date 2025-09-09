@@ -1,17 +1,23 @@
 "use client";
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Background from '../../components/Background';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
+import { useAuth } from '../../contexts/AuthContext';
 
 export default function LoginPage() {
+  const router = useRouter();
+  const { login, isLoading, error, clearError } = useAuth();
+  
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -26,9 +32,13 @@ export default function LoginPage() {
         [name]: ''
       }));
     }
+    // Clear auth error when user starts typing
+    if (error) {
+      clearError();
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const newErrors: Record<string, string> = {};
 
@@ -47,8 +57,17 @@ export default function LoginPage() {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      // Handle login logic here
-      console.log('Login data:', formData);
+      setIsSubmitting(true);
+      try {
+        await login(formData.email, formData.password);
+        // Redirect to dashboard or home page after successful login
+        router.push('/');
+      } catch (error) {
+        // Error is handled by the auth context
+        console.error('Login failed:', error);
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -71,6 +90,13 @@ export default function LoginPage() {
 
           {/* Login Form */}
           <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-10">
+            {/* Error Message */}
+            {error && (
+              <div className="mb-6 p-4 bg-red-500/20 border border-red-500/30 rounded-lg">
+                <p className="text-red-300 text-lg">{error}</p>
+              </div>
+            )}
+            
             <form onSubmit={handleSubmit} className="space-y-8">
               <Input
                 label="Email Address"
@@ -108,8 +134,12 @@ export default function LoginPage() {
                 </Link>
               </div>
 
-              <Button type="submit" variant="primary">
-                Sign In
+              <Button 
+                type="submit" 
+                variant="primary"
+                disabled={isSubmitting || isLoading}
+              >
+                {isSubmitting ? 'Signing In...' : 'Sign In'}
               </Button>
             </form>
 
