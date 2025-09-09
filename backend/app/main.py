@@ -3,10 +3,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.db.session import engine
 from app.db.base import Base
 from app.routers.problems import router as problems_router
+from app.routers.applications import router as applications_router
 from app.routers.auth import router as auth_router
 
 # Import models to ensure they are registered
-from app.models import User, RefreshToken, Problem
+from app.models import User, RefreshToken, Problem, Application
 
 Base.metadata.create_all(bind=engine)
 
@@ -26,3 +27,4 @@ def ping():
 
 app.include_router(auth_router)
 app.include_router(problems_router)
+app.include_router(applications_router)
