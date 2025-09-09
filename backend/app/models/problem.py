@@ -9,6 +9,12 @@ class DifficultyLevel(enum.Enum):
     MEDIUM = "Medium"
     HARD = "Hard"
 
+class ProblemStatus(enum.Enum):
+    NOT_STARTED = "Not Started"
+    IN_PROGRESS = "In Progress"
+    COMPLETED = "Completed"
+    NEEDS_REVISIT = "Needs Revisit"
+
 class Problem(Base):
     __tablename__ = "problems"
 
@@ -16,6 +22,7 @@ class Problem(Base):
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     topics: Mapped[list] = mapped_column(JSON, nullable=False, default=list)
     difficulty: Mapped[DifficultyLevel] = mapped_column(Enum(DifficultyLevel), nullable=False)
+    status: Mapped[ProblemStatus] = mapped_column(Enum(ProblemStatus), default=ProblemStatus.NOT_STARTED, nullable=False)
     link: Mapped[str] = mapped_column(String(500), nullable=True)
     time_minutes: Mapped[int] = mapped_column(Integer, nullable=True)
     notes: Mapped[str] = mapped_column(Text, nullable=True)

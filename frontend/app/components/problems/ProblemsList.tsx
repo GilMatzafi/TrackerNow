@@ -13,6 +13,7 @@ interface ProblemsListProps {
 export default function ProblemsList({ problems, onEdit, onDelete }: ProblemsListProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [difficultyFilter, setDifficultyFilter] = useState<string>('all');
+  const [statusFilter, setStatusFilter] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'name' | 'difficulty' | 'time' | 'date'>('name');
   const [deleteDialog, setDeleteDialog] = useState<{ isOpen: boolean; problem: Problem | null }>({
     isOpen: false,
@@ -27,6 +28,21 @@ export default function ProblemsList({ problems, onEdit, onDelete }: ProblemsLis
         return 'bg-yellow-100 text-yellow-800';
       case 'Hard':
         return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'Not Started':
+        return 'bg-gray-100 text-gray-800';
+      case 'In Progress':
+        return 'bg-blue-100 text-blue-800';
+      case 'Completed':
+        return 'bg-green-100 text-green-800';
+      case 'Needs Revisit':
+        return 'bg-orange-100 text-orange-800';
       default:
         return 'bg-gray-100 text-gray-800';
     }
@@ -61,7 +77,8 @@ export default function ProblemsList({ problems, onEdit, onDelete }: ProblemsLis
       const matchesSearch = problem.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            problem.topics.some(topic => topic.toLowerCase().includes(searchTerm.toLowerCase()));
       const matchesDifficulty = difficultyFilter === 'all' || problem.difficulty === difficultyFilter;
-      return matchesSearch && matchesDifficulty;
+      const matchesStatus = statusFilter === 'all' || problem.status === statusFilter;
+      return matchesSearch && matchesDifficulty && matchesStatus;
     })
     .sort((a, b) => {
       switch (sortBy) {
@@ -82,7 +99,7 @@ export default function ProblemsList({ problems, onEdit, onDelete }: ProblemsLis
   return (
     <div className="space-y-6">
       {/* Filters and Search */}
-      <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+      <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200 animate-slide-in-top">
         <div className="flex flex-col sm:flex-row gap-4">
           {/* Search */}
           <div className="flex-1">
@@ -98,6 +115,7 @@ export default function ProblemsList({ problems, onEdit, onDelete }: ProblemsLis
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                style={{ color: '#111827' }}
               />
             </div>
           </div>
@@ -107,6 +125,7 @@ export default function ProblemsList({ problems, onEdit, onDelete }: ProblemsLis
             value={difficultyFilter}
             onChange={(e) => setDifficultyFilter(e.target.value)}
             className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+            style={{ color: '#111827' }}
           >
             <option value="all">All Difficulties</option>
             <option value="Easy">Easy</option>
@@ -114,11 +133,26 @@ export default function ProblemsList({ problems, onEdit, onDelete }: ProblemsLis
             <option value="Hard">Hard</option>
           </select>
 
+          {/* Status Filter */}
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+            style={{ color: '#111827' }}
+          >
+            <option value="all">All Statuses</option>
+            <option value="Not Started">Not Started</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
+            <option value="Needs Revisit">Needs Revisit</option>
+          </select>
+
           {/* Sort */}
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as 'name' | 'difficulty' | 'time' | 'date')}
             className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+            style={{ color: '#111827' }}
           >
             <option value="name">Sort by Name</option>
             <option value="difficulty">Sort by Difficulty</option>
@@ -134,30 +168,39 @@ export default function ProblemsList({ problems, onEdit, onDelete }: ProblemsLis
           <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
-          <h3 className="mt-4 text-lg font-medium text-gray-900">No problems found</h3>
-          <p className="mt-2 text-gray-500">
-            {searchTerm || difficultyFilter !== 'all' 
+          <h3 className="mt-4 text-lg font-medium" style={{ color: '#111827' }}>No problems found</h3>
+          <p className="mt-2" style={{ color: '#6B7280' }}>
+            {searchTerm || difficultyFilter !== 'all' || statusFilter !== 'all'
               ? 'Try adjusting your search or filter criteria.'
               : 'Get started by adding your first coding problem.'
             }
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredAndSortedProblems.map((problem) => (
-            <div key={problem.id} className="bg-white rounded-lg p-6 shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {filteredAndSortedProblems.map((problem, index) => (
+            <div 
+              key={problem.id} 
+              className="bg-white rounded-lg p-6 shadow-sm border border-gray-200 hover:shadow-md transition-all duration-300 hover:scale-105 animate-fade-in-up"
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
               {/* Header */}
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{problem.name}</h3>
-                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getDifficultyColor(problem.difficulty)}`}>
-                    {problem.difficulty}
-                  </span>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2" style={{ color: '#111827' }}>{problem.name}</h3>
+                  <div className="flex gap-2">
+                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getDifficultyColor(problem.difficulty)}`}>
+                      {problem.difficulty}
+                    </span>
+                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(problem.status)}`}>
+                      {problem.status}
+                    </span>
+                  </div>
                 </div>
                 <div className="flex space-x-2 ml-4">
                   <button
                     onClick={() => onEdit(problem)}
-                    className="p-2 text-gray-400 hover:text-primary transition-colors"
+                    className="p-2 text-gray-400 hover:text-primary transition-all duration-200 hover:scale-110 cursor-pointer"
                     title="Edit problem"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -166,7 +209,7 @@ export default function ProblemsList({ problems, onEdit, onDelete }: ProblemsLis
                   </button>
                   <button
                     onClick={() => handleDeleteClick(problem)}
-                    className="p-2 text-gray-400 hover:text-red-600 transition-colors"
+                    className="p-2 text-gray-400 hover:text-red-600 transition-all duration-200 hover:scale-110 cursor-pointer"
                     title="Delete problem"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -193,7 +236,7 @@ export default function ProblemsList({ problems, onEdit, onDelete }: ProblemsLis
               )}
 
               {/* Details */}
-              <div className="space-y-2 text-sm text-gray-600">
+              <div className="space-y-2 text-sm" style={{ color: '#4B5563' }}>
                 <div className="flex items-center">
                   <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -217,7 +260,7 @@ export default function ProblemsList({ problems, onEdit, onDelete }: ProblemsLis
                       href={problem.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-primary hover:underline truncate"
+                      className="text-primary hover:underline truncate cursor-pointer"
                     >
                       View Problem
                     </a>
@@ -228,7 +271,7 @@ export default function ProblemsList({ problems, onEdit, onDelete }: ProblemsLis
               {/* Notes */}
               {problem.notes && (
                 <div className="mt-4 pt-4 border-t border-gray-200">
-                  <p className="text-sm text-gray-600 line-clamp-2">{problem.notes}</p>
+                  <p className="text-sm line-clamp-2" style={{ color: '#4B5563' }}>{problem.notes}</p>
                 </div>
               )}
             </div>
@@ -237,29 +280,29 @@ export default function ProblemsList({ problems, onEdit, onDelete }: ProblemsLis
       )}
 
       {/* Stats */}
-      <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+      <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200 animate-slide-in-bottom">
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
           <div className="text-center">
-            <div className="text-2xl font-bold text-gray-900">{problems.length}</div>
-            <div className="text-sm text-gray-500">Total Problems</div>
+            <div className="text-2xl font-bold" style={{ color: '#111827' }}>{problems.length}</div>
+            <div className="text-sm" style={{ color: '#6B7280' }}>Total Problems</div>
           </div>
           <div className="text-center">
             <div className="text-2xl font-bold text-green-600">
               {problems.filter(p => p.difficulty === 'Easy').length}
             </div>
-            <div className="text-sm text-gray-500">Easy</div>
+            <div className="text-sm" style={{ color: '#6B7280' }}>Easy</div>
           </div>
           <div className="text-center">
             <div className="text-2xl font-bold text-yellow-600">
               {problems.filter(p => p.difficulty === 'Medium').length}
             </div>
-            <div className="text-sm text-gray-500">Medium</div>
+            <div className="text-sm" style={{ color: '#6B7280' }}>Medium</div>
           </div>
           <div className="text-center">
             <div className="text-2xl font-bold text-red-600">
               {problems.filter(p => p.difficulty === 'Hard').length}
             </div>
-            <div className="text-sm text-gray-500">Hard</div>
+            <div className="text-sm" style={{ color: '#6B7280' }}>Hard</div>
           </div>
         </div>
       </div>

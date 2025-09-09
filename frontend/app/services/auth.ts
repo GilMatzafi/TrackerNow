@@ -194,6 +194,108 @@ class AuthService {
     const token = this.getAccessToken();
     return token ? { 'Authorization': `Bearer ${token}` } : {};
   }
+
+  // Problems API methods
+  async getProblems(skip = 0, limit = 100) {
+    const response = await fetch(`${this.baseURL}/problems?skip=${skip}&limit=${limit}`, {
+      headers: {
+        ...this.getAuthHeaders(),
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to fetch problems');
+    }
+
+    return response.json();
+  }
+
+  async getProblem(id: number) {
+    const response = await fetch(`${this.baseURL}/problems/${id}`, {
+      headers: {
+        ...this.getAuthHeaders(),
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to fetch problem');
+    }
+
+    return response.json();
+  }
+
+  async createProblem(problem: {
+    name: string;
+    topics: string[];
+    difficulty: 'Easy' | 'Medium' | 'Hard';
+    status: 'Not Started' | 'In Progress' | 'Completed' | 'Needs Revisit';
+    link?: string;
+    time_minutes?: number;
+    notes?: string;
+  }) {
+    const response = await fetch(`${this.baseURL}/problems`, {
+      method: 'POST',
+      headers: {
+        ...this.getAuthHeaders(),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(problem),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to create problem');
+    }
+
+    return response.json();
+  }
+
+  async updateProblem(id: number, problem: {
+    name?: string;
+    topics?: string[];
+    difficulty?: 'Easy' | 'Medium' | 'Hard';
+    status?: 'Not Started' | 'In Progress' | 'Completed' | 'Needs Revisit';
+    link?: string;
+    time_minutes?: number;
+    notes?: string;
+  }) {
+    const response = await fetch(`${this.baseURL}/problems/${id}`, {
+      method: 'PUT',
+      headers: {
+        ...this.getAuthHeaders(),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(problem),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to update problem');
+    }
+
+    return response.json();
+  }
+
+  async deleteProblem(id: number) {
+    const response = await fetch(`${this.baseURL}/problems/${id}`, {
+      method: 'DELETE',
+      headers: {
+        ...this.getAuthHeaders(),
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to delete problem');
+    }
+
+    return null; // 204 No Content
+  }
 }
 
 export const authService = new AuthService();

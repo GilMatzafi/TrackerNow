@@ -14,6 +14,7 @@ def create_problem(db: Session, payload: ProblemCreate) -> Problem:
         name=payload.name,
         topics=payload.topics,
         difficulty=payload.difficulty,
+        status=payload.status,
         link=str(payload.link) if payload.link else None,
         time_minutes=payload.time_minutes,
         notes=payload.notes

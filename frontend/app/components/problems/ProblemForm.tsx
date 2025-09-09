@@ -14,6 +14,7 @@ export default function ProblemForm({ problem, onSubmit, onCancel }: ProblemForm
     name: '',
     topics: [],
     difficulty: 'Easy',
+    status: 'Not Started',
     link: '',
     time_minutes: undefined,
     notes: ''
@@ -27,6 +28,7 @@ export default function ProblemForm({ problem, onSubmit, onCancel }: ProblemForm
         name: problem.name,
         topics: problem.topics,
         difficulty: problem.difficulty,
+        status: problem.status,
         link: problem.link || '',
         time_minutes: problem.time_minutes,
         notes: problem.notes || ''
@@ -116,12 +118,12 @@ export default function ProblemForm({ problem, onSubmit, onCancel }: ProblemForm
   };
 
   return (
-    <div className="bg-white rounded-lg p-8 shadow-sm border border-gray-200">
+    <div className="bg-white rounded-lg p-8 shadow-sm border border-gray-200 animate-scale-in">
       <div className="mb-6">
-        <h2 className="text-2xl font-bold text-gray-900">
+        <h2 className="text-2xl font-bold" style={{ color: '#111827' }}>
           {problem ? 'Edit Problem' : 'Add New Problem'}
         </h2>
-        <p className="text-gray-600 mt-1">
+        <p className="mt-1" style={{ color: '#4B5563' }}>
           {problem ? 'Update the problem details below.' : 'Fill in the details for your new coding problem.'}
         </p>
       </div>
@@ -129,7 +131,7 @@ export default function ProblemForm({ problem, onSubmit, onCancel }: ProblemForm
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Problem Name */}
         <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="name" className="block text-sm font-medium mb-2" style={{ color: '#374151' }}>
             Problem Name *
           </label>
           <input
@@ -137,9 +139,10 @@ export default function ProblemForm({ problem, onSubmit, onCancel }: ProblemForm
             id="name"
             value={formData.name}
             onChange={(e) => handleInputChange('name', e.target.value)}
-            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent ${
+            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 hover:border-gray-400 ${
               errors.name ? 'border-red-300' : 'border-gray-300'
             }`}
+            style={{ color: '#111827' }}
             placeholder="e.g., Two Sum"
           />
           {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name}</p>}
@@ -147,7 +150,7 @@ export default function ProblemForm({ problem, onSubmit, onCancel }: ProblemForm
 
         {/* Topics */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium mb-2" style={{ color: '#374151' }}>
             Topics
           </label>
           <div className="space-y-3">
@@ -159,12 +162,13 @@ export default function ProblemForm({ problem, onSubmit, onCancel }: ProblemForm
                 onChange={(e) => setNewTopic(e.target.value)}
                 onKeyPress={handleKeyPress}
                 className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                style={{ color: '#111827' }}
                 placeholder="Add a topic (e.g., Arrays, Hash Table)"
               />
               <button
                 type="button"
                 onClick={addTopic}
-                className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors cursor-pointer"
               >
                 Add
               </button>
@@ -182,7 +186,7 @@ export default function ProblemForm({ problem, onSubmit, onCancel }: ProblemForm
                     <button
                       type="button"
                       onClick={() => removeTopic(topic)}
-                      className="ml-2 text-primary/70 hover:text-primary"
+                      className="ml-2 text-primary/70 hover:text-primary cursor-pointer"
                     >
                       <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -200,7 +204,7 @@ export default function ProblemForm({ problem, onSubmit, onCancel }: ProblemForm
 
         {/* Difficulty */}
         <div>
-          <label htmlFor="difficulty" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="difficulty" className="block text-sm font-medium mb-2" style={{ color: '#374151' }}>
             Difficulty *
           </label>
           <select
@@ -208,6 +212,7 @@ export default function ProblemForm({ problem, onSubmit, onCancel }: ProblemForm
             value={formData.difficulty}
             onChange={(e) => handleInputChange('difficulty', e.target.value)}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+            style={{ color: '#111827' }}
           >
             <option value="Easy">Easy</option>
             <option value="Medium">Medium</option>
@@ -215,9 +220,28 @@ export default function ProblemForm({ problem, onSubmit, onCancel }: ProblemForm
           </select>
         </div>
 
+        {/* Status */}
+        <div>
+          <label htmlFor="status" className="block text-sm font-medium mb-2" style={{ color: '#374151' }}>
+            Status *
+          </label>
+          <select
+            id="status"
+            value={formData.status}
+            onChange={(e) => handleInputChange('status', e.target.value)}
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+            style={{ color: '#111827' }}
+          >
+            <option value="Not Started">Not Started</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
+            <option value="Needs Revisit">Needs Revisit</option>
+          </select>
+        </div>
+
         {/* Link */}
         <div>
-          <label htmlFor="link" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="link" className="block text-sm font-medium mb-2" style={{ color: '#374151' }}>
             Problem Link
           </label>
           <input
@@ -228,17 +252,18 @@ export default function ProblemForm({ problem, onSubmit, onCancel }: ProblemForm
             className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent ${
               errors.link ? 'border-red-300' : 'border-gray-300'
             }`}
+            style={{ color: '#111827' }}
             placeholder="https://leetcode.com/problems/..."
           />
           {errors.link && <p className="mt-1 text-sm text-red-600">{errors.link}</p>}
-          <p className="mt-1 text-sm text-gray-500">
+          <p className="mt-1 text-sm" style={{ color: '#6B7280' }}>
             Optional: Link to the problem on LeetCode, HackerRank, etc.
           </p>
         </div>
 
         {/* Time */}
         <div>
-          <label htmlFor="time_minutes" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="time_minutes" className="block text-sm font-medium mb-2" style={{ color: '#374151' }}>
             Time Spent (minutes)
           </label>
           <input
@@ -250,17 +275,18 @@ export default function ProblemForm({ problem, onSubmit, onCancel }: ProblemForm
             className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent ${
               errors.time_minutes ? 'border-red-300' : 'border-gray-300'
             }`}
+            style={{ color: '#111827' }}
             placeholder="15"
           />
           {errors.time_minutes && <p className="mt-1 text-sm text-red-600">{errors.time_minutes}</p>}
-          <p className="mt-1 text-sm text-gray-500">
+          <p className="mt-1 text-sm" style={{ color: '#6B7280' }}>
             Optional: How long it took you to solve this problem.
           </p>
         </div>
 
         {/* Notes */}
         <div>
-          <label htmlFor="notes" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="notes" className="block text-sm font-medium mb-2" style={{ color: '#374151' }}>
             Notes
           </label>
           <textarea
@@ -269,9 +295,10 @@ export default function ProblemForm({ problem, onSubmit, onCancel }: ProblemForm
             onChange={(e) => handleInputChange('notes', e.target.value)}
             rows={4}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+            style={{ color: '#111827' }}
             placeholder="Add any notes about your solution approach, key insights, or things to remember..."
           />
-          <p className="mt-1 text-sm text-gray-500">
+          <p className="mt-1 text-sm" style={{ color: '#6B7280' }}>
             Optional: Add notes about your solution, approach, or key insights.
           </p>
         </div>
@@ -281,13 +308,29 @@ export default function ProblemForm({ problem, onSubmit, onCancel }: ProblemForm
           <button
             type="button"
             onClick={onCancel}
-            className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+            className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all duration-200 hover:scale-105 cursor-pointer"
+            style={{ color: '#374151' }}
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
+            className="px-6 py-3 rounded-lg transition-all duration-200 hover:scale-105 cursor-pointer"
+            style={{ 
+              backgroundColor: '#000000',
+              color: '#FFFFFF',
+              border: '2px solid #000000',
+              fontWeight: '600',
+              fontSize: '16px'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#333333';
+              e.currentTarget.style.borderColor = '#333333';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = '#000000';
+              e.currentTarget.style.borderColor = '#000000';
+            }}
           >
             {problem ? 'Update Problem' : 'Add Problem'}
           </button>
