@@ -8,6 +8,8 @@ const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: '📊' },
   { name: 'Problems', href: '/problems', icon: '💻' },
   { name: 'Applications', href: '/applications', icon: '📝' },
+  { name: 'Books', href: '/books', icon: '📚' },
+  { name: 'Videos', href: '/videos', icon: '🎥' },
   { name: 'Statistics', href: '/statistics', icon: '📈' },
   { name: 'Settings', href: '/settings', icon: '⚙️' },
 ];
@@ -17,7 +19,7 @@ export default function Sidebar() {
   const { isCollapsed, toggleSidebar } = useSidebar();
 
   return (
-    <div className={`${isCollapsed ? 'w-16' : 'w-64'} bg-white border-r border-gray-200 flex flex-col h-screen transition-all duration-300`}>
+    <div className={`${isCollapsed ? 'w-16' : 'w-64'} bg-white border-r border-gray-200 flex flex-col h-screen transition-all duration-300 fixed left-0 top-0 z-10`}>
       {/* Logo */}
       <div className={`${isCollapsed ? 'p-3' : 'p-6'} border-b border-gray-200`}>
         {isCollapsed ? (

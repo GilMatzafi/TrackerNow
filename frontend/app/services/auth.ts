@@ -378,6 +378,256 @@ class AuthService {
 
     return null; // 204 No Content
   }
+
+  // Books API methods
+  async getBooks() {
+    const response = await fetch(`${this.baseURL}/books/`, {
+      method: 'GET',
+      headers: this.getAuthHeaders(),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to fetch books');
+    }
+
+    return response.json();
+  }
+
+  async getBook(id: number) {
+    const response = await fetch(`${this.baseURL}/books/${id}/`, {
+      method: 'GET',
+      headers: this.getAuthHeaders(),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to fetch book');
+    }
+
+    return response.json();
+  }
+
+  async createBook(bookData: {
+    title: string;
+    author: string;
+    isbn?: string;
+    total_pages: number;
+    current_page: number;
+    status: 'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETED' | 'PAUSED';
+    priority: 'LOW' | 'MEDIUM' | 'HIGH';
+    category: 'PROGRAMMING' | 'SYSTEM_DESIGN' | 'ALGORITHMS' | 'DATABASE' | 'NETWORKING' | 'SECURITY' | 'SOFTWARE_ENGINEERING' | 'OTHER';
+    rating?: number;
+    purchase_link?: string;
+    description?: string;
+    tags?: string[];
+    publication_year?: number;
+  }) {
+    const response = await fetch(`${this.baseURL}/books/`, {
+      method: 'POST',
+      headers: {
+        ...this.getAuthHeaders(),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(bookData),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to create book');
+    }
+
+    return response.json();
+  }
+
+  async updateBook(id: number, bookData: {
+    title?: string;
+    author?: string;
+    isbn?: string;
+    total_pages?: number;
+    current_page?: number;
+    status?: 'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETED' | 'PAUSED';
+    priority?: 'LOW' | 'MEDIUM' | 'HIGH';
+    category?: 'PROGRAMMING' | 'SYSTEM_DESIGN' | 'ALGORITHMS' | 'DATABASE' | 'NETWORKING' | 'SECURITY' | 'SOFTWARE_ENGINEERING' | 'OTHER';
+    rating?: number;
+    purchase_link?: string;
+    description?: string;
+    tags?: string[];
+    publication_year?: number;
+  }) {
+    const response = await fetch(`${this.baseURL}/books/${id}/`, {
+      method: 'PUT',
+      headers: {
+        ...this.getAuthHeaders(),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(bookData),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to update book');
+    }
+
+    return response.json();
+  }
+
+  async deleteBook(id: number) {
+    const response = await fetch(`${this.baseURL}/books/${id}/`, {
+      method: 'DELETE',
+      headers: {
+        ...this.getAuthHeaders(),
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to delete book');
+    }
+
+    return null; // 204 No Content
+  }
+
+  async getBooksStats() {
+    const response = await fetch(`${this.baseURL}/books/stats/`, {
+      method: 'GET',
+      headers: this.getAuthHeaders(),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to fetch books stats');
+    }
+
+    return response.json();
+  }
+
+  // Videos API methods
+  async getVideos() {
+    const response = await fetch(`${this.baseURL}/videos/`, {
+      method: 'GET',
+      headers: this.getAuthHeaders(),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to fetch videos');
+    }
+
+    return response.json();
+  }
+
+  async getVideo(id: number) {
+    const response = await fetch(`${this.baseURL}/videos/${id}/`, {
+      method: 'GET',
+      headers: this.getAuthHeaders(),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to fetch video');
+    }
+
+    return response.json();
+  }
+
+  async createVideo(videoData: {
+    title: string;
+    creator: string;
+    channel?: string;
+    platform?: string;
+    video_url?: string;
+    duration_minutes?: number;
+    current_time_minutes?: number;
+    status: 'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETED' | 'PAUSED';
+    priority: 'LOW' | 'MEDIUM' | 'HIGH';
+    category: 'PROGRAMMING' | 'SYSTEM_DESIGN' | 'ALGORITHMS' | 'DATABASE' | 'NETWORKING' | 'SECURITY' | 'SOFTWARE_ENGINEERING' | 'OTHER';
+    rating?: number;
+    description?: string;
+    tags?: string[];
+    watch_count?: number;
+  }) {
+    const response = await fetch(`${this.baseURL}/videos/`, {
+      method: 'POST',
+      headers: {
+        ...this.getAuthHeaders(),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(videoData),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to create video');
+    }
+
+    return response.json();
+  }
+
+  async updateVideo(id: number, videoData: {
+    title?: string;
+    creator?: string;
+    channel?: string;
+    platform?: string;
+    video_url?: string;
+    duration_minutes?: number;
+    current_time_minutes?: number;
+    status?: 'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETED' | 'PAUSED';
+    priority?: 'LOW' | 'MEDIUM' | 'HIGH';
+    category?: 'PROGRAMMING' | 'SYSTEM_DESIGN' | 'ALGORITHMS' | 'DATABASE' | 'NETWORKING' | 'SECURITY' | 'SOFTWARE_ENGINEERING' | 'OTHER';
+    rating?: number;
+    description?: string;
+    tags?: string[];
+    watch_count?: number;
+  }) {
+    const response = await fetch(`${this.baseURL}/videos/${id}/`, {
+      method: 'PUT',
+      headers: {
+        ...this.getAuthHeaders(),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(videoData),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to update video');
+    }
+
+    return response.json();
+  }
+
+  async deleteVideo(id: number) {
+    const response = await fetch(`${this.baseURL}/videos/${id}/`, {
+      method: 'DELETE',
+      headers: {
+        ...this.getAuthHeaders(),
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to delete video');
+    }
+
+    return null; // 204 No Content
+  }
+
+  async getVideosStats() {
+    const response = await fetch(`${this.baseURL}/videos/stats/`, {
+      method: 'GET',
+      headers: this.getAuthHeaders(),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to fetch videos stats');
+    }
+
+    return response.json();
+  }
 }
 
 export const authService = new AuthService();

@@ -51,14 +51,11 @@ export default function ProblemsPage() {
     <ProtectedRoute>
       <SidebarProvider>
         <div className="min-h-screen bg-gray-50">
-          <div className="flex">
-            <Sidebar />
-            
-            <div className="flex-1 flex flex-col">
-              <Header user={user} onLogout={logout} />
-              
-              <main className="flex-1 p-8">
-                <div className="max-w-none mx-auto px-4">
+          <Sidebar />
+          <div className="lg:pl-64">
+            <Header user={user} onLogout={logout} />
+            <main className="py-8">
+              <div className="max-w-none mx-auto px-4 sm:px-6 lg:px-8">
                   {/* Header */}
                   <div className="flex items-center justify-between mb-8 animate-fade-in-up">
                     <div className="animate-slide-in-left">
@@ -140,9 +137,8 @@ export default function ProblemsPage() {
                       )}
                     </>
                   )}
-                </div>
-              </main>
-            </div>
+              </div>
+            </main>
           </div>
         </div>
       </SidebarProvider>

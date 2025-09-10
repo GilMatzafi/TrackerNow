@@ -54,20 +54,11 @@ function DashboardContent() {
   return (
     <ProtectedRoute>
       <div className="min-h-screen bg-gray-50">
-        <div className="flex">
-          {/* Sidebar */}
-          <Sidebar />
-          
-          {/* Main Content */}
-          <div className="flex-1 flex flex-col">
-            {/* Header */}
-            <Header 
-              user={user} 
-              onLogout={logout}
-            />
-            
-            {/* Dashboard Content */}
-            <main className="flex-1 p-8">
+        <Sidebar />
+        <div className="lg:pl-64">
+          <Header user={user} onLogout={logout} />
+          <main className="py-8">
+            <div className="max-w-none mx-auto px-4 sm:px-6 lg:px-8">
               {/* KPI Cards */}
               <KPICards data={dashboardData} />
               
@@ -96,8 +87,8 @@ function DashboardContent() {
                   <ApplicationsTable data={dashboardData.recentApplications} />
                 </div>
               </div>
-            </main>
-          </div>
+            </div>
+          </main>
         </div>
       </div>
     </ProtectedRoute>
