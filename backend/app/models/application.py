@@ -1,5 +1,5 @@
-from sqlalchemy import Integer, String, Text, JSON, Enum, DateTime, Boolean
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import Integer, String, Text, JSON, Enum, DateTime, Boolean, ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.base import Base
 import enum
 from datetime import datetime
@@ -43,6 +43,7 @@ class Application(Base):
     __tablename__ = "applications"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable=False)
     
     # Basic Job Information
     job_title: Mapped[str] = mapped_column(String(255), nullable=False)
@@ -72,3 +73,6 @@ class Application(Base):
     # Timestamps
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+    
+    # Relationships
+    user = relationship("User", back_populates="applications")
