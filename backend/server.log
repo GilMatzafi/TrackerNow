@@ -1,10 +1,228 @@
 INFO:     Will watch for changes in these directories: ['/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend']
 INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     Started reloader process [25708] using WatchFiles
-INFO:     Started server process [25792]
+INFO:     Started reloader process [67586] using WatchFiles
+INFO:     Started server process [67670]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
-INFO:     127.0.0.1:61664 - "POST /applications HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:63089 - "GET /ping HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63092 - "GET /applications HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/sql/sqltypes.py", line 1709, in _object_value_for_elem
+    return self._object_lookup[elem]  # type: ignore[return-value]
+           ~~~~~~~~~~~~~~~~~~~^^^^^^
+KeyError: 'Applied'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/uvicorn/protocols/http/httptools_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 85, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 78, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 75, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 302, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 215, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/concurrency.py", line 38, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/anyio/to_thread.py", line 56, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2476, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 967, in run
+    result = context.run(func, *args)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/app/routers/applications.py", line 39, in list_applications
+    return svc_list(db, skip=skip, limit=limit)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/app/services/applications.py", line 8, in list_applications
+    return db.query(Application).offset(skip).limit(limit).all()
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/orm/query.py", line 2704, in all
+    return self._iter().all()  # type: ignore
+           ~~~~~~~~~~~~~~~~^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/engine/result.py", line 1774, in all
+    return self._allrows()
+           ~~~~~~~~~~~~~^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/engine/result.py", line 548, in _allrows
+    rows = self._fetchall_impl()
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/engine/result.py", line 1681, in _fetchall_impl
+    return self._real_result._fetchall_impl()
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/engine/result.py", line 2275, in _fetchall_impl
+    return list(self.iterator)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py", line 220, in chunks
+    fetch = cursor._raw_all_rows()
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/engine/result.py", line 541, in _raw_all_rows
+    return [make_row(row) for row in rows]
+            ~~~~~~~~^^^^^
+  File "lib/sqlalchemy/cyextension/resultproxy.pyx", line 22, in sqlalchemy.cyextension.resultproxy.BaseRow.__init__
+  File "lib/sqlalchemy/cyextension/resultproxy.pyx", line 79, in sqlalchemy.cyextension.resultproxy._apply_processors
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/sql/sqltypes.py", line 1829, in process
+    value = self._object_value_for_elem(value)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/sql/sqltypes.py", line 1711, in _object_value_for_elem
+    raise LookupError(
+    ...<7 lines>...
+    ) from err
+LookupError: 'Applied' is not among the defined enum values. Enum name: applicationstatus. Possible values: DRAFT, APPLIED, UNDER_REVIE.., ..., WITHDRAWN
+INFO:     127.0.0.1:63095 - "GET /applications HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/sql/sqltypes.py", line 1709, in _object_value_for_elem
+    return self._object_lookup[elem]  # type: ignore[return-value]
+           ~~~~~~~~~~~~~~~~~~~^^^^^^
+KeyError: 'Applied'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/uvicorn/protocols/http/httptools_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 85, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 78, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 75, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 302, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 215, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/concurrency.py", line 38, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/anyio/to_thread.py", line 56, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2476, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 967, in run
+    result = context.run(func, *args)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/app/routers/applications.py", line 39, in list_applications
+    return svc_list(db, skip=skip, limit=limit)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/app/services/applications.py", line 8, in list_applications
+    return db.query(Application).offset(skip).limit(limit).all()
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/orm/query.py", line 2704, in all
+    return self._iter().all()  # type: ignore
+           ~~~~~~~~~~~~~~~~^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/engine/result.py", line 1774, in all
+    return self._allrows()
+           ~~~~~~~~~~~~~^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/engine/result.py", line 548, in _allrows
+    rows = self._fetchall_impl()
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/engine/result.py", line 1681, in _fetchall_impl
+    return self._real_result._fetchall_impl()
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/engine/result.py", line 2275, in _fetchall_impl
+    return list(self.iterator)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py", line 220, in chunks
+    fetch = cursor._raw_all_rows()
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/engine/result.py", line 541, in _raw_all_rows
+    return [make_row(row) for row in rows]
+            ~~~~~~~~^^^^^
+  File "lib/sqlalchemy/cyextension/resultproxy.pyx", line 22, in sqlalchemy.cyextension.resultproxy.BaseRow.__init__
+  File "lib/sqlalchemy/cyextension/resultproxy.pyx", line 79, in sqlalchemy.cyextension.resultproxy._apply_processors
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/sql/sqltypes.py", line 1829, in process
+    value = self._object_value_for_elem(value)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/sql/sqltypes.py", line 1711, in _object_value_for_elem
+    raise LookupError(
+    ...<7 lines>...
+    ) from err
+LookupError: 'Applied' is not among the defined enum values. Enum name: applicationstatus. Possible values: DRAFT, APPLIED, UNDER_REVIE.., ..., WITHDRAWN
+INFO:     127.0.0.1:63103 - "GET /applications HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63106 - "POST /applications HTTP/1.1" 500 Internal Server Error
 ERROR:    Exception in ASGI application
 Traceback (most recent call last):
   File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/sql/sqltypes.py", line 1709, in _object_value_for_elem
@@ -133,7 +351,194 @@ Traceback (most recent call last):
     ...<7 lines>...
     ) from err
 LookupError: 'Applied' is not among the defined enum values. Enum name: applicationstatus. Possible values: DRAFT, APPLIED, UNDER_REVIE.., ..., WITHDRAWN
-INFO:     127.0.0.1:61673 - "POST /applications HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:63148 - "GET /applications HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/sql/sqltypes.py", line 1709, in _object_value_for_elem
+    return self._object_lookup[elem]  # type: ignore[return-value]
+           ~~~~~~~~~~~~~~~~~~~^^^^^^
+KeyError: 'Applied'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/uvicorn/protocols/http/httptools_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 78, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 75, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 302, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 215, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/concurrency.py", line 38, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/anyio/to_thread.py", line 56, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2476, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 967, in run
+    result = context.run(func, *args)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/app/routers/applications.py", line 39, in list_applications
+    return svc_list(db, skip=skip, limit=limit)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/app/services/applications.py", line 8, in list_applications
+    return db.query(Application).offset(skip).limit(limit).all()
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/orm/query.py", line 2704, in all
+    return self._iter().all()  # type: ignore
+           ~~~~~~~~~~~~~~~~^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/engine/result.py", line 1774, in all
+    return self._allrows()
+           ~~~~~~~~~~~~~^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/engine/result.py", line 548, in _allrows
+    rows = self._fetchall_impl()
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/engine/result.py", line 1681, in _fetchall_impl
+    return self._real_result._fetchall_impl()
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/engine/result.py", line 2275, in _fetchall_impl
+    return list(self.iterator)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py", line 220, in chunks
+    fetch = cursor._raw_all_rows()
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/engine/result.py", line 541, in _raw_all_rows
+    return [make_row(row) for row in rows]
+            ~~~~~~~~^^^^^
+  File "lib/sqlalchemy/cyextension/resultproxy.pyx", line 22, in sqlalchemy.cyextension.resultproxy.BaseRow.__init__
+  File "lib/sqlalchemy/cyextension/resultproxy.pyx", line 79, in sqlalchemy.cyextension.resultproxy._apply_processors
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/sql/sqltypes.py", line 1829, in process
+    value = self._object_value_for_elem(value)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/sql/sqltypes.py", line 1711, in _object_value_for_elem
+    raise LookupError(
+    ...<7 lines>...
+    ) from err
+LookupError: 'Applied' is not among the defined enum values. Enum name: applicationstatus. Possible values: DRAFT, APPLIED, UNDER_REVIE.., ..., WITHDRAWN
+INFO:     127.0.0.1:63149 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63167 - "POST /applications HTTP/1.1" 422 Unprocessable Content
+WARNING:  WatchFiles detected changes in 'app/schemas/application.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [67670]
+INFO:     Started server process [75066]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:63175 - "POST /applications HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/uvicorn/protocols/http/httptools_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 85, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 78, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 75, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 328, in app
+    content = await serialize_response(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 177, in serialize_response
+    raise ResponseValidationError(
+        errors=_normalize_errors(errors), body=response_content
+    )
+fastapi.exceptions.ResponseValidationError: 2 validation errors:
+  {'type': 'enum', 'loc': ('response', 'application_status'), 'msg': "Input should be 'DRAFT', 'APPLIED', 'UNDER_REVIEW', 'PHONE_SCREENING', 'TECHNICAL_INTERVIEW', 'HR_INTERVIEW', 'FINAL_INTERVIEW', 'OFFER_RECEIVED', 'OFFER_ACCEPTED', 'OFFER_DECLINED', 'REJECTED' or 'WITHDRAWN'", 'input': <ApplicationStatus.APPLIED: 'Applied'>, 'ctx': {'expected': "'DRAFT', 'APPLIED', 'UNDER_REVIEW', 'PHONE_SCREENING', 'TECHNICAL_INTERVIEW', 'HR_INTERVIEW', 'FINAL_INTERVIEW', 'OFFER_RECEIVED', 'OFFER_ACCEPTED', 'OFFER_DECLINED', 'REJECTED' or 'WITHDRAWN'"}}
+  {'type': 'enum', 'loc': ('response', 'application_source'), 'msg': "Input should be 'LINKEDIN', 'COMPANY_WEBSITE', 'REFERRAL', 'JOB_BOARD', 'RECRUITER', 'NETWORKING' or 'OTHER'", 'input': <ApplicationSource.LINKEDIN: 'LinkedIn'>, 'ctx': {'expected': "'LINKEDIN', 'COMPANY_WEBSITE', 'REFERRAL', 'JOB_BOARD', 'RECRUITER', 'NETWORKING' or 'OTHER'"}}
+
+WARNING:  WatchFiles detected changes in 'app/models/application.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [75066]
+INFO:     Started server process [76708]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:63184 - "POST /applications HTTP/1.1" 201 Created
+INFO:     127.0.0.1:63187 - "GET /applications HTTP/1.1" 500 Internal Server Error
 ERROR:    Exception in ASGI application
 Traceback (most recent call last):
   File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/sql/sqltypes.py", line 1709, in _object_value_for_elem
@@ -209,45 +614,24 @@ Traceback (most recent call last):
            ^^^^^^^^^^^^
   File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 967, in run
     result = context.run(func, *args)
-  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/app/routers/applications.py", line 52, in create_application
-    return svc_create(db, payload)
-  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/app/services/applications.py", line 44, in create_application
-    db.refresh(obj)
-    ~~~~~~~~~~^^^^^
-  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 3168, in refresh
-    loading.load_on_ident(
-    ~~~~~~~~~~~~~~~~~~~~~^
-        self,
-        ^^^^^
-    ...<10 lines>...
-        is_user_refresh=True,
-        ^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py", line 510, in load_on_ident
-    return load_on_pk_identity(
-        session,
-    ...<11 lines>...
-        is_user_refresh=is_user_refresh,
-    )
-  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py", line 706, in load_on_pk_identity
-    return result.one()
-           ~~~~~~~~~~^^
-  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/engine/result.py", line 1815, in one
-    return self._only_one_row(
-           ~~~~~~~~~~~~~~~~~~^
-        raise_for_second_row=True, raise_for_none=True, scalar=False
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/engine/result.py", line 757, in _only_one_row
-    row: Optional[_InterimRowType[Any]] = onerow(hard_close=True)
-                                          ~~~~~~^^^^^^^^^^^^^^^^^
-  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/engine/result.py", line 1678, in _fetchone_impl
-    return self._real_result._fetchone_impl(hard_close=hard_close)
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/engine/result.py", line 2264, in _fetchone_impl
-    row = next(self.iterator, _NO_ROW)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/app/routers/applications.py", line 39, in list_applications
+    return svc_list(db, skip=skip, limit=limit)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/app/services/applications.py", line 8, in list_applications
+    return db.query(Application).offset(skip).limit(limit).all()
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/orm/query.py", line 2704, in all
+    return self._iter().all()  # type: ignore
+           ~~~~~~~~~~~~~~~~^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/engine/result.py", line 1774, in all
+    return self._allrows()
+           ~~~~~~~~~~~~~^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/engine/result.py", line 548, in _allrows
+    rows = self._fetchall_impl()
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/engine/result.py", line 1681, in _fetchall_impl
+    return self._real_result._fetchall_impl()
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/engine/result.py", line 2275, in _fetchall_impl
+    return list(self.iterator)
   File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py", line 220, in chunks
     fetch = cursor._raw_all_rows()
   File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/engine/result.py", line 541, in _raw_all_rows
@@ -262,28 +646,140 @@ Traceback (most recent call last):
     ...<7 lines>...
     ) from err
 LookupError: 'Applied' is not among the defined enum values. Enum name: applicationstatus. Possible values: DRAFT, APPLIED, UNDER_REVIE.., ..., WITHDRAWN
-INFO:     127.0.0.1:61680 - "GET /applications HTTP/1.1" 200 OK
-WARNING:  WatchFiles detected changes in 'migrate_create_applications.py'. Reloading...
+INFO:     127.0.0.1:63192 - "GET /applications HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/sql/sqltypes.py", line 1709, in _object_value_for_elem
+    return self._object_lookup[elem]  # type: ignore[return-value]
+           ~~~~~~~~~~~~~~~~~~~^^^^^^
+KeyError: 'Applied'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/uvicorn/protocols/http/httptools_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 85, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 78, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 75, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 302, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 215, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/starlette/concurrency.py", line 38, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/anyio/to_thread.py", line 56, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2476, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 967, in run
+    result = context.run(func, *args)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/app/routers/applications.py", line 39, in list_applications
+    return svc_list(db, skip=skip, limit=limit)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/app/services/applications.py", line 8, in list_applications
+    return db.query(Application).offset(skip).limit(limit).all()
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/orm/query.py", line 2704, in all
+    return self._iter().all()  # type: ignore
+           ~~~~~~~~~~~~~~~~^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/engine/result.py", line 1774, in all
+    return self._allrows()
+           ~~~~~~~~~~~~~^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/engine/result.py", line 548, in _allrows
+    rows = self._fetchall_impl()
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/engine/result.py", line 1681, in _fetchall_impl
+    return self._real_result._fetchall_impl()
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/engine/result.py", line 2275, in _fetchall_impl
+    return list(self.iterator)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py", line 220, in chunks
+    fetch = cursor._raw_all_rows()
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/engine/result.py", line 541, in _raw_all_rows
+    return [make_row(row) for row in rows]
+            ~~~~~~~~^^^^^
+  File "lib/sqlalchemy/cyextension/resultproxy.pyx", line 22, in sqlalchemy.cyextension.resultproxy.BaseRow.__init__
+  File "lib/sqlalchemy/cyextension/resultproxy.pyx", line 79, in sqlalchemy.cyextension.resultproxy._apply_processors
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/sql/sqltypes.py", line 1829, in process
+    value = self._object_value_for_elem(value)
+  File "/Users/gilos/Desktop/ComputerScience/Projects/trackerNow/backend/.venv/lib/python3.13/site-packages/sqlalchemy/sql/sqltypes.py", line 1711, in _object_value_for_elem
+    raise LookupError(
+    ...<7 lines>...
+    ) from err
+LookupError: 'Applied' is not among the defined enum values. Enum name: applicationstatus. Possible values: DRAFT, APPLIED, UNDER_REVIE.., ..., WITHDRAWN
+INFO:     127.0.0.1:63200 - "GET /applications HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'app/schemas/application.py', 'app/models/application.py'. Reloading...
 INFO:     Shutting down
 INFO:     Waiting for application shutdown.
 INFO:     Application shutdown complete.
-INFO:     Finished server process [25792]
-INFO:     Started server process [33650]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-WARNING:  WatchFiles detected changes in 'migrate_create_applications.py', 'app/models/__init__.py', 'app/routers/applications.py', 'app/services/applications.py', 'app/main.py', 'app/schemas/application.py', 'app/models/application.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [33650]
-INFO:     Started server process [33951]
+INFO:     Finished server process [76708]
+INFO:     Started server process [84233]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 WARNING:  WatchFiles detected changes in 'app/models/application.py'. Reloading...
 INFO:     Shutting down
 INFO:     Waiting for application shutdown.
 INFO:     Application shutdown complete.
-INFO:     Finished server process [33951]
-INFO:     Started server process [33989]
+INFO:     Finished server process [84233]
+INFO:     Started server process [84257]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
+INFO:     127.0.0.1:63245 - "GET /applications HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63248 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63248 - "OPTIONS /problems?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63245 - "OPTIONS /problems?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63248 - "GET /problems?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63248 - "GET /problems?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63248 - "GET /applications HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63245 - "GET /applications HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63258 - "GET /problems?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63258 - "GET /problems?skip=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63258 - "GET /applications HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63258 - "GET /applications HTTP/1.1" 200 OK

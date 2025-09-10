@@ -296,6 +296,88 @@ class AuthService {
 
     return null; // 204 No Content
   }
+
+  // Applications API methods
+  async getApplications() {
+    const response = await fetch(`${this.baseURL}/applications`, {
+      method: 'GET',
+      headers: this.getAuthHeaders(),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to fetch applications');
+    }
+
+    return response.json();
+  }
+
+  async getApplication(id: number) {
+    const response = await fetch(`${this.baseURL}/applications/${id}`, {
+      method: 'GET',
+      headers: this.getAuthHeaders(),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to fetch application');
+    }
+
+    return response.json();
+  }
+
+  async createApplication(applicationData: any) {
+    const response = await fetch(`${this.baseURL}/applications`, {
+      method: 'POST',
+      headers: {
+        ...this.getAuthHeaders(),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(applicationData),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to create application');
+    }
+
+    return response.json();
+  }
+
+  async updateApplication(id: number, applicationData: any) {
+    const response = await fetch(`${this.baseURL}/applications/${id}`, {
+      method: 'PUT',
+      headers: {
+        ...this.getAuthHeaders(),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(applicationData),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to update application');
+    }
+
+    return response.json();
+  }
+
+  async deleteApplication(id: number) {
+    const response = await fetch(`${this.baseURL}/applications/${id}`, {
+      method: 'DELETE',
+      headers: {
+        ...this.getAuthHeaders(),
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to delete application');
+    }
+
+    return null; // 204 No Content
+  }
 }
 
 export const authService = new AuthService();
