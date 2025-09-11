@@ -11,6 +11,7 @@ class User(Base):
     first_name = Column(String, nullable=False)
     last_name = Column(String, nullable=False)
     hashed_password = Column(String, nullable=False)
+    avatar_seed = Column(String, nullable=True)
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
@@ -23,3 +24,4 @@ class User(Base):
     videos = relationship("Video", back_populates="user")
     pomodoros = relationship("Pomodoro", back_populates="user")
     onboarding_tasks = relationship("OnboardingTask", back_populates="user")
+    calendar_events = relationship("CalendarEvent", back_populates="user")

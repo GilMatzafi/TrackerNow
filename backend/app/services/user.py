@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from typing import Optional
 from app.models.user import User
 from app.models.refresh_token import RefreshToken
-from app.schemas.user import UserCreate, UserLogin
+from app.schemas.user import UserCreate, UserLogin, UserUpdate
 from app.core.security import get_password_hash, verify_password, create_access_token, create_refresh_token, verify_token
 from app.core.config import settings
 
@@ -133,3 +133,18 @@ class UserService:
         
         self.db.commit()
         return True
+
+    def update_user(self, user_id: int, user_data: UserUpdate) -> User:
+        """Update user information."""
+        user = self.get_user_by_id(user_id)
+        if not user:
+            raise ValueError("User not found")
+        
+        # Update only provided fields
+        update_data = user_data.dict(exclude_unset=True)
+        for field, value in update_data.items():
+            setattr(user, field, value)
+        
+        self.db.commit()
+        self.db.refresh(user)
+        return user

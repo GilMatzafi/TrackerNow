@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.api.deps import get_db, get_current_user
-from app.schemas.user import UserCreate, UserLogin, UserResponse, Token, TokenRefresh, TokenResponse
+from app.schemas.user import UserCreate, UserLogin, UserResponse, UserUpdate, Token, TokenRefresh, TokenResponse
 from app.services.user import UserService
 
 router = APIRouter(prefix="/auth", tags=["authentication"])
@@ -71,3 +71,21 @@ def logout(token_data: TokenRefresh, db: Session = Depends(get_db)):
 def get_current_user_info(current_user = Depends(get_current_user)):
     """Get current user information."""
     return current_user
+
+@router.put("/me", response_model=UserResponse)
+def update_current_user(
+    user_data: UserUpdate,
+    db: Session = Depends(get_db),
+    current_user = Depends(get_current_user)
+):
+    """Update current user information."""
+    user_service = UserService(db)
+    
+    try:
+        updated_user = user_service.update_user(current_user.id, user_data)
+        return updated_user
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )

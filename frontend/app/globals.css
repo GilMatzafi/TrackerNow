@@ -20,16 +20,55 @@ body {
 /* Background animations */
 @keyframes float {
   0%, 100% {
-    transform: translateY(0px) translateX(0px);
+    transform: translateY(0px) translateX(0px) rotate(0deg);
   }
   25% {
-    transform: translateY(-30px) translateX(15px);
+    transform: translateY(-8px) translateX(4px) rotate(1deg);
   }
   50% {
-    transform: translateY(-15px) translateX(-10px);
+    transform: translateY(-4px) translateX(-3px) rotate(-0.5deg);
   }
   75% {
-    transform: translateY(-40px) translateX(20px);
+    transform: translateY(-12px) translateX(6px) rotate(0.8deg);
+  }
+}
+
+@keyframes breathe {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+@keyframes gentle-sway {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(0.5deg);
+  }
+  75% {
+    transform: rotate(-0.5deg);
+  }
+}
+
+@keyframes avatar-dance {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px) rotate(0deg) scale(1);
+  }
+  20% {
+    transform: translateY(-5px) translateX(2px) rotate(0.3deg) scale(1.01);
+  }
+  40% {
+    transform: translateY(-3px) translateX(-1px) rotate(-0.2deg) scale(1.005);
+  }
+  60% {
+    transform: translateY(-7px) translateX(3px) rotate(0.4deg) scale(1.015);
+  }
+  80% {
+    transform: translateY(-2px) translateX(-2px) rotate(-0.3deg) scale(1.008);
   }
 }
 
@@ -77,6 +116,28 @@ body {
 
 .animate-float-fast {
   animation: float 3.5s ease-in-out infinite;
+}
+
+.animate-breathe {
+  animation: breathe 4s ease-in-out infinite;
+}
+
+.animate-gentle-sway {
+  animation: gentle-sway 6s ease-in-out infinite;
+}
+
+.animate-avatar-dance {
+  animation: avatar-dance 8s ease-in-out infinite;
+}
+
+/* Avatar glow effect */
+.avatar-glow {
+  filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.3));
+  transition: filter 0.3s ease-in-out;
+}
+
+.avatar-glow:hover {
+  filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.5)) drop-shadow(0 0 30px rgba(147, 197, 253, 0.3));
 }
 
 .animate-pulse-slow {

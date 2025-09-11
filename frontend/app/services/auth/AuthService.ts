@@ -5,6 +5,7 @@ export interface User {
   email: string;
   first_name: string;
   last_name: string;
+  avatar_seed?: string;
   is_active: boolean;
   created_at: string;
 }
@@ -19,6 +20,12 @@ export interface RegisterRequest {
   first_name: string;
   last_name: string;
   password: string;
+}
+
+export interface UpdateUserRequest {
+  first_name?: string;
+  last_name?: string;
+  avatar_seed?: string;
 }
 
 export interface AuthResponse {
@@ -155,6 +162,11 @@ class AuthService extends ApiService {
     }
 
     this.clearTokens();
+  }
+
+  // Update user information
+  async updateUser(userData: UpdateUserRequest): Promise<User> {
+    return this.put<User>('/auth/me', userData);
   }
 
   // Token management
