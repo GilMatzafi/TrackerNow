@@ -4,9 +4,7 @@ import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useApplications } from '../hooks/useApplications';
 import ProtectedRoute from '../components/ProtectedRoute';
-import { SidebarProvider } from '../contexts/SidebarContext';
-import Sidebar from '../components/dashboard/Sidebar';
-import Header from '../components/dashboard/Header';
+import TopNavbar from '../components/dashboard/TopNavbar';
 import ApplicationsList from '../components/applications/ApplicationsList';
 import ApplicationForm from '../components/applications/ApplicationForm';
 import { Application, ApplicationFormData } from '../types/application';
@@ -50,13 +48,10 @@ export default function ApplicationsPage() {
 
   return (
     <ProtectedRoute>
-      <SidebarProvider>
-        <div className="min-h-screen bg-gray-50">
-          <Sidebar />
-          <div className="lg:pl-64">
-            <Header user={user} onLogout={logout} />
-            <main className="py-8">
-              <div className="max-w-none mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen" style={{background: 'linear-gradient(90deg, #EDEDED 0%, #FDF5D6 100%)'}}>
+        <TopNavbar user={user} onLogout={logout} />
+        <main className="py-8">
+          <div className="max-w-none mx-auto px-4 sm:px-6 lg:px-8">
                   {/* Header */}
                   <div className="flex items-center justify-between mb-8 animate-fade-in-up">
                     <div className="animate-slide-in-left">
@@ -138,11 +133,9 @@ export default function ApplicationsPage() {
                       )}
                     </>
                   )}
-              </div>
-            </main>
           </div>
-        </div>
-      </SidebarProvider>
+        </main>
+      </div>
     </ProtectedRoute>
   );
 }

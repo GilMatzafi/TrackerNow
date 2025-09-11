@@ -4,9 +4,7 @@ import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useVideos } from '../hooks/useVideos';
 import ProtectedRoute from '../components/ProtectedRoute';
-import { SidebarProvider } from '../contexts/SidebarContext';
-import Sidebar from '../components/dashboard/Sidebar';
-import Header from '../components/dashboard/Header';
+import TopNavbar from '../components/dashboard/TopNavbar';
 import VideosList from '../components/videos/VideosList';
 import VideoForm from '../components/videos/VideoForm';
 import { Video } from '../types/resource';
@@ -52,13 +50,10 @@ export default function VideosPage() {
 
   return (
     <ProtectedRoute>
-      <SidebarProvider>
-        <div className="min-h-screen bg-gray-50">
-          <Sidebar />
-          <div className="lg:pl-64">
-            <Header user={user} onLogout={logout} />
-            <main className="py-8">
-              <div className="max-w-none mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen" style={{background: 'linear-gradient(90deg, #EDEDED 0%, #FDF5D6 100%)'}}>
+        <TopNavbar user={user} onLogout={logout} />
+        <main className="py-8">
+          <div className="max-w-none mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Page Header */}
                 <div className="mb-8">
                   <div className="flex items-center justify-between">
@@ -127,11 +122,9 @@ export default function VideosPage() {
                     onDelete={handleDeleteVideo}
                   />
                 )}
-              </div>
-            </main>
           </div>
-        </div>
-      </SidebarProvider>
+        </main>
+      </div>
     </ProtectedRoute>
   );
 }

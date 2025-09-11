@@ -1,11 +1,8 @@
 "use client";
 
-import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { SidebarProvider, useSidebar } from '../contexts/SidebarContext';
 import ProtectedRoute from '../components/ProtectedRoute';
-import Sidebar from '../components/dashboard/Sidebar';
-import Header from '../components/dashboard/Header';
+import TopNavbar from '../components/dashboard/TopNavbar';
 import KPICards from '../components/dashboard/KPICards';
 import ProgressChart from '../components/dashboard/ProgressChart';
 import TimeSpentChart from '../components/dashboard/TimeSpentChart';
@@ -14,7 +11,6 @@ import ApplicationsTable from '../components/dashboard/ApplicationsTable';
 
 function DashboardContent() {
   const { user, logout } = useAuth();
-  const { isCollapsed } = useSidebar();
 
   // Mock data - in a real app, this would come from your backend
   const dashboardData = {
@@ -53,24 +49,22 @@ function DashboardContent() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gray-50">
-        <Sidebar />
-        <div className="lg:pl-64">
-          <Header user={user} onLogout={logout} />
-          <main className="py-8">
-            <div className="max-w-none mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen" style={{background: 'linear-gradient(90deg, #EDEDED 0%, #FDF5D6 100%)'}}>
+        <TopNavbar user={user} onLogout={logout} />
+        <main className="py-8">
+          <div className="max-w-none mx-auto px-4 sm:px-6 lg:px-8">
               {/* KPI Cards */}
               <KPICards data={dashboardData} />
               
               {/* Charts Row */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
                 {/* Progress Overview */}
-                <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-200">
+                <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-200">
                   <ProgressChart data={dashboardData.dailyProgress} />
                 </div>
                 
                 {/* Time Spent Coding */}
-                <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-200">
+                <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-200">
                   <TimeSpentChart data={dashboardData.dailyProgress} />
                 </div>
               </div>
@@ -78,27 +72,22 @@ function DashboardContent() {
               {/* Bottom Row */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
                 {/* Problem Distribution */}
-                <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-200">
+                <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-200">
                   <ProblemDistribution data={dashboardData.problemsByTopic} />
                 </div>
                 
                 {/* Applications Timeline */}
-                <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-200">
+                <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-200">
                   <ApplicationsTable data={dashboardData.recentApplications} />
                 </div>
               </div>
-            </div>
-          </main>
-        </div>
+          </div>
+        </main>
       </div>
     </ProtectedRoute>
   );
 }
 
 export default function Dashboard() {
-  return (
-    <SidebarProvider>
-      <DashboardContent />
-    </SidebarProvider>
-  );
+  return <DashboardContent />;
 }

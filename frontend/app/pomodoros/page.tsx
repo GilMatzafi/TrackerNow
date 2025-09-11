@@ -3,9 +3,7 @@
 import { useAuth } from '../contexts/AuthContext';
 import { usePomodoroTimer } from '../hooks/usePomodoros';
 import ProtectedRoute from '../components/ProtectedRoute';
-import { SidebarProvider } from '../contexts/SidebarContext';
-import Sidebar from '../components/dashboard/Sidebar';
-import Header from '../components/dashboard/Header';
+import TopNavbar from '../components/dashboard/TopNavbar';
 import SimplePomodoroClock from '../components/pomodoros/SimplePomodoroClock';
 
 export default function PomodorosPage() {
@@ -50,13 +48,10 @@ export default function PomodorosPage() {
 
   return (
     <ProtectedRoute>
-      <SidebarProvider>
-        <div className="min-h-screen bg-gray-50">
-          <Sidebar />
-          <div className="lg:pl-64">
-            <Header user={user} onLogout={logout} />
-            <main className="py-8">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen" style={{background: 'linear-gradient(90deg, #EDEDED 0%, #FDF5D6 100%)'}}>
+        <TopNavbar user={user} onLogout={logout} />
+        <main className="py-8">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
 
         {/* Simple Pomodoro Clock */}
@@ -72,11 +67,9 @@ export default function PomodorosPage() {
         </div>
 
 
-              </div>
-            </main>
           </div>
-        </div>
-      </SidebarProvider>
+        </main>
+      </div>
     </ProtectedRoute>
   );
 }

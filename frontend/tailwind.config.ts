@@ -32,6 +32,15 @@ export default {
           800: "#166534",
           900: "#14532d",
         },
+        // Modern dashboard colors inspired by the reference image
+        brand: {
+          yellow: "#FCD34D", // Main brand yellow
+          yellowLight: "#FEF3C7",
+          yellowDark: "#F59E0B",
+          gray: "#374151", // Dark gray for text
+          grayLight: "#F9FAFB", // Light background
+          grayMedium: "#E5E7EB", // Medium gray for borders
+        },
         ink: {
           DEFAULT: "#161316",
           50: "#f8f8f8",
