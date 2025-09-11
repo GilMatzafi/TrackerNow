@@ -21,3 +21,4 @@ class User(Base):
     applications = relationship("Application", back_populates="user")
     books = relationship("Book", back_populates="user")
     videos = relationship("Video", back_populates="user")
+    pomodoros = relationship("Pomodoro", back_populates="user")
