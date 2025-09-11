@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Video } from '../types/resource';
-import { authService } from '../services/auth';
+import { videosService } from '../services';
 
 export const useVideos = () => {
   const [videos, setVideos] = useState<Video[]>([]);
@@ -12,7 +12,7 @@ export const useVideos = () => {
       setLoading(true);
       setError(null);
       try {
-        const data = await authService.getVideos();
+        const data = await videosService.getVideos();
         setVideos(data);
       } catch (err: any) {
         setError(err.message || 'Failed to fetch videos');
@@ -28,7 +28,7 @@ export const useVideos = () => {
     setLoading(true);
     setError(null);
     try {
-      const newVideo = await authService.createVideo({
+      const newVideo = await videosService.createVideo({
         title: videoData.title,
         creator: videoData.creator,
         channel: videoData.channel,
@@ -59,7 +59,7 @@ export const useVideos = () => {
     setLoading(true);
     setError(null);
     try {
-      const updatedVideo = await authService.updateVideo(id, {
+      const updatedVideo = await videosService.updateVideo(id, {
         title: videoData.title,
         creator: videoData.creator,
         channel: videoData.channel,
@@ -90,7 +90,7 @@ export const useVideos = () => {
     setLoading(true);
     setError(null);
     try {
-      await authService.deleteVideo(id);
+      await videosService.deleteVideo(id);
       setVideos(prev => prev.filter(video => video.id !== id));
       return true;
     } catch (err: any) {
@@ -107,7 +107,7 @@ export const useVideos = () => {
     try {
       const video = videos.find(v => v.id === id);
       if (video) {
-        const updatedVideo = await authService.updateVideo(id, {
+        const updatedVideo = await videosService.updateVideo(id, {
           watch_count: (video.watch_count || 0) + 1
         });
         setVideos(prev => prev.map(v => v.id === id ? updatedVideo : v));

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Application, ApplicationFormData } from '../types/application';
-import { authService } from '../services/auth';
+import { applicationsService } from '../services';
 
 export const useApplications = () => {
   const [applications, setApplications] = useState<Application[]>([]);
@@ -11,7 +11,7 @@ export const useApplications = () => {
     try {
       setLoading(true);
       setError(null);
-      const data = await authService.getApplications();
+      const data = await applicationsService.getApplications();
       setApplications(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch applications');
@@ -23,7 +23,7 @@ export const useApplications = () => {
   const addApplication = async (applicationData: ApplicationFormData): Promise<boolean> => {
     try {
       setError(null);
-      const newApplication = await authService.createApplication(applicationData);
+      const newApplication = await applicationsService.createApplication(applicationData);
       setApplications(prev => [...prev, newApplication]);
       return true;
     } catch (err) {
@@ -35,7 +35,7 @@ export const useApplications = () => {
   const updateApplication = async (id: number, applicationData: Partial<ApplicationFormData>): Promise<boolean> => {
     try {
       setError(null);
-      const updatedApplication = await authService.updateApplication(id, applicationData);
+      const updatedApplication = await applicationsService.updateApplication(id, applicationData);
       setApplications(prev => prev.map(app => 
         app.id === id ? updatedApplication : app
       ));
@@ -49,7 +49,7 @@ export const useApplications = () => {
   const deleteApplication = async (id: number): Promise<boolean> => {
     try {
       setError(null);
-      await authService.deleteApplication(id);
+      await applicationsService.deleteApplication(id);
       setApplications(prev => prev.filter(app => app.id !== id));
       return true;
     } catch (err) {

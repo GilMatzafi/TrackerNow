@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Book } from '../types/resource';
-import { authService } from '../services/auth';
+import { booksService } from '../services';
 
 export const useBooks = () => {
   const [books, setBooks] = useState<Book[]>([]);
@@ -12,7 +12,7 @@ export const useBooks = () => {
       setLoading(true);
       setError(null);
       try {
-        const data = await authService.getBooks();
+        const data = await booksService.getBooks();
         setBooks(data);
       } catch (err: any) {
         setError(err.message || 'Failed to fetch books');
@@ -28,7 +28,7 @@ export const useBooks = () => {
     setLoading(true);
     setError(null);
     try {
-      const newBook = await authService.createBook({
+      const newBook = await booksService.createBook({
         title: bookData.title,
         author: bookData.author,
         isbn: bookData.isbn,
@@ -58,7 +58,7 @@ export const useBooks = () => {
     setLoading(true);
     setError(null);
     try {
-      const updatedBook = await authService.updateBook(id, {
+      const updatedBook = await booksService.updateBook(id, {
         title: bookData.title,
         author: bookData.author,
         isbn: bookData.isbn,
@@ -88,7 +88,7 @@ export const useBooks = () => {
     setLoading(true);
     setError(null);
     try {
-      await authService.deleteBook(id);
+      await booksService.deleteBook(id);
       setBooks(prev => prev.filter(book => book.id !== id));
       return true;
     } catch (err: any) {

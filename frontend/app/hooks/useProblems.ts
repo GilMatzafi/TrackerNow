@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Problem } from '../types/problem';
-import { authService } from '../services/auth';
+import { problemsService } from '../services';
 
 export interface UseProblemsReturn {
   problems: Problem[];
@@ -21,7 +21,7 @@ export function useProblems(): UseProblemsReturn {
     try {
       setLoading(true);
       setError(null);
-      const data = await authService.getProblems();
+      const data = await problemsService.getProblems();
       setProblems(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch problems');
@@ -33,7 +33,7 @@ export function useProblems(): UseProblemsReturn {
   const addProblem = useCallback(async (problem: Omit<Problem, 'id'>): Promise<boolean> => {
     try {
       setError(null);
-      const data = await authService.createProblem(problem);
+      const data = await problemsService.createProblem(problem);
       setProblems(prev => [...prev, data]);
       return true;
     } catch (err) {
@@ -45,7 +45,7 @@ export function useProblems(): UseProblemsReturn {
   const updateProblem = useCallback(async (id: number, problem: Partial<Problem>): Promise<boolean> => {
     try {
       setError(null);
-      const data = await authService.updateProblem(id, problem);
+      const data = await problemsService.updateProblem(id, problem);
       setProblems(prev => 
         prev.map(p => p.id === id ? data : p)
       );
@@ -59,7 +59,7 @@ export function useProblems(): UseProblemsReturn {
   const deleteProblem = useCallback(async (id: number): Promise<boolean> => {
     try {
       setError(null);
-      await authService.deleteProblem(id);
+      await problemsService.deleteProblem(id);
       setProblems(prev => prev.filter(p => p.id !== id));
       return true;
     } catch (err) {

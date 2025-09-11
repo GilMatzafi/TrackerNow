@@ -8,6 +8,7 @@ const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: '📊' },
   { name: 'Problems', href: '/problems', icon: '💻' },
   { name: 'Applications', href: '/applications', icon: '📝' },
+  { name: 'Pomodoros', href: '/pomodoros', icon: '🍅' },
   { name: 'Books', href: '/books', icon: '📚' },
   { name: 'Videos', href: '/videos', icon: '🎥' },
   { name: 'Statistics', href: '/statistics', icon: '📈' },
@@ -74,7 +75,7 @@ export default function Sidebar() {
               General
             </h3>
           )}
-          {navigation.slice(0, 3).map((item) => {
+          {navigation.slice(0, 4).map((item) => {
             const isActive = pathname === item.href;
             return (
               <Link
@@ -100,7 +101,7 @@ export default function Sidebar() {
               Tools
             </h3>
           )}
-          {navigation.slice(3).map((item) => {
+          {navigation.slice(4).map((item) => {
             const isActive = pathname === item.href;
             return (
               <Link

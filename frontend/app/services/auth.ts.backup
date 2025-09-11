@@ -628,6 +628,206 @@ class AuthService {
 
     return response.json();
   }
+
+  // Pomodoro methods
+  async getPomodoros() {
+    const response = await fetch(`${this.baseURL}/pomodoros`, {
+      method: 'GET',
+      headers: this.getAuthHeaders(),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to fetch pomodoros');
+    }
+
+    return response.json();
+  }
+
+  async getPomodoro(id: number) {
+    const response = await fetch(`${this.baseURL}/pomodoros/${id}`, {
+      method: 'GET',
+      headers: this.getAuthHeaders(),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to fetch pomodoro');
+    }
+
+    return response.json();
+  }
+
+  async createPomodoro(pomodoroData: any) {
+    const response = await fetch(`${this.baseURL}/pomodoros`, {
+      method: 'POST',
+      headers: {
+        ...this.getAuthHeaders(),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(pomodoroData),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to create pomodoro');
+    }
+
+    return response.json();
+  }
+
+  async updatePomodoro(id: number, pomodoroData: any) {
+    const response = await fetch(`${this.baseURL}/pomodoros/${id}`, {
+      method: 'PUT',
+      headers: {
+        ...this.getAuthHeaders(),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(pomodoroData),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to update pomodoro');
+    }
+
+    return response.json();
+  }
+
+  async deletePomodoro(id: number) {
+    const response = await fetch(`${this.baseURL}/pomodoros/${id}`, {
+      method: 'DELETE',
+      headers: this.getAuthHeaders(),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to delete pomodoro');
+    }
+
+    return null; // 204 No Content
+  }
+
+  async getActivePomodoro() {
+    const response = await fetch(`${this.baseURL}/pomodoros/active`, {
+      method: 'GET',
+      headers: this.getAuthHeaders(),
+    });
+
+    if (!response.ok) {
+      if (response.status === 404) {
+        return null; // No active pomodoro
+      }
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to fetch active pomodoro');
+    }
+
+    return response.json();
+  }
+
+  async getPomodoroStats() {
+    const response = await fetch(`${this.baseURL}/pomodoros/stats`, {
+      method: 'GET',
+      headers: this.getAuthHeaders(),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to fetch pomodoro stats');
+    }
+
+    return response.json();
+  }
+
+  async startPomodoro(id: number) {
+    const response = await fetch(`${this.baseURL}/pomodoros/${id}/start`, {
+      method: 'POST',
+      headers: {
+        ...this.getAuthHeaders(),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({}),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to start pomodoro');
+    }
+
+    return response.json();
+  }
+
+  async pausePomodoro(id: number) {
+    const response = await fetch(`${this.baseURL}/pomodoros/${id}/pause`, {
+      method: 'POST',
+      headers: {
+        ...this.getAuthHeaders(),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({}),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to pause pomodoro');
+    }
+
+    return response.json();
+  }
+
+  async resumePomodoro(id: number) {
+    const response = await fetch(`${this.baseURL}/pomodoros/${id}/resume`, {
+      method: 'POST',
+      headers: {
+        ...this.getAuthHeaders(),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({}),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to resume pomodoro');
+    }
+
+    return response.json();
+  }
+
+  async completePomodoro(id: number) {
+    const response = await fetch(`${this.baseURL}/pomodoros/${id}/complete`, {
+      method: 'POST',
+      headers: {
+        ...this.getAuthHeaders(),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({}),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to complete pomodoro');
+    }
+
+    return response.json();
+  }
+
+  async cancelPomodoro(id: number) {
+    const response = await fetch(`${this.baseURL}/pomodoros/${id}/cancel`, {
+      method: 'POST',
+      headers: {
+        ...this.getAuthHeaders(),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({}),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to cancel pomodoro');
+    }
+
+    return response.json();
+  }
 }
 
 export const authService = new AuthService();
