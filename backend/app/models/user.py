@@ -22,3 +22,4 @@ class User(Base):
     books = relationship("Book", back_populates="user")
     videos = relationship("Video", back_populates="user")
     pomodoros = relationship("Pomodoro", back_populates="user")
+    onboarding_tasks = relationship("OnboardingTask", back_populates="user")

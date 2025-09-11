@@ -72,4 +72,12 @@ export abstract class ApiService {
   protected async delete<T>(endpoint: string): Promise<T> {
     return this.makeRequest<T>(endpoint, { method: 'DELETE' });
   }
+
+  // PATCH request
+  public async patch<T>(endpoint: string, data?: unknown): Promise<T> {
+    return this.makeRequest<T>(endpoint, {
+      method: 'PATCH',
+      body: data ? JSON.stringify(data) : undefined,
+    });
+  }
 }

@@ -24,7 +24,7 @@ export default function TopNavbar({ user, onLogout }: TopNavbarProps) {
   const pathname = usePathname();
 
   return (
-    <nav className="h-24 px-8 pt-24 pb-32" style={{background: 'linear-gradient(90deg, #EDEDED 0%, #FDF5D6 100%)'}}>
+    <nav className="h-24 px-8 pt-24 pb-24" style={{background: 'linear-gradient(90deg, #EDEDED 0%, #FDF5D6 100%)'}}>
       <div className="flex items-center justify-between h-full">
         {/* Brand/Logo */}
         <div className="flex items-center">

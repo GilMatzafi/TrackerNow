@@ -8,6 +8,7 @@ export { type Application, type ApplicationFormData, type ApplicationStatus, typ
 export { booksService, type BookFormData, type BookStats } from './books/BooksService';
 export { videosService, type VideoFormData, type VideoStats } from './videos/VideosService';
 export { type Book, type Video, type ResourceType, type ResourceStatus, type ResourcePriority, type ResourceCategory } from '../types/resource';
+export { onboardingTasksService, type OnboardingTask, type CreateOnboardingTask, type UpdateOnboardingTask } from './onboardingTasks';
 
 // For backward compatibility, export authService as the default
 export { authService as default } from './auth/AuthService';
