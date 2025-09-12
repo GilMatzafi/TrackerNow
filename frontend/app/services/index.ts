@@ -1,6 +1,5 @@
 // Export all services from a single entry point
 export { authService, type User, type LoginRequest, type RegisterRequest, type UpdateUserRequest, type AuthResponse, type TokenResponse } from './auth/AuthService';
-export { pomodorosService } from './pomodoros/PomodorosService';
 export { problemsService } from './problems/ProblemsService';
 export { type Problem, type ProblemFormData } from '../types/problem';
 export { applicationsService } from './applications/ApplicationsService';
