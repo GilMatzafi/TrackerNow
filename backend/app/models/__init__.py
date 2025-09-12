@@ -4,7 +4,8 @@ from .problem import Problem
 from .application import Application
 from .resource import Book, Video
 from .pomodoro import Pomodoro
+from .pomodoro_session import PomodoroSession
 from .onboarding_task import OnboardingTask
 from .calendar_event import CalendarEvent
 
-__all__ = ["User", "RefreshToken", "Problem", "Application", "Book", "Video", "Pomodoro", "OnboardingTask", "CalendarEvent"]
+__all__ = ["User", "RefreshToken", "Problem", "Application", "Book", "Video", "Pomodoro", "PomodoroSession", "OnboardingTask", "CalendarEvent"]

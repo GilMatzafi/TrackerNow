@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from 'react';
+import { usePomodoro } from '../../contexts/PomodoroContext';
 
 // Custom launch animation styles
 const launchModalStyles = `
@@ -32,12 +33,7 @@ const launchModalStyles = `
 `;
 
 export default function TimeTrackerCard() {
-  const [timeRemaining, setTimeRemaining] = useState(2 * 60 + 35); // 2:35 in seconds
-  const [isRunning, setIsRunning] = useState(false);
-  const [currentMode, setCurrentMode] = useState<'work' | 'break'>('work');
-  const [showSettings, setShowSettings] = useState(false);
-  const [activeTab, setActiveTab] = useState<'duration' | 'notifications'>('duration');
-  const [buttonPosition, setButtonPosition] = useState({ x: 0, y: 0 });
+  const { addSession, getTodayWorkTime, refreshSessions } = usePomodoro();
   const [settings, setSettings] = useState({
     focusSession: 25,
     shortBreak: 5,
@@ -46,6 +42,12 @@ export default function TimeTrackerCard() {
     soundEnabled: true,
     notificationsEnabled: true
   });
+  const [currentMode, setCurrentMode] = useState<'work' | 'break'>('work');
+  const [timeRemaining, setTimeRemaining] = useState(settings.focusSession * 60); // Start with focus session duration
+  const [isRunning, setIsRunning] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [activeTab, setActiveTab] = useState<'duration' | 'notifications'>('duration');
+  const [buttonPosition, setButtonPosition] = useState({ x: 0, y: 0 });
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   // Inject custom styles
@@ -56,6 +58,20 @@ export default function TimeTrackerCard() {
     return () => document.head.removeChild(style);
   }, []);
 
+  // Get today's pomodoro count from backend
+  const todayPomodoros = Math.floor(getTodayWorkTime() / settings.focusSession);
+
+  // Update timer when mode changes (only when timer is at full duration)
+  useEffect(() => {
+    const expectedDuration = currentMode === 'work' ? settings.focusSession : settings.shortBreak;
+    const expectedTime = expectedDuration * 60;
+    
+    // Only update if timer is at the expected full duration (not paused mid-session)
+    if (timeRemaining === expectedTime) {
+      setTimeRemaining(expectedTime);
+    }
+  }, [currentMode, settings.focusSession, settings.shortBreak]);
+
   // Timer logic
   useEffect(() => {
     if (isRunning && timeRemaining > 0) {
@@ -63,6 +79,25 @@ export default function TimeTrackerCard() {
         setTimeRemaining(prev => {
           if (prev <= 1) {
             setIsRunning(false);
+            
+            // Save completed session (async)
+            const sessionDuration = currentMode === 'work' ? settings.focusSession : 
+                                  currentMode === 'break' ? settings.shortBreak : settings.longBreak;
+            
+            addSession({
+              date: new Date().toISOString().split('T')[0],
+              duration: sessionDuration,
+              type: currentMode,
+              completed: true
+            }).catch(error => {
+              console.error('Error saving session:', error);
+            });
+
+            // Refresh sessions to update the counter
+            if (currentMode === 'work') {
+              refreshSessions();
+            }
+
             // Switch between work and break
             setCurrentMode(prev => prev === 'work' ? 'break' : 'work');
             return prev === 'work' ? settings.shortBreak * 60 : settings.focusSession * 60;
@@ -81,7 +116,7 @@ export default function TimeTrackerCard() {
         clearInterval(intervalRef.current);
       }
     };
-  }, [isRunning, timeRemaining]);
+  }, [isRunning, timeRemaining, currentMode, settings, addSession]);
 
   const formatTime = (seconds: number): string => {
     const minutes = Math.floor(seconds / 60);
@@ -110,9 +145,34 @@ export default function TimeTrackerCard() {
     setIsRunning(false);
   };
 
-  const resetTimer = () => {
+  const skipMode = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
     setIsRunning(false);
-    setTimeRemaining(currentMode === 'work' ? settings.focusSession * 60 : settings.shortBreak * 60);
+    
+    // If skipping a work session, count it as completed and save to history
+    if (currentMode === 'work') {
+      const sessionDuration = settings.focusSession;
+      
+      // Save completed session
+      addSession({
+        date: new Date().toISOString().split('T')[0],
+        duration: sessionDuration,
+        type: 'work',
+        completed: true
+      }).catch(error => {
+        console.error('Error saving skipped session:', error);
+      });
+
+      // Refresh sessions to update the counter
+      refreshSessions();
+    }
+    
+    const nextMode = currentMode === 'work' ? 'break' : 'work';
+    setCurrentMode(nextMode);
+    const nextDuration = nextMode === 'work' ? settings.focusSession : settings.shortBreak;
+    setTimeRemaining(nextDuration * 60);
   };
 
   const progress = getProgress();
@@ -121,7 +181,7 @@ export default function TimeTrackerCard() {
   return (
     <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-200">
       {/* Header */}
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex justify-between items-center mb-4">
         <h3 className="text-2xl font-bold text-gray-900">Time Tracker</h3>
         <button 
           onClick={(e) => {
@@ -141,10 +201,11 @@ export default function TimeTrackerCard() {
         </button>
       </div>
 
+
       {/* Circular Timer */}
-      <div className="flex justify-center mb-4">
-        <div className="relative w-48 h-48">
-          <svg className="w-48 h-48 transform -rotate-90" viewBox="0 0 100 100">
+      <div className="flex justify-center">
+        <div className="relative w-56 h-56">
+          <svg className="w-56 h-56 transform -rotate-90" viewBox="0 0 100 100">
             {/* Background circle */}
             <circle
               cx="50"
@@ -181,6 +242,9 @@ export default function TimeTrackerCard() {
             >
               {getModeText()}
             </div>
+            <div className="text-sm text-gray-500 mt-1">
+              #{todayPomodoros}
+            </div>
           </div>
         </div>
       </div>
@@ -210,11 +274,12 @@ export default function TimeTrackerCard() {
           )}
           
           <button
-            onClick={resetTimer}
+            onClick={skipMode}
             className="w-13 h-13 bg-white border border-gray-200 rounded-full flex items-center justify-center hover:bg-gray-50 transition-all duration-200 shadow-sm cursor-pointer"
           >
             <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 5l7 7-7 7" />
             </svg>
           </button>
         </div>

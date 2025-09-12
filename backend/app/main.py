@@ -8,11 +8,12 @@ from app.routers.books import router as books_router
 from app.routers.videos import router as videos_router
 from app.routers.auth import router as auth_router
 from app.routers.pomodoros import router as pomodoros_router
+from app.routers.pomodoro_sessions import router as pomodoro_sessions_router
 from app.routers.onboarding_tasks import router as onboarding_tasks_router
 from app.routers.calendar_events import router as calendar_events_router
 
 # Import models to ensure they are registered
-from app.models import User, RefreshToken, Problem, Application, Book, Video, Pomodoro, OnboardingTask, CalendarEvent
+from app.models import User, RefreshToken, Problem, Application, Book, Video, Pomodoro, PomodoroSession, OnboardingTask, CalendarEvent
 
 Base.metadata.create_all(bind=engine)
 
@@ -36,5 +37,6 @@ app.include_router(applications_router)
 app.include_router(books_router, prefix="/books", tags=["books"])
 app.include_router(videos_router, prefix="/videos", tags=["videos"])
 app.include_router(pomodoros_router)
+app.include_router(pomodoro_sessions_router, prefix="/pomodoro-sessions", tags=["pomodoro-sessions"])
 app.include_router(onboarding_tasks_router, prefix="/onboarding-tasks", tags=["onboarding-tasks"])
 app.include_router(calendar_events_router, prefix="/calendar-events", tags=["calendar-events"])

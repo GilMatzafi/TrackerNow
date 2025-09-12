@@ -23,5 +23,6 @@ class User(Base):
     books = relationship("Book", back_populates="user")
     videos = relationship("Video", back_populates="user")
     pomodoros = relationship("Pomodoro", back_populates="user")
+    pomodoro_sessions = relationship("PomodoroSession", back_populates="user")
     onboarding_tasks = relationship("OnboardingTask", back_populates="user")
     calendar_events = relationship("CalendarEvent", back_populates="user")

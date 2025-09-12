@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { PomodoroProvider } from '../contexts/PomodoroContext';
 import ProtectedRoute from '../components/ProtectedRoute';
 import TopNavbar from '../components/dashboard/TopNavbar';
 import KPICards from '../components/dashboard/KPICards';
@@ -71,9 +72,10 @@ function DashboardContent() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen" style={{background: 'linear-gradient(90deg, #EDEDED 0%, #FDF5D6 100%)'}}>
-        <TopNavbar user={user} onLogout={logout} />
-          <main className="py-8">
+      <PomodoroProvider>
+        <div className="min-h-screen" style={{background: 'linear-gradient(90deg, #EDEDED 0%, #FDF5D6 100%)'}}>
+          <TopNavbar user={user} onLogout={logout} />
+            <main className="py-8">
             <div className="max-w-none mx-auto px-4 sm:px-6 lg:px-8">
               {/* Welcome Message */}
               <div className="mb-24">
@@ -142,7 +144,8 @@ function DashboardContent() {
               </div>
             </div>
           </main>
-      </div>
+        </div>
+      </PomodoroProvider>
     </ProtectedRoute>
   );
 }
