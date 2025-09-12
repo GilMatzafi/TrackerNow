@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { usePomodoro } from '../../contexts/PomodoroContext';
+import { useTimerSettings } from '../../hooks/useTimerSettings';
 
 // Custom launch animation styles
 const launchModalStyles = `
@@ -33,20 +34,24 @@ const launchModalStyles = `
 `;
 
 export default function TimeTrackerCard() {
-  const { addSession, getTodayWorkTime, refreshSessions } = usePomodoro();
+  const { addSession, getTodaySessions, refreshSessions } = usePomodoro();
+  const { settings: backendSettings, updateSettings, loading: settingsLoading } = useTimerSettings();
+  
+  // Local settings state (will be synced with backend)
   const [settings, setSettings] = useState({
     focusSession: 25,
     shortBreak: 5,
     longBreak: 15,
     longBreakAfter: 4,
     soundEnabled: true,
-    notificationsEnabled: true
+    pauseStartSound: true,
+    focusBreakSound: true
   });
   const [currentMode, setCurrentMode] = useState<'work' | 'break'>('work');
   const [timeRemaining, setTimeRemaining] = useState(settings.focusSession * 60); // Start with focus session duration
   const [isRunning, setIsRunning] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
-  const [activeTab, setActiveTab] = useState<'duration' | 'notifications'>('duration');
+  const [activeTab, setActiveTab] = useState<'duration' | 'sounds'>('duration');
   const [buttonPosition, setButtonPosition] = useState({ x: 0, y: 0 });
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -55,22 +60,131 @@ export default function TimeTrackerCard() {
     const style = document.createElement('style');
     style.textContent = launchModalStyles;
     document.head.appendChild(style);
-    return () => document.head.removeChild(style);
+    return () => {
+      document.head.removeChild(style);
+    };
   }, []);
 
-  // Get today's pomodoro count from backend
-  const todayPomodoros = Math.floor(getTodayWorkTime() / settings.focusSession);
+  // Sync backend settings with local state
+  useEffect(() => {
+    if (backendSettings) {
+      setSettings({
+        focusSession: backendSettings.focus_session,
+        shortBreak: backendSettings.short_break,
+        longBreak: backendSettings.long_break,
+        longBreakAfter: backendSettings.long_break_after,
+        soundEnabled: backendSettings.sound_enabled,
+        pauseStartSound: backendSettings.pause_start_sound,
+        focusBreakSound: backendSettings.focus_break_sound
+      });
+    }
+  }, [backendSettings]);
 
-  // Update timer when mode changes (only when timer is at full duration)
+  // Get today's pomodoro count from backend (based on actual completed sessions, not current settings)
+  const todayPomodoros = getTodaySessions().filter(session => 
+    session.type === 'work' && session.completed
+  ).length;
+
+  // Update settings in backend
+  const updateBackendSettings = async (updates: any) => {
+    try {
+      await updateSettings(updates);
+    } catch (error) {
+      console.error('Failed to update settings:', error);
+    }
+  };
+
+  // Helper functions for settings updates
+  const updateFocusSession = (newValue: number) => {
+    setSettings(prev => ({ ...prev, focusSession: newValue }));
+    updateBackendSettings({ focus_session: newValue });
+  };
+
+  const updateShortBreak = (newValue: number) => {
+    setSettings(prev => ({ ...prev, shortBreak: newValue }));
+    updateBackendSettings({ short_break: newValue });
+  };
+
+  const updateLongBreak = (newValue: number) => {
+    setSettings(prev => ({ ...prev, longBreak: newValue }));
+    updateBackendSettings({ long_break: newValue });
+  };
+
+  const updateLongBreakAfter = (newValue: number) => {
+    setSettings(prev => ({ ...prev, longBreakAfter: newValue }));
+    updateBackendSettings({ long_break_after: newValue });
+  };
+
+  const updatePauseStartSound = (newValue: boolean) => {
+    setSettings(prev => ({ ...prev, pauseStartSound: newValue }));
+    updateBackendSettings({ pause_start_sound: newValue });
+  };
+
+  const updateFocusBreakSound = (newValue: boolean) => {
+    setSettings(prev => ({ ...prev, focusBreakSound: newValue }));
+    updateBackendSettings({ focus_break_sound: newValue });
+  };
+
+  // Play sound function
+  const playSound = (type: 'focusEnd' | 'breakEnd' | 'pauseStart') => {
+    if (!settings.soundEnabled) return;
+    
+    // Create audio context for sound generation
+    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    
+    // Different frequencies for different sounds
+    let frequency = 800; // Default frequency
+    let duration = 0.3; // Default duration
+    
+    switch (type) {
+      case 'focusEnd':
+        if (!settings.focusBreakSound) return;
+        frequency = 1000; // Higher pitch for focus end
+        duration = 0.5;
+        break;
+      case 'breakEnd':
+        if (!settings.focusBreakSound) return;
+        frequency = 600; // Lower pitch for break end
+        duration = 0.4;
+        break;
+      case 'pauseStart':
+        if (!settings.pauseStartSound) return;
+        frequency = 800; // Medium pitch for pause/start
+        duration = 0.2;
+        break;
+    }
+    
+    oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+    oscillator.type = 'sine';
+    
+    // Set volume envelope
+    gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+    gainNode.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + 0.1);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+    
+    oscillator.start(audioContext.currentTime);
+    oscillator.stop(audioContext.currentTime + duration);
+  };
+
+  // Update timer when mode changes or settings change
   useEffect(() => {
     const expectedDuration = currentMode === 'work' ? settings.focusSession : settings.shortBreak;
     const expectedTime = expectedDuration * 60;
     
-    // Only update if timer is at the expected full duration (not paused mid-session)
-    if (timeRemaining === expectedTime) {
+    // Always update timer when not running (paused or stopped)
+    if (!isRunning) {
       setTimeRemaining(expectedTime);
     }
-  }, [currentMode, settings.focusSession, settings.shortBreak]);
+    // If running, only update if timer is at the expected full duration
+    else if (timeRemaining === expectedTime) {
+      setTimeRemaining(expectedTime);
+    }
+  }, [currentMode, settings.focusSession, settings.shortBreak, isRunning]);
 
   // Timer logic
   useEffect(() => {
@@ -98,9 +212,16 @@ export default function TimeTrackerCard() {
               refreshSessions();
             }
 
+            // Play appropriate sound
+            if (currentMode === 'work') {
+              playSound('focusEnd');
+            } else {
+              playSound('breakEnd');
+            }
+
             // Switch between work and break
             setCurrentMode(prev => prev === 'work' ? 'break' : 'work');
-            return prev === 'work' ? settings.shortBreak * 60 : settings.focusSession * 60;
+            return currentMode === 'work' ? settings.shortBreak * 60 : settings.focusSession * 60;
           }
           return prev - 1;
         });
@@ -139,10 +260,12 @@ export default function TimeTrackerCard() {
 
   const startTimer = () => {
     setIsRunning(true);
+    playSound('pauseStart');
   };
 
   const pauseTimer = () => {
     setIsRunning(false);
+    playSound('pauseStart');
   };
 
   const skipMode = () => {
@@ -300,9 +423,9 @@ export default function TimeTrackerCard() {
             className="absolute inset-0"
           ></div>
           <div 
-            className="absolute bg-gray-900 rounded-3xl p-8 w-96 max-w-full shadow-2xl"
+            className="absolute bg-gray-900 rounded-3xl p-10 w-[500px] h-[600px] max-w-full shadow-2xl"
             style={{
-              left: `${buttonPosition.x - 350}px`, // More to the left
+              left: `${buttonPosition.x - 450}px`, // More to the left
               top: `${buttonPosition.y - 50}px`, // More down
               animation: 'launchModal 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards',
               transformStyle: 'preserve-3d',
@@ -311,12 +434,12 @@ export default function TimeTrackerCard() {
           >
             {/* Header */}
             <div className="flex justify-between items-center mb-8">
-              <h2 className="text-2xl font-bold text-white">Settings</h2>
+              <h2 className="text-4xl font-bold text-white">Settings</h2>
               <button
                 onClick={() => setShowSettings(false)}
-                className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gray-700 transition-all duration-200 cursor-pointer"
+                className="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gray-700 transition-all duration-200 cursor-pointer"
               >
-                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
@@ -326,7 +449,7 @@ export default function TimeTrackerCard() {
             <div className="flex bg-gray-800 rounded-2xl p-1 mb-8">
               <button
                 onClick={() => setActiveTab('duration')}
-                className={`flex-1 py-3 px-4 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer ${
+                className={`flex-1 py-4 px-6 rounded-xl text-lg font-medium transition-all duration-200 cursor-pointer ${
                   activeTab === 'duration'
                     ? 'bg-gray-700 text-white'
                     : 'text-gray-400 hover:text-white'
@@ -335,89 +458,135 @@ export default function TimeTrackerCard() {
                 DURATION
               </button>
               <button
-                onClick={() => setActiveTab('notifications')}
-                className={`flex-1 py-3 px-4 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer ${
-                  activeTab === 'notifications'
+                onClick={() => setActiveTab('sounds')}
+                className={`flex-1 py-4 px-6 rounded-xl text-lg font-medium transition-all duration-200 cursor-pointer ${
+                  activeTab === 'sounds'
                     ? 'bg-gray-700 text-white'
                     : 'text-gray-400 hover:text-white'
                 }`}
               >
-                NOTIFICATIONS
+                SOUNDS
               </button>
             </div>
 
             {/* Content */}
             {activeTab === 'duration' && (
-              <div className="space-y-6">
+              <div className="space-y-8 mt-14">
                 {/* Focus Session */}
                 <div className="flex justify-between items-center">
-                  <span className="text-white text-lg">Focus Session</span>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-white text-2xl font-bold">{settings.focusSession}</span>
-                    <span className="text-white text-sm">min</span>
-                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
+                  <span className="text-white text-2xl">Focus Session</span>
+                  <div className="flex items-center space-x-3">
+                    <button
+                      onClick={() => updateFocusSession(Math.max(5, settings.focusSession - 5))}
+                      className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-600 transition-colors cursor-pointer"
+                    >
+                      <span className="text-white text-xl">-</span>
+                    </button>
+                    <span className="text-white text-3xl font-bold w-16 text-center">{settings.focusSession}</span>
+                    <button
+                      onClick={() => updateFocusSession(Math.min(60, settings.focusSession + 5))}
+                      className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-600 transition-colors cursor-pointer"
+                    >
+                      <span className="text-white text-xl">+</span>
+                    </button>
+                    <span className="text-white text-lg ml-2 w-8 text-left">min</span>
                   </div>
                 </div>
 
                 {/* Short break */}
                 <div className="flex justify-between items-center">
-                  <span className="text-white text-lg">Short break</span>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-white text-2xl font-bold">{settings.shortBreak.toString().padStart(2, '0')}</span>
-                    <span className="text-white text-sm">min</span>
-                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
+                  <span className="text-white text-2xl">Short break</span>
+                  <div className="flex items-center space-x-3">
+                    <button
+                      onClick={() => updateShortBreak(Math.max(1, settings.shortBreak - 1))}
+                      className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-600 transition-colors cursor-pointer"
+                    >
+                      <span className="text-white text-xl">-</span>
+                    </button>
+                    <span className="text-white text-3xl font-bold w-16 text-center">{settings.shortBreak.toString().padStart(2, '0')}</span>
+                    <button
+                      onClick={() => updateShortBreak(Math.min(30, settings.shortBreak + 1))}
+                      className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-600 transition-colors cursor-pointer"
+                    >
+                      <span className="text-white text-xl">+</span>
+                    </button>
+                    <span className="text-white text-lg ml-2 w-8 text-left">min</span>
                   </div>
                 </div>
 
                 {/* Long break */}
                 <div className="flex justify-between items-center">
-                  <span className="text-white text-lg">Long break</span>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-white text-2xl font-bold">{settings.longBreak}</span>
-                    <span className="text-white text-sm">min</span>
-                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
+                  <span className="text-white text-2xl">Long break</span>
+                  <div className="flex items-center space-x-3">
+                    <button
+                      onClick={() => updateLongBreak(Math.max(5, settings.longBreak - 5))}
+                      className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-600 transition-colors cursor-pointer"
+                    >
+                      <span className="text-white text-xl">-</span>
+                    </button>
+                    <span className="text-white text-3xl font-bold w-16 text-center">{settings.longBreak}</span>
+                    <button
+                      onClick={() => updateLongBreak(Math.min(60, settings.longBreak + 5))}
+                      className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-600 transition-colors cursor-pointer"
+                    >
+                      <span className="text-white text-xl">+</span>
+                    </button>
+                    <span className="text-white text-lg ml-2 w-8 text-left">min</span>
                   </div>
                 </div>
 
                 {/* Long break after */}
                 <div className="flex justify-between items-center">
-                  <span className="text-white text-lg">Long break after</span>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-white text-2xl font-bold">{settings.longBreakAfter}</span>
-                    <span className="text-white text-sm">Sess.</span>
-                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
+                  <span className="text-white text-2xl">Long break after</span>
+                  <div className="flex items-center space-x-3">
+                    <button
+                      onClick={() => updateLongBreakAfter(Math.max(2, settings.longBreakAfter - 1))}
+                      className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-600 transition-colors cursor-pointer"
+                    >
+                      <span className="text-white text-xl">-</span>
+                    </button>
+                    <span className="text-white text-3xl font-bold w-16 text-center">{settings.longBreakAfter.toString()}</span>
+                    <button
+                      onClick={() => updateLongBreakAfter(Math.min(10, settings.longBreakAfter + 1))}
+                      className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-600 transition-colors cursor-pointer"
+                    >
+                      <span className="text-white text-xl">+</span>
+                    </button>
+                    <span className="text-white text-lg ml-2 w-8 text-left">Sess.</span>
                   </div>
                 </div>
               </div>
             )}
 
-            {activeTab === 'notifications' && (
-              <div className="space-y-6">
+            {activeTab === 'sounds' && (
+              <div className="space-y-8 mt-10">
                 <div className="flex justify-between items-center">
-                  <span className="text-white text-lg">Sound Alerts</span>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-white text-2xl font-bold">{settings.soundEnabled ? 'ON' : 'OFF'}</span>
-                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
+                  <span className="text-white text-2xl">Pause/Start Sound</span>
+                  <div className="flex items-center space-x-3">
+                    <span className="text-white text-3xl font-bold">{settings.pauseStartSound ? 'ON' : 'OFF'}</span>
+                    <button
+                      onClick={() => updatePauseStartSound(!settings.pauseStartSound)}
+                      className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-600 transition-colors cursor-pointer"
+                    >
+                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </button>
                   </div>
                 </div>
 
                 <div className="flex justify-between items-center">
-                  <span className="text-white text-lg">Push Notifications</span>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-white text-2xl font-bold">{settings.notificationsEnabled ? 'ON' : 'OFF'}</span>
-                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
+                  <span className="text-white text-2xl">Focus/Break Sound</span>
+                  <div className="flex items-center space-x-3">
+                    <span className="text-white text-3xl font-bold">{settings.focusBreakSound ? 'ON' : 'OFF'}</span>
+                    <button
+                      onClick={() => updateFocusBreakSound(!settings.focusBreakSound)}
+                      className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-600 transition-colors cursor-pointer"
+                    >
+                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </button>
                   </div>
                 </div>
               </div>

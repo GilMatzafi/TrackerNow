@@ -9,6 +9,7 @@ interface PomodoroContextType {
   error: string | null;
   addSession: (session: CreatePomodoroSession) => Promise<void>;
   getWeeklySessions: () => PomodoroSession[];
+  getTodaySessions: () => PomodoroSession[];
   getTotalWorkTime: () => number;
   getTodayWorkTime: () => number;
   refreshSessions: () => Promise<void>;
@@ -77,6 +78,11 @@ export const PomodoroProvider: React.FC<PomodoroProviderProps> = ({ children }) 
       .reduce((total, session) => total + session.duration, 0);
   };
 
+  const getTodaySessions = (): PomodoroSession[] => {
+    const today = new Date().toISOString().split('T')[0];
+    return sessions.filter(session => session.date === today);
+  };
+
   const getTodayWorkTime = (): number => {
     const today = new Date().toISOString().split('T')[0];
     return sessions
@@ -94,6 +100,7 @@ export const PomodoroProvider: React.FC<PomodoroProviderProps> = ({ children }) 
     error,
     addSession,
     getWeeklySessions,
+    getTodaySessions,
     getTotalWorkTime,
     getTodayWorkTime,
     refreshSessions,
