@@ -13,6 +13,7 @@ import { useOnboardingTasks } from '../hooks/useOnboardingTasks';
 import UserProfileCard from '../components/dashboard/UserProfileCard';
 import ProgressCard from '../components/dashboard/ProgressCard';
 import OnboardingTasksCard from '../components/dashboard/OnboardingTasksCard';
+import MotivationalQuotesCard from '../components/dashboard/MotivationalQuotesCard';
 import TimeTrackerCard from '../components/dashboard/TimeTrackerCard';
 import CalendarCard from '../components/dashboard/CalendarCard';
 
@@ -103,58 +104,8 @@ function DashboardContent() {
                 />
 
                 {/* Second Row Cards */}
-                {/* Onboarding Tasks Card - Leftmost */}
-                <div className="bg-white rounded-3xl p-10 shadow-sm border border-gray-200">
-                  <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-lg font-semibold text-gray-900">Onboarding Task</h3>
-                    <span className="text-sm text-gray-600">2/8</span>
-                  </div>
-                  <div className="space-y-3">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-5 h-5 bg-yellow-400 rounded-full flex items-center justify-center">
-                        <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                        </svg>
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-900">Interview</p>
-                        <p className="text-xs text-gray-500">Sep 13, 08:30</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <div className="w-5 h-5 bg-yellow-400 rounded-full flex items-center justify-center">
-                        <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                        </svg>
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-900">Team Meeting</p>
-                        <p className="text-xs text-gray-500">Sep 13, 10:30</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <div className="w-5 h-5 bg-gray-200 rounded-full"></div>
-                      <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-900">Project Update</p>
-                        <p className="text-xs text-gray-500">Sep 13, 13:00</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <div className="w-5 h-5 bg-gray-200 rounded-full"></div>
-                      <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-900">Discuss Q3 Goals</p>
-                        <p className="text-xs text-gray-500">Sep 13, 14:45</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <div className="w-5 h-5 bg-gray-200 rounded-full"></div>
-                      <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-900">HR Policy Review</p>
-                        <p className="text-xs text-gray-500">Sep 13, 16:30</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                {/* Motivational Quotes Card - Leftmost */}
+                <MotivationalQuotesCard />
 
                 {/* Calendar Card - Spans 2 columns */}
                 <CalendarCard className="col-span-2" />
