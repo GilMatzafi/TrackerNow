@@ -172,7 +172,7 @@ export default function KPICards({ data }: KPICardsProps) {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 mb-2">
       {/* Featured card - Problems Solved (larger) */}
       <CardComponent card={featuredCard} index={0} />
       

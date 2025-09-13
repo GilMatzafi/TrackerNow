@@ -83,7 +83,7 @@ function DashboardContent() {
               </div>
               
               {/* Combined Grid Layout */}
-              <div className="grid grid-cols-1 lg:grid-cols-4 gap-2 mt-8 auto-rows-[400px] mb-10">
+              <div className="grid grid-cols-1 lg:grid-cols-4 gap-2 mt-1 auto-rows-[400px] mb-2">
                 {/* User Profile Card */}
                 <UserProfileCard user={user} onRefreshUser={refreshUser} />
 
@@ -118,7 +118,7 @@ function DashboardContent() {
               <KPICards data={dashboardData} />
               
               {/* Charts Row */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8 ">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-1 mt-1 ">
                 {/* Progress Overview */}
                 <div className="bg-white rounded-3xl p-12 shadow-sm border border-gray-200">
                   <ProgressChart data={dashboardData.dailyProgress} />
@@ -131,7 +131,7 @@ function DashboardContent() {
               </div>
               
               {/* Bottom Row */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-1 mt-1">
                 {/* Problem Distribution */}
                 <div className="bg-white rounded-3xl p-12 shadow-sm border border-gray-200">
                   <ProblemDistribution data={dashboardData.problemsByTopic} />
