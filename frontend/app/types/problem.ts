@@ -2,8 +2,8 @@ export interface Problem {
   id: number;
   name: string;
   topics: string[];
-  difficulty: 'Easy' | 'Medium' | 'Hard';
-  status: 'Not Started' | 'In Progress' | 'Completed' | 'Needs Revisit';
+  difficulty: 'EASY' | 'MEDIUM' | 'HARD';
+  status: 'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETED' | 'NEEDS_REVISIT';
   link?: string;
   time_minutes?: number;
   notes?: string;
@@ -13,8 +13,8 @@ export interface Problem {
 export interface ProblemFormData {
   name: string;
   topics: string[];
-  difficulty: 'Easy' | 'Medium' | 'Hard';
-  status: 'Not Started' | 'In Progress' | 'Completed' | 'Needs Revisit';
+  difficulty: 'EASY' | 'MEDIUM' | 'HARD';
+  status: 'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETED' | 'NEEDS_REVISIT';
   link?: string;
   time_minutes?: number;
   notes?: string;

@@ -320,7 +320,7 @@ export default function CalendarCard({ className = "" }: CalendarCardProps) {
           }}
         >
           <div 
-            className="bg-white rounded-2xl p-6 w-96 max-w-full mx-4 shadow-2xl border border-gray-100 relative"
+            className="bg-white rounded-2xl p-8 w-[600px] max-w-full mx-4 shadow-2xl border border-gray-100 relative"
             onClick={(e) => e.stopPropagation()}
             style={{
               animation: 'launchModal 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards',
@@ -340,78 +340,81 @@ export default function CalendarCard({ className = "" }: CalendarCardProps) {
               </svg>
             </button>
             
-            <h3 className="text-lg font-semibold mb-4 pr-8">
-              Add Event - {selectedDate.toLocaleDateString()}
+            <h3 className="text-2xl font-semibold mb-6 pr-8">
+              Add Event - {selectedDate.toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric' 
+              })}
             </h3>
             
-            <form onSubmit={handleCreateEvent} className="space-y-4">
+            <form onSubmit={handleCreateEvent} className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-lg font-medium text-gray-700 mb-2">
                   Title *
                 </label>
                 <input
                   name="title"
                   type="text"
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-lg font-medium text-gray-700 mb-2">
                   Description
                 </label>
                 <textarea
                   name="description"
-                  rows={2}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  rows={3}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
                 />
               </div>
               
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-lg font-medium text-gray-700 mb-2">
                     Start Time *
                   </label>
                   <input
                     name="startTime"
                     type="time"
                     required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-lg font-medium text-gray-700 mb-2">
                     End Time *
                   </label>
                   <input
                     name="endTime"
                     type="time"
                     required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
                   />
                 </div>
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-lg font-medium text-gray-700 mb-2">
                   Location
                 </label>
                 <input
                   name="location"
                   type="text"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-lg font-medium text-gray-700 mb-2">
                   Event Type
                 </label>
                 <select
                   name="eventType"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
                 >
                   <option value="">Select type</option>
                   <option value="meeting">Meeting</option>
@@ -422,10 +425,10 @@ export default function CalendarCard({ className = "" }: CalendarCardProps) {
                 </select>
               </div>
               
-              <div className="flex space-x-3 pt-4">
+              <div className="flex space-x-4 pt-6">
                 <button
                   type="submit"
-                  className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
+                  className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 transition-colors text-lg font-medium cursor-pointer"
                 >
                   Create Event
                 </button>
@@ -435,7 +438,7 @@ export default function CalendarCard({ className = "" }: CalendarCardProps) {
                     setShowEventForm(false);
                     setSelectedDate(null);
                   }}
-                  className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-400 transition-colors"
+                  className="flex-1 bg-gray-300 text-gray-700 py-3 px-6 rounded-md hover:bg-gray-400 transition-colors text-lg font-medium cursor-pointer"
                 >
                   Cancel
                 </button>

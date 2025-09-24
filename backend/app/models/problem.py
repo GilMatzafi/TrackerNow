@@ -5,15 +5,15 @@ import enum
 from datetime import datetime
 
 class DifficultyLevel(enum.Enum):
-    EASY = "Easy"
-    MEDIUM = "Medium"
-    HARD = "Hard"
+    EASY = "EASY"
+    MEDIUM = "MEDIUM"
+    HARD = "HARD"
 
 class ProblemStatus(enum.Enum):
-    NOT_STARTED = "Not Started"
-    IN_PROGRESS = "In Progress"
-    COMPLETED = "Completed"
-    NEEDS_REVISIT = "Needs Revisit"
+    NOT_STARTED = "NOT_STARTED"
+    IN_PROGRESS = "IN_PROGRESS"
+    COMPLETED = "COMPLETED"
+    NEEDS_REVISIT = "NEEDS_REVISIT"
 
 class Problem(Base):
     __tablename__ = "problems"

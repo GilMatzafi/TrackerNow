@@ -8,7 +8,9 @@ import {
   PencilIcon,
   CheckCircleIcon,
   ChevronDownIcon,
-  ChevronUpIcon
+  ChevronUpIcon,
+  BuildingOfficeIcon,
+  CurrencyDollarIcon
 } from '@heroicons/react/24/outline';
 import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
 
@@ -162,22 +164,6 @@ export default function JobDetailPage({ job, onClose, onEdit }: JobDetailPagePro
             ← Back to Applications
           </button>
           <div className="flex items-center space-x-4">
-            <button
-              onClick={() => setIsStarred(!isStarred)}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-              {isStarred ? (
-                <StarIconSolid className="w-6 h-6 text-yellow-500" />
-              ) : (
-                <StarIcon className="w-6 h-6 text-gray-400" />
-              )}
-            </button>
-            <button
-              onClick={() => onEdit?.(job)}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              Edit Job
-            </button>
           </div>
         </div>
       </div>
@@ -193,7 +179,7 @@ export default function JobDetailPage({ job, onClose, onEdit }: JobDetailPagePro
                   <h1 className="text-4xl font-bold text-gray-900 mb-2">
                     {job.position}
                   </h1>
-                  <div className="flex items-center space-x-4 text-lg text-gray-600">
+                  <div className="flex items-center space-x-4 text-lg text-gray-600 mb-4">
                     <div className="flex items-center space-x-2">
                       <MapPinIcon className="w-5 h-5" />
                       <span>{job.location || 'Location not specified'}</span>
@@ -203,6 +189,26 @@ export default function JobDetailPage({ job, onClose, onEdit }: JobDetailPagePro
                       <span>Saved {job.appliedDate || 'recently'}</span>
                     </div>
                   </div>
+                  
+                  {/* Job Details */}
+                  <div className="flex items-center space-x-6">
+                    <div className="flex items-center space-x-2">
+                      <BuildingOfficeIcon className="w-5 h-5 text-gray-500" />
+                      <span className="text-sm text-gray-900">{job.company}</span>
+                    </div>
+                    {job.salary && (
+                      <div className="flex items-center space-x-2">
+                        <CurrencyDollarIcon className="w-5 h-5 text-gray-500" />
+                        <span className="text-sm text-gray-900">{job.salary}</span>
+                      </div>
+                    )}
+                    {job.appliedDate && (
+                      <div className="flex items-center space-x-2">
+                        <ClockIcon className="w-5 h-5 text-gray-500" />
+                        <span className="text-sm text-gray-900">{job.appliedDate}</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
                 <div className="flex space-x-1">
                   {[...Array(5)].map((_, i) => (
@@ -210,70 +216,68 @@ export default function JobDetailPage({ job, onClose, onEdit }: JobDetailPagePro
                   ))}
                 </div>
               </div>
-
-              {job.isReferral && (
-                <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
-                  <div className="flex items-center space-x-2">
-                    <CheckCircleIcon className="w-5 h-5 text-green-600" />
-                    <span className="text-green-800 font-medium">
-                      Referral Opportunity
-                    </span>
-                  </div>
-                  {job.referrerName && (
-                    <p className="text-green-700 mt-1">
-                      Referred by: {job.referrerName}
-                    </p>
-                  )}
-                </div>
-              )}
             </div>
 
-            {/* Guidance Section */}
-            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-              <button
-                onClick={() => setIsGuidanceExpanded(!isGuidanceExpanded)}
-                className="w-full flex items-center justify-between text-left"
-              >
+            {/* Company Overview */}
+            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-200">
+              <h2 className="text-2xl font-semibold text-gray-900 mb-6">Company Overview</h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
-                  <h2 className="text-xl font-semibold text-gray-900">
-                    Guidance {guidanceProgress}% complete
-                  </h2>
-                  <p className="text-gray-600 mt-1">
-                    Follow these steps to improve your application
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">About {job.company}</h3>
+                  <p className="text-gray-700 leading-relaxed mb-4">
+                    {job.companyDescription || `Join our dynamic team at ${job.company} in an environment that fosters teamwork, nurtures career development, celebrates diversity, and rewards innovation. We offer competitive compensation and excellent employee programs.`}
                   </p>
-                </div>
-                {isGuidanceExpanded ? (
-                  <ChevronUpIcon className="w-5 h-5 text-gray-400" />
-                ) : (
-                  <ChevronDownIcon className="w-5 h-5 text-gray-400" />
-                )}
-              </button>
-
-              {isGuidanceExpanded && (
-                <div className="mt-6 space-y-4">
-                  {guidanceSteps.map((step) => (
-                    <div key={step.id} className="flex items-start space-x-3">
-                      <input
-                        type="checkbox"
-                        checked={step.completed}
-                        onChange={(e) => {
-                          const newSteps = guidanceSteps.map(s => 
-                            s.id === step.id ? { ...s, completed: e.target.checked } : s
-                          );
-                          const completed = newSteps.filter(s => s.completed).length;
-                          setGuidanceProgress(Math.round((completed / newSteps.length) * 100));
-                        }}
-                        className="mt-1 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                      />
-                      <div>
-                        <h3 className="font-medium text-gray-900">{step.title}</h3>
-                        <p className="text-sm text-gray-600 mt-1">{step.description}</p>
-                      </div>
+                  
+                  <div className="space-y-3">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span className="text-gray-700">Industry-leading technology solutions</span>
                     </div>
-                  ))}
+                    <div className="flex items-center space-x-3">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span className="text-gray-700">Innovative and collaborative culture</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span className="text-gray-700">Professional growth opportunities</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span className="text-gray-700">Competitive benefits package</span>
+                    </div>
+                  </div>
                 </div>
-              )}
+                
+                <div>
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">Company Details</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <span className="text-sm font-medium text-gray-600">Company Size:</span>
+                      <p className="text-gray-900">500-1000 employees</p>
+                    </div>
+                    <div>
+                      <span className="text-sm font-medium text-gray-600">Founded:</span>
+                      <p className="text-gray-900">2010</p>
+                    </div>
+                    <div>
+                      <span className="text-sm font-medium text-gray-600">Industry:</span>
+                      <p className="text-gray-900">Technology</p>
+                    </div>
+                    <div>
+                      <span className="text-sm font-medium text-gray-600">Website:</span>
+                      <a href="#" className="text-blue-600 hover:text-blue-800">www.{job.company.toLowerCase()}.com</a>
+                    </div>
+                    <div>
+                      <span className="text-sm font-medium text-gray-600">Headquarters:</span>
+                      <p className="text-gray-900">{job.location || 'San Francisco, CA'}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
+
+
 
             {/* Job Description */}
             <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-200">
@@ -393,32 +397,99 @@ export default function JobDetailPage({ job, onClose, onEdit }: JobDetailPagePro
               </div>
             </div>
 
-            {/* Job Details */}
+            {/* Contact Person */}
             <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Job Details</h3>
-              <div className="space-y-3">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Contact Person</h3>
+              
+              <div className="space-y-4">
                 <div>
-                  <span className="text-sm font-medium text-gray-600">Company:</span>
-                  <p className="text-sm text-gray-900">{job.company}</p>
+                  <label className="block text-sm font-medium text-gray-600 mb-2">
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Contact person name"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                  />
                 </div>
+                
                 <div>
-                  <span className="text-sm font-medium text-gray-600">Status:</span>
-                  <p className="text-sm text-gray-900">{job.status || 'Saved'}</p>
+                  <label className="block text-sm font-medium text-gray-600 mb-2">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    placeholder="contact@company.com"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                  />
                 </div>
-                {job.salary && (
-                  <div>
-                    <span className="text-sm font-medium text-gray-600">Salary:</span>
-                    <p className="text-sm text-gray-900">{job.salary}</p>
-                  </div>
-                )}
-                {job.appliedDate && (
-                  <div>
-                    <span className="text-sm font-medium text-gray-600">Applied:</span>
-                    <p className="text-sm text-gray-900">{job.appliedDate}</p>
-                  </div>
-                )}
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-600 mb-2">
+                    LinkedIn
+                  </label>
+                  <input
+                    type="url"
+                    placeholder="https://linkedin.com/in/username"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-600 mb-2">
+                    Role
+                  </label>
+                  <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                    <option value="">Select role</option>
+                    <option value="HR">HR</option>
+                    <option value="Technical">Technical</option>
+                    <option value="Manager">Manager</option>
+                    <option value="Recruiter">Recruiter</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
               </div>
             </div>
+
+            {/* Resume/CV Upload */}
+            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Resume/CV</h3>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-600 mb-2">
+                    Upload Resume
+                  </label>
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition-colors">
+                    <div className="space-y-2">
+                      <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                      <div className="text-sm text-gray-600">
+                        <label htmlFor="file-upload" className="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
+                          <span>Upload a file</span>
+                          <input id="file-upload" name="file-upload" type="file" className="sr-only" accept=".pdf,.doc,.docx" />
+                        </label>
+                        <span className="pl-1">or drag and drop</span>
+                      </div>
+                      <p className="text-xs text-gray-500">PDF, DOC, DOCX up to 10MB</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-600 mb-2">
+                    Cover Letter
+                  </label>
+                  <textarea
+                    rows={4}
+                    placeholder="Write your cover letter here..."
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                  />
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>

@@ -7,8 +7,6 @@ const navigation = [
   { name: 'Dashboard', href: '/dashboard' },
   { name: 'Problems', href: '/problems' },
   { name: 'Applications', href: '/applications/kanban' },
-  { name: 'Books', href: '/books' },
-  { name: 'Videos', href: '/videos' },
 ];
 
 interface TopNavbarProps {
@@ -23,12 +21,17 @@ export default function TopNavbar({ user, onLogout }: TopNavbarProps) {
   const pathname = usePathname();
 
   return (
-    <nav className="h-24 px-8 pt-24 pb-24" style={{background: 'linear-gradient(90deg, #EDEDED 0%, #FDF5D6 100%)'}}>
+    <nav className="h-24 px-8 pt-24 pb-24 bg-gray-50">
       <div className="flex items-center justify-between h-full">
         {/* Brand/Logo */}
         <div className="flex items-center">
-          <div className="border-2 border-black rounded-full px-7 py-3" style={{background: 'linear-gradient(90deg, #EDEDED 0%, #FDF5D6 100%)'}}>
-            <span className="text-gray-900 font-light text-6xl">TrackerNow</span>
+          <div className="flex items-center space-x-4">
+            <img 
+              src="/logo.png" 
+              alt="TrackerNow Logo" 
+              className="w-100 h-100"
+            />
+       
           </div>
         </div>
 

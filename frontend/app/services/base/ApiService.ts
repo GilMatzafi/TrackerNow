@@ -18,10 +18,49 @@ export abstract class ApiService {
     return localStorage.getItem('access_token');
   }
 
+  // Get refresh token from localStorage
+  private getRefreshToken(): string | null {
+    return localStorage.getItem('refresh_token');
+  }
+
+  // Refresh access token
+  private async refreshToken(): Promise<void> {
+    const refreshToken = this.getRefreshToken();
+    
+    if (!refreshToken) {
+      throw new Error('No refresh token available');
+    }
+
+    const response = await fetch(`${this.baseURL}/auth/refresh`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ refresh_token: refreshToken }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Token refresh failed');
+    }
+
+    const tokenData = await response.json();
+    
+    // Update access token
+    localStorage.setItem('access_token', tokenData.access_token);
+  }
+
+  // Clear all tokens
+  private clearTokens(): void {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    localStorage.removeItem('token_type');
+  }
+
   // Make authenticated API request
   protected async makeRequest<T>(
     endpoint: string,
-    options: RequestInit = {}
+    options: RequestInit = {},
+    retryCount = 0
   ): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
     
@@ -33,6 +72,19 @@ export abstract class ApiService {
         ...options.headers,
       },
     });
+
+    // Handle 401 Unauthorized - try to refresh token
+    if (response.status === 401 && retryCount === 0) {
+      try {
+        await this.refreshToken();
+        // Retry the request with new token
+        return this.makeRequest<T>(endpoint, options, retryCount + 1);
+      } catch (refreshError) {
+        // If refresh fails, clear tokens and throw error
+        this.clearTokens();
+        throw new Error('Authentication failed - please login again');
+      }
+    }
 
     if (!response.ok) {
       const error = await response.json().catch(() => ({ detail: 'Unknown error' }));

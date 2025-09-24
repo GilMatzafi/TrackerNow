@@ -45,8 +45,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           setUser(userData);
         } catch (error) {
           console.error('Auth check failed:', error);
-          // Clear invalid tokens
+          // Clear invalid tokens and redirect to login
           await authService.logout();
+          setUser(null);
         }
       }
       setIsLoading(false);
@@ -111,6 +112,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       }
     } catch (error) {
       console.error('Failed to refresh user data:', error);
+      // If refresh fails, clear user state
+      setUser(null);
     }
   };
 

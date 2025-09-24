@@ -73,14 +73,10 @@ function DashboardContent() {
   return (
     <ProtectedRoute>
       <PomodoroProvider>
-        <div className="min-h-screen" style={{background: 'linear-gradient(90deg, #EDEDED 0%, #FDF5D6 100%)'}}>
+        <div className="min-h-screen bg-gray-50">
           <TopNavbar user={user} onLogout={logout} />
             <main className="py-8">
             <div className="max-w-none mx-auto px-4 sm:px-6 lg:px-8">
-              {/* Welcome Message */}
-              <div className="mb-24">
-                <h1 className="text-6xl  text-gray-900">Welcome in, {user?.first_name || 'User'}</h1>
-              </div>
               
               {/* Combined Grid Layout */}
               <div className="grid grid-cols-1 lg:grid-cols-4 gap-2 mt-1 auto-rows-[400px] mb-2">
@@ -113,32 +109,15 @@ function DashboardContent() {
                 <CalendarCard className="col-span-2" />
 
               </div>
-              
-              {/* KPI Cards */}
-              <KPICards data={dashboardData} />
-              
-              {/* Charts Row */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-1 mt-1 ">
-                {/* Progress Overview */}
-                <div className="bg-white rounded-3xl p-12 shadow-sm border border-gray-200">
-                  <ProgressChart data={dashboardData.dailyProgress} />
-                </div>
-                
-                {/* Time Spent Coding */}
-                <div className="bg-white rounded-3xl p-12 shadow-sm border border-gray-200">
-                  <TimeSpentChart data={dashboardData.dailyProgress} />
-                </div>
-              </div>
-              
               {/* Bottom Row */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-1 mt-1">
+              <div className="grid grid-cols-1 lg:grid-cols-4 gap-2 mt-1 auto-rows-[1000px] mb-2">
                 {/* Problem Distribution */}
-                <div className="bg-white rounded-3xl p-12 shadow-sm border border-gray-200">
+                <div className="bg-white rounded-3xl p-12 shadow-sm border border-gray-200 lg:col-span-2">
                   <ProblemDistribution data={dashboardData.problemsByTopic} />
                 </div>
                 
                 {/* Applications Timeline */}
-                <div className="bg-white rounded-3xl p-12 shadow-sm border border-gray-200">
+                <div className="bg-white rounded-3xl p-12 shadow-sm border border-gray-200 lg:col-span-2">
                   <ApplicationsTable data={dashboardData.recentApplications} />
                 </div>
               </div>

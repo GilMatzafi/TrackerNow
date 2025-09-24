@@ -41,6 +41,15 @@ export default function Home() {
       {/* Main content */}
       <div className="relative z-10 min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto text-center">
+          {/* Logo */}
+          <div className="flex justify-center mb-8">
+            <img 
+              src="/logo.png" 
+              alt="TrackerNow Logo" 
+              className="w-24 h-24"
+            />
+          </div>
+          
           {/* Main headline */}
           <h1 
             className="text-5xl sm:text-6xl lg:text-8xl xl:text-9xl font-bold mb-8 leading-tight"

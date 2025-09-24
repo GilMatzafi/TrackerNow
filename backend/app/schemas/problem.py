@@ -4,15 +4,15 @@ from enum import Enum
 from datetime import datetime
 
 class DifficultyLevel(str, Enum):
-    EASY = "Easy"
-    MEDIUM = "Medium"
-    HARD = "Hard"
+    EASY = "EASY"
+    MEDIUM = "MEDIUM"
+    HARD = "HARD"
 
 class ProblemStatus(str, Enum):
-    NOT_STARTED = "Not Started"
-    IN_PROGRESS = "In Progress"
-    COMPLETED = "Completed"
-    NEEDS_REVISIT = "Needs Revisit"
+    NOT_STARTED = "NOT_STARTED"
+    IN_PROGRESS = "IN_PROGRESS"
+    COMPLETED = "COMPLETED"
+    NEEDS_REVISIT = "NEEDS_REVISIT"
 
 class ProblemBase(BaseModel):
     name: str
@@ -23,11 +23,6 @@ class ProblemBase(BaseModel):
     time_minutes: Optional[int] = None
     notes: Optional[str] = None
 
-    @validator('topics')
-    def topics_must_not_be_empty(cls, v):
-        if not v:
-            raise ValueError('At least one topic must be provided')
-        return v
 
     @validator('time_minutes')
     def time_must_be_positive(cls, v):
@@ -47,11 +42,6 @@ class ProblemUpdate(BaseModel):
     time_minutes: Optional[int] = None
     notes: Optional[str] = None
 
-    @validator('topics')
-    def topics_must_not_be_empty(cls, v):
-        if v is not None and not v:
-            raise ValueError('At least one topic must be provided')
-        return v
 
     @validator('time_minutes')
     def time_must_be_positive(cls, v):

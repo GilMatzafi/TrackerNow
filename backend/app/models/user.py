@@ -19,8 +19,6 @@ class User(Base):
     # Relationships
     refresh_tokens = relationship("RefreshToken", back_populates="user")
     problems = relationship("Problem", back_populates="user")
-    books = relationship("Book", back_populates="user")
-    videos = relationship("Video", back_populates="user")
     pomodoros = relationship("Pomodoro", back_populates="user")
     pomodoro_sessions = relationship("PomodoroSession", back_populates="user")
     onboarding_tasks = relationship("OnboardingTask", back_populates="user")

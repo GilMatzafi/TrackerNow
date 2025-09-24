@@ -3,14 +3,15 @@ from app.models.problem import Problem
 from app.schemas.problem import ProblemCreate, ProblemUpdate
 from typing import Optional
 
-def list_problems(db: Session, skip: int = 0, limit: int = 100) -> list[Problem]:
-    return db.query(Problem).offset(skip).limit(limit).all()
+def list_problems(db: Session, user_id: int, skip: int = 0, limit: int = 100) -> list[Problem]:
+    return db.query(Problem).filter(Problem.user_id == user_id).offset(skip).limit(limit).all()
 
-def get_problem(db: Session, problem_id: int) -> Optional[Problem]:
-    return db.query(Problem).filter(Problem.id == problem_id).first()
+def get_problem(db: Session, problem_id: int, user_id: int) -> Optional[Problem]:
+    return db.query(Problem).filter(Problem.id == problem_id, Problem.user_id == user_id).first()
 
-def create_problem(db: Session, payload: ProblemCreate) -> Problem:
+def create_problem(db: Session, payload: ProblemCreate, user_id: int) -> Problem:
     obj = Problem(
+        user_id=user_id,
         name=payload.name,
         topics=payload.topics,
         difficulty=payload.difficulty,
@@ -24,8 +25,8 @@ def create_problem(db: Session, payload: ProblemCreate) -> Problem:
     db.refresh(obj)
     return obj
 
-def update_problem(db: Session, problem_id: int, payload: ProblemUpdate) -> Optional[Problem]:
-    problem = db.query(Problem).filter(Problem.id == problem_id).first()
+def update_problem(db: Session, problem_id: int, payload: ProblemUpdate, user_id: int) -> Optional[Problem]:
+    problem = db.query(Problem).filter(Problem.id == problem_id, Problem.user_id == user_id).first()
     if not problem:
         return None
     
@@ -40,8 +41,8 @@ def update_problem(db: Session, problem_id: int, payload: ProblemUpdate) -> Opti
     db.refresh(problem)
     return problem
 
-def delete_problem(db: Session, problem_id: int) -> bool:
-    problem = db.query(Problem).filter(Problem.id == problem_id).first()
+def delete_problem(db: Session, problem_id: int, user_id: int) -> bool:
+    problem = db.query(Problem).filter(Problem.id == problem_id, Problem.user_id == user_id).first()
     if not problem:
         return False
     

@@ -80,6 +80,13 @@ export default function LoginPage() {
         <div className="max-w-md w-full">
           {/* Header */}
           <div className="text-center mb-10">
+            <div className="flex justify-center mb-6">
+              <img 
+                src="/logo.png" 
+                alt="TrackerNow Logo" 
+                className="w-20 h-20"
+              />
+            </div>
             <h1 className="text-5xl sm:text-6xl font-bold text-white mb-4">
               Welcome Back
             </h1>
