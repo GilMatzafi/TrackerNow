@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from app.api.deps import get_db, get_current_user
 from app.models.user import User
 from app.schemas.problem import ProblemCreate, ProblemUpdate, ProblemResponse
+from app.schemas.problem_autofill import ProblemAutoFillRequest, ProblemAutoFillResponse
 from app.services.problems import (
     list_problems as svc_list, 
     create_problem as svc_create,
@@ -10,6 +11,7 @@ from app.services.problems import (
     update_problem as svc_update,
     delete_problem as svc_delete
 )
+from app.services.problem_autofill import problem_autofill_service
 
 router = APIRouter(prefix="/problems", tags=["problems"])
 
@@ -63,4 +65,39 @@ def delete_problem(
     if not success:
         raise HTTPException(status_code=404, detail="Problem not found")
     return None
+
+@router.post("/autofill", response_model=ProblemAutoFillResponse)
+def autofill_problem_details(
+    request: ProblemAutoFillRequest,
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Auto-fill problem details from various coding platforms
+    """
+    try:
+        if not request.problem_name or len(request.problem_name.strip()) < 2:
+            return ProblemAutoFillResponse(
+                success=False,
+                error="Problem name must be at least 2 characters long"
+            )
+        
+        # Extract problem details
+        details = problem_autofill_service.extract_problem_details(request.problem_name.strip())
+        
+        if details:
+            return ProblemAutoFillResponse(
+                success=True,
+                data=details
+            )
+        else:
+            return ProblemAutoFillResponse(
+                success=False,
+                error="No matching problem found on supported platforms"
+            )
+            
+    except Exception as e:
+        return ProblemAutoFillResponse(
+            success=False,
+            error=f"Error fetching problem details: {str(e)}"
+        )
 

@@ -9,8 +9,11 @@ import KPICards from '../components/dashboard/KPICards';
 import ProgressChart from '../components/dashboard/ProgressChart';
 import TimeSpentChart from '../components/dashboard/TimeSpentChart';
 import ProblemDistribution from '../components/dashboard/ProblemDistribution';
+import TimeToComplete from '../components/dashboard/TimeToComplete';
+import ActivityChart from '../components/dashboard/ActivityChart';
 import ApplicationsTable from '../components/dashboard/ApplicationsTable';
 import { useOnboardingTasks } from '../hooks/useOnboardingTasks';
+import { useProblems } from '../hooks/useProblems';
 import UserProfileCard from '../components/dashboard/UserProfileCard';
 import ProgressCard from '../components/dashboard/ProgressCard';
 import OnboardingTasksCard from '../components/dashboard/OnboardingTasksCard';
@@ -33,11 +36,18 @@ function DashboardContent() {
     toggleTaskCompletion 
   } = useOnboardingTasks();
 
+  // Problems data from backend
+  const { 
+    problems, 
+    loading: problemsLoading, 
+    error: problemsError 
+  } = useProblems();
+
 
 
   // Mock data - in a real app, this would come from your backend
   const dashboardData = {
-    problemsSolved: 47,
+    problemsSolved: problems.length,
     applicationsSent: 12,
     interviewRate: 25, // 25% success rate
     streak: 8,
@@ -109,16 +119,29 @@ function DashboardContent() {
                 <CalendarCard className="col-span-2" />
 
               </div>
-              {/* Bottom Row */}
-              <div className="grid grid-cols-1 lg:grid-cols-4 gap-2 mt-1 auto-rows-[1000px] mb-2">
-                {/* Problem Distribution */}
+              {/* Third Row - Time Analytics */}
+              <div className="grid grid-cols-1 lg:grid-cols-4 gap-2 mt-1 auto-rows-[800px] mb-2">
+                {/* Time to Complete */}
                 <div className="bg-white rounded-3xl p-12 shadow-sm border border-gray-200 lg:col-span-2">
-                  <ProblemDistribution data={dashboardData.problemsByTopic} />
+                  <TimeToComplete problems={problems} />
                 </div>
                 
                 {/* Applications Timeline */}
                 <div className="bg-white rounded-3xl p-12 shadow-sm border border-gray-200 lg:col-span-2">
                   <ApplicationsTable data={dashboardData.recentApplications} />
+                </div>
+              </div>
+
+              {/* Bottom Row */}
+              <div className="grid grid-cols-1 lg:grid-cols-4 gap-2 mt-1 auto-rows-[1000px] mb-2">
+                {/* Problem Distribution */}
+                <div className="bg-white rounded-3xl p-12 shadow-sm border border-gray-200 lg:col-span-2">
+                  <ProblemDistribution problems={problems} />
+                </div>
+                
+                {/* Activity Chart */}
+                <div className="bg-white rounded-3xl p-12 shadow-sm border border-gray-200 lg:col-span-2">
+                  <ActivityChart problems={problems} />
                 </div>
               </div>
             </div>

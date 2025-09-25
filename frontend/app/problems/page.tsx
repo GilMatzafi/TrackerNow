@@ -65,14 +65,10 @@ export default function ProblemsPage() {
         <div className="min-h-screen bg-gray-50">
           <TopNavbar user={user} onLogout={logout} />
           <main className="py-8">
-            <div className="max-w-[1600px] mx-auto px-6 sm:px-8 lg:px-12">
+            <div className="max-w-[1600px] mx-auto px-6 sm:px-8 lg:px-12" style={{ marginLeft: '290px', marginRight: 'unset' }}>
                     {/* Header */}
                     <div className="mb-8 animate-fade-in-up">
                       <div className="animate-slide-in-left">
-                        <h1 className="text-4xl font-bold" style={{ color: '#111827' }}>Problems Board</h1>
-                        <p className="mt-2 text-lg" style={{ color: '#4B5563' }}>
-                          Organize your coding problems by difficulty level
-                        </p>
                       </div>
                     </div>
 

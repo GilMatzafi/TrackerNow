@@ -26,6 +26,31 @@ class ProblemsService extends ApiService {
   async deleteProblem(id: number): Promise<void> {
     return this.delete<void>(`/problems/${id}`);
   }
+
+  // Auto-fill problem details
+  async autofillProblemDetails(problemName: string): Promise<{
+    success: boolean;
+    data?: {
+      name: string;
+      link: string;
+      difficulty: 'EASY' | 'MEDIUM' | 'HARD';
+      topics: string[];
+      platform: string;
+    };
+    error?: string;
+  }> {
+    return this.post<{
+      success: boolean;
+      data?: {
+        name: string;
+        link: string;
+        difficulty: 'EASY' | 'MEDIUM' | 'HARD';
+        topics: string[];
+        platform: string;
+      };
+      error?: string;
+    }>('/problems/autofill', { problem_name: problemName });
+  }
 }
 
 export const problemsService = new ProblemsService();
