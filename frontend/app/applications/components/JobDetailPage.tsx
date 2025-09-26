@@ -147,26 +147,43 @@ export default function JobDetailPage({ job, onClose, onEdit }: JobDetailPagePro
   ];
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50">
+    <div 
+      className="fixed inset-0 backdrop-blur-sm flex items-center justify-center p-4"
+      style={{ zIndex: 9999 }}
+      onClick={onClose}
+    >
       <div 
         className="bg-white rounded-2xl w-full max-w-7xl mx-4 max-h-[95vh] overflow-y-auto shadow-2xl border border-gray-200"
+        onClick={(e) => e.stopPropagation()}
         style={{
-          animation: 'launchModal 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards'
+          animation: 'launchModal 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards',
+          transformStyle: 'preserve-3d',
+          perspective: '1000px',
+          zIndex: 10000
         }}
       >
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <button
-            onClick={onClose}
-            className="text-gray-600 hover:text-gray-900 text-lg font-medium"
-          >
-            ← Back to Applications
-          </button>
-          <div className="flex items-center space-x-4">
+        <button
+          onClick={onClose}
+          className="absolute top-6 right-6 w-10 h-10 flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors z-10"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+        
+        {/* Header */}
+        <div className="bg-white border-b border-gray-200 px-6 py-4">
+          <div className="max-w-7xl mx-auto flex items-center justify-between">
+            <button
+              onClick={onClose}
+              className="text-gray-600 hover:text-gray-900 text-lg font-medium"
+            >
+              ← Back to Applications
+            </button>
+            <div className="flex items-center space-x-4">
+            </div>
           </div>
         </div>
-      </div>
 
       <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -176,43 +193,43 @@ export default function JobDetailPage({ job, onClose, onEdit }: JobDetailPagePro
             <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-200">
               <div className="flex items-start justify-between mb-6">
                 <div>
-                  <h1 className="text-4xl font-bold text-gray-900 mb-2">
+                  <h1 className="text-5xl font-bold text-gray-900 mb-4">
                     {job.position}
                   </h1>
-                  <div className="flex items-center space-x-4 text-lg text-gray-600 mb-4">
-                    <div className="flex items-center space-x-2">
-                      <MapPinIcon className="w-5 h-5" />
-                      <span>{job.location || 'Location not specified'}</span>
+                  <div className="flex items-center space-x-6 text-xl text-gray-600 mb-6">
+                    <div className="flex items-center space-x-3">
+                      <MapPinIcon className="w-6 h-6" />
+                      <span className="font-semibold">{job.location || 'Location not specified'}</span>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <ClockIcon className="w-5 h-5" />
-                      <span>Saved {job.appliedDate || 'recently'}</span>
+                    <div className="flex items-center space-x-3">
+                      <ClockIcon className="w-6 h-6" />
+                      <span className="font-semibold">Saved {job.appliedDate || 'recently'}</span>
                     </div>
                   </div>
                   
                   {/* Job Details */}
-                  <div className="flex items-center space-x-6">
-                    <div className="flex items-center space-x-2">
-                      <BuildingOfficeIcon className="w-5 h-5 text-gray-500" />
-                      <span className="text-sm text-gray-900">{job.company}</span>
+                  <div className="flex items-center space-x-8">
+                    <div className="flex items-center space-x-3">
+                      <BuildingOfficeIcon className="w-6 h-6 text-gray-500" />
+                      <span className="text-lg font-semibold text-gray-900">{job.company}</span>
                     </div>
                     {job.salary && (
-                      <div className="flex items-center space-x-2">
-                        <CurrencyDollarIcon className="w-5 h-5 text-gray-500" />
-                        <span className="text-sm text-gray-900">{job.salary}</span>
+                      <div className="flex items-center space-x-3">
+                        <CurrencyDollarIcon className="w-6 h-6 text-gray-500" />
+                        <span className="text-lg font-semibold text-gray-900">{job.salary}</span>
                       </div>
                     )}
                     {job.appliedDate && (
-                      <div className="flex items-center space-x-2">
-                        <ClockIcon className="w-5 h-5 text-gray-500" />
-                        <span className="text-sm text-gray-900">{job.appliedDate}</span>
+                      <div className="flex items-center space-x-3">
+                        <ClockIcon className="w-6 h-6 text-gray-500" />
+                        <span className="text-lg font-semibold text-gray-900">{job.appliedDate}</span>
                       </div>
                     )}
                   </div>
                 </div>
-                <div className="flex space-x-1">
+                <div className="flex space-x-2">
                   {[...Array(5)].map((_, i) => (
-                    <StarIcon key={i} className="w-6 h-6 text-gray-300" />
+                    <StarIcon key={i} className="w-8 h-8 text-gray-300" />
                   ))}
                 </div>
               </div>
@@ -220,57 +237,57 @@ export default function JobDetailPage({ job, onClose, onEdit }: JobDetailPagePro
 
             {/* Company Overview */}
             <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-200">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-6">Company Overview</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8">Company Overview</h2>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-4">About {job.company}</h3>
-                  <p className="text-gray-700 leading-relaxed mb-4">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-6">About {job.company}</h3>
+                  <p className="text-xl text-gray-700 leading-relaxed mb-6">
                     {job.companyDescription || `Join our dynamic team at ${job.company} in an environment that fosters teamwork, nurtures career development, celebrates diversity, and rewards innovation. We offer competitive compensation and excellent employee programs.`}
                   </p>
                   
-                  <div className="space-y-3">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Industry-leading technology solutions</span>
+                  <div className="space-y-4">
+                    <div className="flex items-center space-x-4">
+                      <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                      <span className="text-lg text-gray-700 font-medium">Industry-leading technology solutions</span>
                     </div>
-                    <div className="flex items-center space-x-3">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Innovative and collaborative culture</span>
+                    <div className="flex items-center space-x-4">
+                      <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                      <span className="text-lg text-gray-700 font-medium">Innovative and collaborative culture</span>
                     </div>
-                    <div className="flex items-center space-x-3">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Professional growth opportunities</span>
+                    <div className="flex items-center space-x-4">
+                      <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                      <span className="text-lg text-gray-700 font-medium">Professional growth opportunities</span>
                     </div>
-                    <div className="flex items-center space-x-3">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-700">Competitive benefits package</span>
+                    <div className="flex items-center space-x-4">
+                      <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                      <span className="text-lg text-gray-700 font-medium">Competitive benefits package</span>
                     </div>
                   </div>
                 </div>
                 
                 <div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-4">Company Details</h3>
-                  <div className="space-y-4">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-6">Company Details</h3>
+                  <div className="space-y-5">
                     <div>
-                      <span className="text-sm font-medium text-gray-600">Company Size:</span>
-                      <p className="text-gray-900">500-1000 employees</p>
+                      <span className="text-lg font-semibold text-gray-600">Company Size:</span>
+                      <p className="text-xl text-gray-900 font-medium">500-1000 employees</p>
                     </div>
                     <div>
-                      <span className="text-sm font-medium text-gray-600">Founded:</span>
-                      <p className="text-gray-900">2010</p>
+                      <span className="text-lg font-semibold text-gray-600">Founded:</span>
+                      <p className="text-xl text-gray-900 font-medium">2010</p>
                     </div>
                     <div>
-                      <span className="text-sm font-medium text-gray-600">Industry:</span>
-                      <p className="text-gray-900">Technology</p>
+                      <span className="text-lg font-semibold text-gray-600">Industry:</span>
+                      <p className="text-xl text-gray-900 font-medium">Technology</p>
                     </div>
                     <div>
-                      <span className="text-sm font-medium text-gray-600">Website:</span>
-                      <a href="#" className="text-blue-600 hover:text-blue-800">www.{job.company.toLowerCase()}.com</a>
+                      <span className="text-lg font-semibold text-gray-600">Website:</span>
+                      <a href="#" className="text-xl text-blue-600 hover:text-blue-800 font-medium">www.{job.company.toLowerCase()}.com</a>
                     </div>
                     <div>
-                      <span className="text-sm font-medium text-gray-600">Headquarters:</span>
-                      <p className="text-gray-900">{job.location || 'San Francisco, CA'}</p>
+                      <span className="text-lg font-semibold text-gray-600">Headquarters:</span>
+                      <p className="text-xl text-gray-900 font-medium">{job.location || 'San Francisco, CA'}</p>
                     </div>
                   </div>
                 </div>
@@ -281,46 +298,46 @@ export default function JobDetailPage({ job, onClose, onEdit }: JobDetailPagePro
 
             {/* Job Description */}
             <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-200">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-semibold text-gray-900">Job Description</h2>
-                <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                  <PencilIcon className="w-5 h-5 text-gray-400" />
+              <div className="flex items-center justify-between mb-8">
+                <h2 className="text-3xl font-bold text-gray-900">Job Description</h2>
+                <button className="p-3 hover:bg-gray-100 rounded-lg transition-colors">
+                  <PencilIcon className="w-6 h-6 text-gray-400" />
                 </button>
               </div>
               
-              <div className="prose prose-lg max-w-none">
-                <p className="text-gray-700 leading-relaxed mb-6">
+              <div className="prose prose-xl max-w-none">
+                <p className="text-xl text-gray-700 leading-relaxed mb-8">
                   Join our dynamic team at {job.company} in an environment that fosters 
-                  <span className="bg-yellow-100 px-1 rounded">teamwork</span>, 
-                  <span className="bg-yellow-100 px-1 rounded">nurtures career development</span>, 
-                  <span className="bg-yellow-100 px-1 rounded">celebrates diversity</span>, and 
-                  <span className="bg-yellow-100 px-1 rounded">rewards innovation</span>. 
+                  <span className="bg-yellow-100 px-2 py-1 rounded font-semibold">teamwork</span>, 
+                  <span className="bg-yellow-100 px-2 py-1 rounded font-semibold">nurtures career development</span>, 
+                  <span className="bg-yellow-100 px-2 py-1 rounded font-semibold">celebrates diversity</span>, and 
+                  <span className="bg-yellow-100 px-2 py-1 rounded font-semibold">rewards innovation</span>. 
                   We offer competitive compensation and excellent employee programs.
                 </p>
 
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">Position Summary</h3>
-                <p className="text-gray-700 leading-relaxed mb-6">
+                <h3 className="text-2xl font-bold text-gray-900 mb-6">Position Summary</h3>
+                <p className="text-xl text-gray-700 leading-relaxed mb-8">
                   We are seeking a skilled professional for immediate hire, focusing on projects, 
                   installations, and commercial service work.
                 </p>
 
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">Responsibilities</h3>
-                <ul className="list-disc list-inside space-y-2 text-gray-700">
-                  <li>Interpret <span className="bg-yellow-100 px-1 rounded">blueprints</span> to determine the layout for systems, including fixture placement and routing.</li>
+                <h3 className="text-2xl font-bold text-gray-900 mb-6">Responsibilities</h3>
+                <ul className="list-disc list-inside space-y-3 text-xl text-gray-700">
+                  <li>Interpret <span className="bg-yellow-100 px-2 py-1 rounded font-semibold">blueprints</span> to determine the layout for systems, including fixture placement and routing.</li>
                   <li>Execute precise cuts in walls and floors for accommodation.</li>
                   <li>Conduct thorough testing of systems for leaks using various methods, ensuring readiness for inspections.</li>
-                  <li>Commit to the highest <span className="bg-yellow-100 px-1 rounded">safety standards</span> and company protocols.</li>
+                  <li>Commit to the highest <span className="bg-yellow-100 px-2 py-1 rounded font-semibold">safety standards</span> and company protocols.</li>
                 </ul>
 
-                <h3 className="text-xl font-semibold text-gray-900 mb-4 mt-8">Qualifications</h3>
-                <ul className="list-disc list-inside space-y-2 text-gray-700">
+                <h3 className="text-2xl font-bold text-gray-900 mb-6 mt-10">Qualifications</h3>
+                <ul className="list-disc list-inside space-y-3 text-xl text-gray-700">
                   <li>Certified professional with proven experience.</li>
                   <li>Proven experience in both residential and commercial tasks.</li>
                   <li>Professionalism in service work, with a strong sense of respect and courtesy.</li>
-                  <li>Knowledgeable in <span className="bg-yellow-100 px-1 rounded">mechanical installations</span> and familiar with local codes.</li>
+                  <li>Knowledgeable in <span className="bg-yellow-100 px-2 py-1 rounded font-semibold">mechanical installations</span> and familiar with local codes.</li>
                   <li>Possession of a valid driver's license.</li>
-                  <li>Strong mathematical and <span className="bg-yellow-100 px-1 rounded">problem solving</span> abilities.</li>
-                  <li>Capable of working <span className="bg-yellow-100 px-1 rounded">independently</span> with little oversight and as part of a <span className="bg-yellow-100 px-1 rounded">team</span>.</li>
+                  <li>Strong mathematical and <span className="bg-yellow-100 px-2 py-1 rounded font-semibold">problem solving</span> abilities.</li>
+                  <li>Capable of working <span className="bg-yellow-100 px-2 py-1 rounded font-semibold">independently</span> with little oversight and as part of a <span className="bg-yellow-100 px-2 py-1 rounded font-semibold">team</span>.</li>
                   <li>Must own some tools/equipment and be able to manage the physical demands.</li>
                 </ul>
               </div>
@@ -331,26 +348,26 @@ export default function JobDetailPage({ job, onClose, onEdit }: JobDetailPagePro
           <div className="space-y-6">
             {/* Hard Skills */}
             <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-900">Hard Skills</h3>
-                <div className="flex items-center space-x-2">
-                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                  <span className="text-sm text-gray-600">On</span>
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-2xl font-bold text-gray-900">Hard Skills</h3>
+                <div className="flex items-center space-x-3">
+                  <div className="w-4 h-4 bg-green-500 rounded-full"></div>
+                  <span className="text-lg font-semibold text-gray-600">On</span>
                 </div>
               </div>
               
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {hardSkills.slice(0, isSkillsExpanded ? hardSkills.length : 6).map((skill, index) => (
                   <div key={index} className="flex items-center justify-between">
-                    <span className="text-sm text-gray-700">{skill.name}</span>
-                    <div className="flex items-center space-x-2">
-                      <div className="w-16 h-2 bg-gray-200 rounded-full overflow-hidden">
+                    <span className="text-lg font-medium text-gray-700">{skill.name}</span>
+                    <div className="flex items-center space-x-3">
+                      <div className="w-20 h-3 bg-gray-200 rounded-full overflow-hidden">
                         <div 
                           className="h-full bg-green-500 transition-all duration-300"
                           style={{ width: `${(skill.count / 3) * 100}%` }}
                         ></div>
                       </div>
-                      <span className="text-xs text-gray-500 w-4">{skill.count}</span>
+                      <span className="text-base text-gray-500 w-6 font-semibold">{skill.count}</span>
                     </div>
                   </div>
                 ))}
@@ -358,7 +375,7 @@ export default function JobDetailPage({ job, onClose, onEdit }: JobDetailPagePro
                 {!isSkillsExpanded && (
                   <button
                     onClick={() => setIsSkillsExpanded(true)}
-                    className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+                    className="text-lg text-blue-600 hover:text-blue-800 font-semibold"
                   >
                     Show all {hardSkills.length}
                   </button>
@@ -368,19 +385,19 @@ export default function JobDetailPage({ job, onClose, onEdit }: JobDetailPagePro
 
             {/* Soft Skills */}
             <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-900">Soft Skills</h3>
-                <div className="flex items-center space-x-2">
-                  <div className="w-3 h-3 bg-purple-500 rounded-full"></div>
-                  <span className="text-sm text-gray-600">On</span>
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-2xl font-bold text-gray-900">Soft Skills</h3>
+                <div className="flex items-center space-x-3">
+                  <div className="w-4 h-4 bg-purple-500 rounded-full"></div>
+                  <span className="text-lg font-semibold text-gray-600">On</span>
                 </div>
               </div>
               
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {softSkills.slice(0, isSkillsExpanded ? softSkills.length : 6).map((skill, index) => (
                   <div key={index} className="flex items-center justify-between">
-                    <span className="text-sm text-gray-700">{skill}</span>
-                    <div className="w-16 h-2 bg-gray-200 rounded-full overflow-hidden">
+                    <span className="text-lg font-medium text-gray-700">{skill}</span>
+                    <div className="w-20 h-3 bg-gray-200 rounded-full overflow-hidden">
                       <div className="h-full bg-purple-500 w-3/4"></div>
                     </div>
                   </div>
@@ -389,7 +406,7 @@ export default function JobDetailPage({ job, onClose, onEdit }: JobDetailPagePro
                 {!isSkillsExpanded && (
                   <button
                     onClick={() => setIsSkillsExpanded(true)}
-                    className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+                    className="text-lg text-blue-600 hover:text-blue-800 font-semibold"
                   >
                     Show all {softSkills.length}
                   </button>
@@ -399,47 +416,47 @@ export default function JobDetailPage({ job, onClose, onEdit }: JobDetailPagePro
 
             {/* Contact Person */}
             <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Contact Person</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-6">Contact Person</h3>
               
-              <div className="space-y-4">
+              <div className="space-y-5">
                 <div>
-                  <label className="block text-sm font-medium text-gray-600 mb-2">
+                  <label className="block text-lg font-semibold text-gray-600 mb-3">
                     Name
                   </label>
                   <input
                     type="text"
                     placeholder="Contact person name"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-600 mb-2">
+                  <label className="block text-lg font-semibold text-gray-600 mb-3">
                     Email
                   </label>
                   <input
                     type="email"
                     placeholder="contact@company.com"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-600 mb-2">
+                  <label className="block text-lg font-semibold text-gray-600 mb-3">
                     LinkedIn
                   </label>
                   <input
                     type="url"
                     placeholder="https://linkedin.com/in/username"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-600 mb-2">
+                  <label className="block text-lg font-semibold text-gray-600 mb-3">
                     Role
                   </label>
-                  <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                  <select className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg">
                     <option value="">Select role</option>
                     <option value="HR">HR</option>
                     <option value="Technical">Technical</option>
@@ -453,38 +470,38 @@ export default function JobDetailPage({ job, onClose, onEdit }: JobDetailPagePro
 
             {/* Resume/CV Upload */}
             <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Resume/CV</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-6">Resume/CV</h3>
               
-              <div className="space-y-4">
+              <div className="space-y-5">
                 <div>
-                  <label className="block text-sm font-medium text-gray-600 mb-2">
+                  <label className="block text-lg font-semibold text-gray-600 mb-3">
                     Upload Resume
                   </label>
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition-colors">
-                    <div className="space-y-2">
-                      <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gray-400 transition-colors">
+                    <div className="space-y-3">
+                      <svg className="mx-auto h-16 w-16 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
                         <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
-                      <div className="text-sm text-gray-600">
-                        <label htmlFor="file-upload" className="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
+                      <div className="text-lg text-gray-600">
+                        <label htmlFor="file-upload" className="relative cursor-pointer bg-white rounded-md font-semibold text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
                           <span>Upload a file</span>
                           <input id="file-upload" name="file-upload" type="file" className="sr-only" accept=".pdf,.doc,.docx" />
                         </label>
                         <span className="pl-1">or drag and drop</span>
                       </div>
-                      <p className="text-xs text-gray-500">PDF, DOC, DOCX up to 10MB</p>
+                      <p className="text-base text-gray-500">PDF, DOC, DOCX up to 10MB</p>
                     </div>
                   </div>
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-600 mb-2">
+                  <label className="block text-lg font-semibold text-gray-600 mb-3">
                     Cover Letter
                   </label>
                   <textarea
                     rows={4}
                     placeholder="Write your cover letter here..."
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
                   />
                 </div>
               </div>

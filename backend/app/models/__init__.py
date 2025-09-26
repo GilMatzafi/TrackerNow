@@ -6,5 +6,6 @@ from .pomodoro_session import PomodoroSession
 from .onboarding_task import OnboardingTask
 from .calendar_event import CalendarEvent
 from .timer_settings import TimerSettings
+from .job import Job, Contact
 
-__all__ = ["User", "RefreshToken", "Problem", "Pomodoro", "PomodoroSession", "OnboardingTask", "CalendarEvent", "TimerSettings"]
+__all__ = ["User", "RefreshToken", "Problem", "Pomodoro", "PomodoroSession", "OnboardingTask", "CalendarEvent", "TimerSettings", "Job", "Contact"]

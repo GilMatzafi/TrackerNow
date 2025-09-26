@@ -130,7 +130,7 @@ export default function ProblemDistribution({ problems }: ProblemDistributionPro
       </div>
 
       {/* Legend */}
-      <div className="space-y-4">
+      <div className="max-h-96 overflow-y-auto space-y-4 pr-2">
         {data.map((item, index) => (
           <div key={index} className="flex items-center justify-between p-4 rounded-lg hover:bg-gray-50 transition-colors group cursor-pointer">
             <div className="flex items-center space-x-4">

@@ -1,48 +1,22 @@
 "use client";
 
+import React from 'react';
 import JobCard from './JobCard';
-import { ReactNode } from 'react';
-
-interface Contact {
-  id: string;
-  type: string;
-  name: string;
-  email: string;
-  linkedin: string;
-}
-
-interface Job {
-  id: string;
-  company: string;
-  position: string;
-  location?: string;
-  salary?: string;
-  note?: string;
-  tags?: string[];
-  status?: string;
-  appliedDate?: string;
-  interviewTime?: string;
-  companyLogo?: string;
-  isReferral?: boolean;
-  referrerName?: string;
-  contacts?: Contact[];
-}
+import EmptyState from './EmptyState';
+import { Job, JobStatus } from '../../types/job';
+import { ColumnConfig } from '../constants/columns';
 
 interface JobColumnProps {
-  title: string;
-  count: number;
+  config: ColumnConfig;
   jobs: Job[];
-  color?: string;
-  icon?: ReactNode;
-  columnId: string;
-  onJobDrop?: (e: React.DragEvent, targetColumn: string, position?: number) => void;
-  onJobDragStart?: (e: React.DragEvent, jobId: string) => void;
+  onJobDrop?: (e: React.DragEvent, targetColumn: JobStatus, position?: number) => void;
+  onJobDragStart?: (e: React.DragEvent, jobId: number) => void;
   onJobDragEnd?: () => void;
-  onJobDragOver?: (e: React.DragEvent, columnId: string, position: number) => void;
+  onJobDragOver?: (e: React.DragEvent, columnId: JobStatus, position: number) => void;
   onJobDragLeave?: () => void;
-  jobDropZone?: {columnId: string, position: number} | null;
-  onJobEdit?: (job: any) => void;
-  onJobDelete?: (jobId: string) => void;
+  jobDropZone?: { columnId: JobStatus; position: number } | null;
+  onJobEdit?: (job: Job) => void;
+  onJobDelete?: (jobId: number) => void;
   onColumnDragStart?: (e: React.DragEvent) => void;
   onColumnDrop?: (e: React.DragEvent) => void;
   onColumnDragOver?: (e: React.DragEvent) => void;
@@ -52,12 +26,8 @@ interface JobColumnProps {
 }
 
 export default function JobColumn({ 
-  title, 
-  count, 
+  config,
   jobs, 
-  color = "gray", 
-  icon,
-  columnId,
   onJobDrop,
   onJobDragStart,
   onJobDragEnd,
@@ -73,65 +43,52 @@ export default function JobColumn({
   onColumnDragEnd,
   isDraggable = false
 }: JobColumnProps) {
-  const getColorClasses = (color: string) => {
-    switch (color) {
-      case 'blue':
-        return 'border-blue-200 bg-blue-50';
-      case 'green':
-        return 'border-green-200 bg-green-50';
-      case 'yellow':
-        return 'border-yellow-200 bg-yellow-50';
-      case 'red':
-        return 'border-red-200 bg-red-50';
-      case 'purple':
-        return 'border-purple-200 bg-purple-50';
-      default:
-        return 'border-gray-200 bg-gray-50';
-    }
-  };
 
-  const handleDrop = (e: React.DragEvent) => {
+  const handleColumnDrop = (e: React.DragEvent) => {
     e.preventDefault();
-    if (onDrop) {
-      onDrop(e, title);
+    if (onColumnDrop) {
+      onColumnDrop(e);
     }
   };
 
-  const handleDragOver = (e: React.DragEvent) => {
+  const handleColumnDragOver = (e: React.DragEvent) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
-    if (onDragOver) {
-      onDragOver(e);
+    if (onColumnDragOver) {
+      onColumnDragOver(e);
     }
   };
 
-  const handleDragEnter = (e: React.DragEvent) => {
+  const handleColumnDragLeave = (e: React.DragEvent) => {
     e.preventDefault();
-    if (onDragEnter) {
-      onDragEnter(e);
+    if (onColumnDragLeave) {
+      onColumnDragLeave();
     }
   };
 
-  const handleDragLeave = (e: React.DragEvent) => {
-    e.preventDefault();
-    if (onDragLeave) {
-      onDragLeave(e);
-    }
-  };
+  const renderDropZone = (position: number) => (
+    <div 
+      className="h-2 bg-blue-500 rounded-full mb-2 mx-4 shadow-lg relative"
+      onDragOver={(e) => onJobDragOver?.(e, config.id, position)}
+      onDragLeave={onJobDragLeave}
+      onDrop={(e) => onJobDrop?.(e, config.id, position)}
+    >
+      <div className="absolute -left-1 -top-1 w-3 h-3 bg-blue-500 rounded-full"></div>
+      <div className="absolute -right-1 -top-1 w-3 h-3 bg-blue-500 rounded-full"></div>
+    </div>
+  );
 
   return (
     <div className="w-full">
-      {/* Column Wrapper - White Card */}
       <div 
-        className="bg-gray-50 rounded-xl p-6 shadow-sm border border-gray-200 h-full transition-colors"
-        onDrop={handleDrop}
-        onDragOver={handleDragOver}
-        onDragEnter={handleDragEnter}
-        onDragLeave={handleDragLeave}
+        className="bg-gray-50 rounded-xl p-8 shadow-sm border border-gray-200 h-full transition-colors"
+        onDrop={handleColumnDrop}
+        onDragOver={handleColumnDragOver}
+        onDragLeave={handleColumnDragLeave}
       >
         {/* Column Header */}
         <div 
-          className={`flex items-center justify-between mb-6 ${isDraggable ? 'cursor-grab active:cursor-grabbing' : ''}`}
+          className={`flex items-center justify-between mb-8 ${isDraggable ? 'cursor-grab active:cursor-grabbing' : ''}`}
           draggable={isDraggable}
           onDragStart={onColumnDragStart}
           onDrop={onColumnDrop}
@@ -139,14 +96,12 @@ export default function JobColumn({
           onDragLeave={onColumnDragLeave}
           onDragEnd={onColumnDragEnd}
         >
-          <div className="flex items-center space-x-3">
-            {icon && (
-              <div className="w-6 h-6 text-gray-600">
-                {icon}
-              </div>
-            )}
-            <h3 className="text-lg font-semibold text-gray-900">
-              {title} <span className="text-gray-500 font-normal ml-2">{count}</span>
+          <div className="flex items-center space-x-4">
+            <div className="w-8 h-8 text-gray-600">
+              {config.icon}
+            </div>
+            <h3 className="text-2xl font-bold text-gray-900">
+              {config.title} <span className="text-gray-500 font-normal ml-3 text-lg">{jobs.length}</span>
             </h3>
           </div>
           <div className="flex items-center space-x-1">
@@ -164,57 +119,40 @@ export default function JobColumn({
         </div>
 
         {/* Jobs List */}
-        <div className="space-y-4">
-          {jobs.map((job, index) => (
-            <div key={job.id}>
-              {/* Drop zone before each job */}
-              {jobDropZone?.columnId === columnId && jobDropZone?.position === index && (
-                <div className="h-2 bg-blue-500 rounded-full mb-2 mx-4 shadow-lg">
-                  <div className="absolute -left-1 -top-1 w-3 h-3 bg-blue-500 rounded-full"></div>
-                  <div className="absolute -right-1 -top-1 w-3 h-3 bg-blue-500 rounded-full"></div>
+        <div className="space-y-4 min-h-[600px]">
+          {jobs.length === 0 ? (
+            <EmptyState
+              title={config.emptyStateTitle}
+              description={config.emptyStateDescription}
+              icon={config.icon}
+            />
+          ) : (
+            jobs.map((job, index) => (
+              <div key={job.id}>
+                {/* Drop zone before each job */}
+                {jobDropZone?.columnId === config.id && jobDropZone?.position === index && renderDropZone(index)}
+                
+                <div
+                  onDragOver={(e) => onJobDragOver?.(e, config.id, index)}
+                  onDragLeave={onJobDragLeave}
+                  onDrop={(e) => onJobDrop?.(e, config.id, index)}
+                >
+                  <JobCard
+                    {...job}
+                    onDragStart={onJobDragStart}
+                    onDragEnd={onJobDragEnd}
+                    onClick={onJobEdit}
+                    onDelete={onJobDelete}
+                  />
                 </div>
-              )}
-              
-              <div
-                onDragOver={(e) => onJobDragOver?.(e, columnId, index)}
-                onDragLeave={onJobDragLeave}
-                onDrop={(e) => onJobDrop?.(e, title, index)}
-              >
-                <JobCard
-                  id={job.id}
-                  company={job.company}
-                  position={job.position}
-                  location={job.location}
-                  salary={job.salary}
-                  note={job.note}
-                  tags={job.tags}
-                  status={job.status}
-                  appliedDate={job.appliedDate}
-                  interviewTime={job.interviewTime}
-                  companyLogo={job.companyLogo}
-                  isReferral={job.isReferral}
-                  referrerName={job.referrerName}
-                  onDragStart={onJobDragStart}
-                  onDragEnd={onJobDragEnd}
-                  onClick={onJobEdit}
-                  onDelete={onJobDelete}
-                />
               </div>
-            </div>
-          ))}
+            ))
+          )}
           
           {/* Drop zone after last job */}
-          {jobDropZone?.columnId === columnId && jobDropZone?.position === jobs.length && (
-            <div 
-              className="h-2 bg-blue-500 rounded-full mt-2 mx-4 shadow-lg"
-              onDragOver={(e) => onJobDragOver?.(e, columnId, jobs.length)}
-              onDragLeave={onJobDragLeave}
-              onDrop={(e) => onJobDrop?.(e, title, jobs.length)}
-            >
-              <div className="absolute -left-1 -top-1 w-3 h-3 bg-blue-500 rounded-full"></div>
-              <div className="absolute -right-1 -top-1 w-3 h-3 bg-blue-500 rounded-full"></div>
-            </div>
-          )}
+          {jobs.length > 0 && jobDropZone?.columnId === config.id && jobDropZone?.position === jobs.length && 
+            renderDropZone(jobs.length)
+          }
         </div>
       </div>
     </div>

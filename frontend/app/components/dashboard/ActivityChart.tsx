@@ -23,9 +23,9 @@ export default function ActivityChart({ problems }: ActivityChartProps) {
     const activityMap = new Map<string, number>();
 
     problems.forEach(problem => {
-      if (!problem.createdAt) return;
+      if (!problem.created_at) return;
       
-      const date = new Date(problem.createdAt);
+      const date = new Date(problem.created_at);
       let key: string;
       
       switch (period) {
@@ -62,6 +62,23 @@ export default function ActivityChart({ problems }: ActivityChartProps) {
   const maxCount = Math.max(...activityData.map(d => d.count), 1);
 
   // Show empty state if no problems
+  if (problems.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full">
+        <div className="text-center">
+          <div className="w-20 h-20 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
+            <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
+          </div>
+          <h3 className="text-2xl font-semibold text-gray-900 mb-2">No Problems Yet</h3>
+          <p className="text-lg text-gray-500">Start adding problems to see your activity patterns</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show message if no activity data (problems exist but no creation dates)
   if (activityData.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center h-full">
@@ -71,8 +88,8 @@ export default function ActivityChart({ problems }: ActivityChartProps) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
             </svg>
           </div>
-          <h3 className="text-2xl font-semibold text-gray-900 mb-2">No Activity Yet</h3>
-          <p className="text-lg text-gray-500">Start solving problems to see your activity patterns</p>
+          <h3 className="text-2xl font-semibold text-gray-900 mb-2">No Activity Data</h3>
+          <p className="text-lg text-gray-500">Problems exist but no creation dates available</p>
         </div>
       </div>
     );

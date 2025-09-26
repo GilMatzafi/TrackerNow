@@ -24,3 +24,4 @@ class User(Base):
     onboarding_tasks = relationship("OnboardingTask", back_populates="user")
     calendar_events = relationship("CalendarEvent", back_populates="user")
     timer_settings = relationship("TimerSettings", back_populates="user", uselist=False)
+    jobs = relationship("Job", back_populates="user")

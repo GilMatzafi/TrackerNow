@@ -16,10 +16,10 @@ export default function TimeToComplete({ problems }: TimeToCompleteProps) {
 
   // Calculate statistics for each difficulty
   problems.forEach(problem => {
-    if (problem.timeSpent && problem.timeSpent > 0) {
+    if (problem.time_minutes && problem.time_minutes > 0) {
       const difficulty = problem.difficulty as keyof typeof difficultyStats;
       if (difficultyStats[difficulty]) {
-        difficultyStats[difficulty].totalTime += problem.timeSpent;
+        difficultyStats[difficulty].totalTime += problem.time_minutes;
         difficultyStats[difficulty].count += 1;
         difficultyStats[difficulty].problems.push(problem);
       }
@@ -36,20 +36,72 @@ export default function TimeToComplete({ problems }: TimeToCompleteProps) {
   // Get max time for chart scaling
   const maxTime = Math.max(averages.EASY, averages.MEDIUM, averages.HARD, 1);
 
-  // Show empty state if no problems with time data
-  const hasTimeData = Object.values(averages).some(time => time > 0);
-  
-  if (!hasTimeData) {
+  // Show empty state if no problems at all
+  if (problems.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center h-full">
         <div className="text-center">
+          <div className="w-20 h-20 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
+            <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+          </div>
+          <h3 className="text-2xl font-semibold text-gray-900 mb-2">No Problems Yet</h3>
+          <p className="text-lg text-gray-500">Start adding problems to see time analytics</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Check if we have time data
+  const hasTimeData = Object.values(averages).some(time => time > 0);
+
+  // If no time data but we have problems, show problem counts by difficulty
+  if (!hasTimeData) {
+    const difficultyCounts = {
+      EASY: problems.filter(p => p.difficulty === 'EASY').length,
+      MEDIUM: problems.filter(p => p.difficulty === 'MEDIUM').length,
+      HARD: problems.filter(p => p.difficulty === 'HARD').length
+    };
+
+    return (
+      <div>
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h3 className="text-4xl font-semibold text-gray-900">Time to Complete</h3>
+            <p className="text-xl text-gray-500">Average time spent by difficulty</p>
+          </div>
+        </div>
+
+        {/* No Time Data Message */}
+        <div className="text-center py-12">
           <div className="w-20 h-20 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
             <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
           <h3 className="text-2xl font-semibold text-gray-900 mb-2">No Time Data Yet</h3>
-          <p className="text-lg text-gray-500">Start tracking time spent on problems to see analytics</p>
+          <p className="text-lg text-gray-500 mb-8">Start tracking time spent on problems to see analytics</p>
+          
+          {/* Show problem counts by difficulty */}
+          <div className="grid grid-cols-3 gap-6 max-w-2xl mx-auto">
+            {Object.entries(difficultyCounts).map(([difficulty, count]) => (
+              <div key={difficulty} className="bg-gray-50 rounded-xl p-6 text-center">
+                <div className={`w-12 h-12 mx-auto mb-4 rounded-full flex items-center justify-center ${
+                  difficulty === 'EASY' ? 'bg-green-100' : 
+                  difficulty === 'MEDIUM' ? 'bg-yellow-100' : 'bg-red-100'
+                }`}>
+                  <span className="text-2xl">
+                    {difficulty === 'EASY' ? '🟢' : difficulty === 'MEDIUM' ? '🟡' : '🔴'}
+                  </span>
+                </div>
+                <h4 className="text-xl font-semibold text-gray-900 mb-2">{difficulty}</h4>
+                <div className="text-3xl font-bold text-gray-900">{count}</div>
+                <div className="text-sm text-gray-500">problems</div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     );

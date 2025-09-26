@@ -3,7 +3,6 @@
 import { useAuth } from '../../contexts/AuthContext';
 import ProtectedRoute from '../../components/ProtectedRoute';
 import TopNavbar from '../../components/dashboard/TopNavbar';
-import ApplicationsHeader from '../components/ApplicationsHeader';
 import KanbanBoard from '../components/KanbanBoard';
 
 export default function ApplicationsKanbanPage() {
@@ -11,11 +10,10 @@ export default function ApplicationsKanbanPage() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen" style={{background: 'linear-gradient(90deg, #EDEDED 0%, #FDF5D6 100%)'}}>
+      <div className="min-h-screen bg-gray-50">
         <TopNavbar user={user} onLogout={logout} />
         <main className="py-8">
           <div className="w-full px-4 sm:px-6 lg:px-8">
-            <ApplicationsHeader />
             <KanbanBoard />
           </div>
         </main>
