@@ -12,8 +12,13 @@ import ProblemDistribution from '../components/dashboard/ProblemDistribution';
 import TimeToComplete from '../components/dashboard/TimeToComplete';
 import ActivityChart from '../components/dashboard/ActivityChart';
 import ApplicationsTable from '../components/dashboard/ApplicationsTable';
+import ApplicationSuccessRate from '../components/dashboard/ApplicationSuccessRate';
+import ApplicationTrends from '../components/dashboard/ApplicationTrends';
+import CompanyPerformance from '../components/dashboard/CompanyPerformance';
+import ReferralAnalysis from '../components/dashboard/ReferralAnalysis';
 import { useOnboardingTasks } from '../hooks/useOnboardingTasks';
 import { useProblems } from '../hooks/useProblems';
+import { useJobs } from '../hooks/useJobs';
 import UserProfileCard from '../components/dashboard/UserProfileCard';
 import ProgressCard from '../components/dashboard/ProgressCard';
 import OnboardingTasksCard from '../components/dashboard/OnboardingTasksCard';
@@ -43,15 +48,23 @@ function DashboardContent() {
     error: problemsError 
   } = useProblems();
 
+  // Jobs data from backend
+  const { 
+    jobs, 
+    loading: jobsLoading, 
+    error: jobsError,
+    jobStats
+  } = useJobs();
 
 
-  // Mock data - in a real app, this would come from your backend
+
+  // Process real data from backend
   const dashboardData = {
     problemsSolved: problems.length,
-    applicationsSent: 12,
-    interviewRate: 25, // 25% success rate
-    streak: 8,
-    timeSpent: 24.5, // hours
+    applicationsSent: jobs.length,
+    interviewRate: jobStats ? Math.round((jobStats.jobs_by_status.interview || 0) / jobs.length * 100) : 0,
+    streak: 8, // Keep mock data for now
+    timeSpent: 24.5, // Keep mock data for now
     problemsByTopic: [
       { topic: 'Arrays', count: 15, percentage: 32 },
       { topic: 'Graphs', count: 12, percentage: 26 },
@@ -59,11 +72,11 @@ function DashboardContent() {
       { topic: 'Strings', count: 7, percentage: 15 },
       { topic: 'Trees', count: 5, percentage: 10 }
     ],
-    applicationsByStatus: [
-      { status: 'Applied', count: 8, percentage: 67 },
-      { status: 'Interview', count: 3, percentage: 25 },
-      { status: 'Offer', count: 1, percentage: 8 }
-    ],
+    applicationsByStatus: jobStats ? [
+      { status: 'Applied', count: jobStats.jobs_by_status.applied || 0, percentage: Math.round((jobStats.jobs_by_status.applied || 0) / jobs.length * 100) },
+      { status: 'Interview', count: jobStats.jobs_by_status.interview || 0, percentage: Math.round((jobStats.jobs_by_status.interview || 0) / jobs.length * 100) },
+      { status: 'Offer', count: jobStats.jobs_by_status.offered || 0, percentage: Math.round((jobStats.jobs_by_status.offered || 0) / jobs.length * 100) }
+    ] : [],
     dailyProgress: [
       { day: 'Mon', problems: 5, hours: 2.5 },
       { day: 'Tue', problems: 8, hours: 3.2 },
@@ -73,11 +86,12 @@ function DashboardContent() {
       { day: 'Sat', problems: 4, hours: 1.5 },
       { day: 'Sun', problems: 2, hours: 0.8 }
     ],
-    recentApplications: [
-      { company: 'Google', position: 'Software Engineer', status: 'Interview', date: '2024-01-15' },
-      { company: 'Microsoft', position: 'Frontend Developer', status: 'Applied', date: '2024-01-14' },
-      { company: 'Amazon', position: 'Full Stack Engineer', status: 'Offer', date: '2024-01-13' }
-    ]
+    recentApplications: jobs.slice(0, 5).map(job => ({
+      company: job.company,
+      position: job.position,
+      status: job.status,
+      date: job.applied_date || job.created_at
+    }))
   };
 
   return (
@@ -128,7 +142,46 @@ function DashboardContent() {
                 
                 {/* Applications Timeline */}
                 <div className="bg-white rounded-3xl p-12 shadow-sm border border-gray-200 lg:col-span-2">
-                  <ApplicationsTable data={dashboardData.recentApplications} />
+                  {jobsLoading ? (
+                    <div className="flex items-center justify-center h-full">
+                      <div className="text-center">
+                        <div className="w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mx-auto mb-4"></div>
+                        <p className="text-lg text-gray-600">Loading applications...</p>
+                      </div>
+                    </div>
+                  ) : jobsError ? (
+                    <div className="flex items-center justify-center h-full">
+                      <div className="text-center">
+                        <p className="text-lg text-red-600">Error loading applications</p>
+                        <p className="text-sm text-gray-500">{jobsError}</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <ApplicationsTable data={dashboardData.recentApplications} />
+                  )}
+                </div>
+              </div>
+
+              {/* Application Analytics Row */}
+              <div className="grid grid-cols-1 lg:grid-cols-4 gap-2 mt-1 auto-rows-[800px] mb-2">
+                {/* Application Success Rate */}
+                <div className="bg-white rounded-3xl p-12 shadow-sm border border-gray-200 lg:col-span-1">
+                  <ApplicationSuccessRate jobs={jobs} />
+                </div>
+                
+                {/* Application Trends */}
+                <div className="bg-white rounded-3xl p-12 shadow-sm border border-gray-200 lg:col-span-1">
+                  <ApplicationTrends jobs={jobs} />
+                </div>
+                
+                {/* Company Performance */}
+                <div className="bg-white rounded-3xl p-12 shadow-sm border border-gray-200 lg:col-span-1">
+                  <CompanyPerformance jobs={jobs} />
+                </div>
+                
+                {/* Referral Analysis */}
+                <div className="bg-white rounded-3xl p-12 shadow-sm border border-gray-200 lg:col-span-1">
+                  <ReferralAnalysis jobs={jobs} />
                 </div>
               </div>
 

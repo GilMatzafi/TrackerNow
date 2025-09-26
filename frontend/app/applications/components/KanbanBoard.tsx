@@ -13,6 +13,8 @@ import { Job, JobStatus } from '../../types/job';
 export default function KanbanBoard() {
   const [viewingJob, setViewingJob] = useState<Job | null>(null);
   const [isDetailPageOpen, setIsDetailPageOpen] = useState(false);
+  const [isAddJobOpen, setIsAddJobOpen] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState<JobStatus>('saved');
   
   // Use the real API data
   const { 
@@ -85,6 +87,26 @@ export default function KanbanBoard() {
     setViewingJob(null);
   };
 
+  const handleAddJob = (status: JobStatus) => {
+    setSelectedStatus(status);
+    setIsAddJobOpen(true);
+  };
+
+  const handleCloseAddJob = () => {
+    setIsAddJobOpen(false);
+    setSelectedStatus('saved');
+  };
+
+  const handleCreateJob = async (jobData: JobCreate) => {
+    try {
+      await createJob(jobData);
+      setIsAddJobOpen(false);
+      setSelectedStatus('saved');
+    } catch (error) {
+      console.error('Failed to create job:', error);
+    }
+  };
+
   // Loading state
   if (loading) {
     return <LoadingState message="Loading your job applications..." />;
@@ -101,38 +123,48 @@ export default function KanbanBoard() {
       <div className="flex justify-center px-8">
         <div className="w-full max-w-[2400px]">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8">
-            {columns.map((column, index) => (
+        {columns.map((column, index) => (
               <div key={column.id} className="w-[450px]">
-                <JobColumn
+              <JobColumn
                   config={column}
-                  jobs={column.jobs}
-                  onJobDrop={handleJobDrop}
-                  onJobDragStart={handleJobDragStart}
+                jobs={column.jobs}
+                onJobDrop={handleJobDrop}
+                onJobDragStart={handleJobDragStart}
                   onJobDragEnd={handleColumnDragEnd}
-                  onJobDragOver={handleJobDragOver}
-                  onJobDragLeave={handleJobDragLeave}
+                onJobDragOver={handleJobDragOver}
+                onJobDragLeave={handleJobDragLeave}
                   jobDropZone={dragState.jobDropZone}
                   onJobEdit={handleJobEdit}
                   onJobDelete={handleJobDelete}
-                  onColumnDragStart={(e) => handleColumnDragStart(e, index)}
+                  onAddJob={handleAddJob}
+                onColumnDragStart={(e) => handleColumnDragStart(e, index)}
                   onColumnDrop={handleColumnDragEnd}
-                  onColumnDragOver={(e) => handleColumnDragOver(e, index)}
-                  onColumnDragLeave={handleColumnDragLeave}
-                  onColumnDragEnd={handleColumnDragEnd}
+                onColumnDragOver={(e) => handleColumnDragOver(e, index)}
+                onColumnDragLeave={handleColumnDragLeave}
+                onColumnDragEnd={handleColumnDragEnd}
                   isDraggable={false}
-                />
-              </div>
-            ))}
+              />
+          </div>
+        ))}
           </div>
         </div>
       </div>
-
+      
       {/* Job Detail Modal */}
       {isDetailPageOpen && viewingJob && (
         <JobDetailPage
           job={viewingJob}
           onClose={handleCloseDetailPage}
           onEdit={handleJobEdit}
+        />
+      )}
+
+      {/* Add Job Modal */}
+      {isAddJobOpen && (
+        <JobForm
+          initialStatus={selectedStatus}
+          onSubmit={handleCreateJob}
+          onCancel={handleCloseAddJob}
         />
       )}
     </div>

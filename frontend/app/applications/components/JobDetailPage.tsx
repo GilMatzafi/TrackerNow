@@ -82,9 +82,10 @@ interface JobDetailPageProps {
   job: Job;
   onClose: () => void;
   onEdit?: (job: Job) => void;
+  isAddingNewJob?: boolean;
 }
 
-export default function JobDetailPage({ job, onClose, onEdit }: JobDetailPageProps) {
+export default function JobDetailPage({ job, onClose, onEdit, isAddingNewJob = false }: JobDetailPageProps) {
   const [isGuidanceExpanded, setIsGuidanceExpanded] = useState(false);
   const [guidanceProgress, setGuidanceProgress] = useState(0);
   const [isStarred, setIsStarred] = useState(false);
@@ -173,16 +174,21 @@ export default function JobDetailPage({ job, onClose, onEdit }: JobDetailPagePro
         
         {/* Header */}
         <div className="bg-white border-b border-gray-200 px-6 py-4">
-          <div className="max-w-7xl mx-auto flex items-center justify-between">
-            <button
-              onClick={onClose}
-              className="text-gray-600 hover:text-gray-900 text-lg font-medium"
-            >
-              ← Back to Applications
-            </button>
-            <div className="flex items-center space-x-4">
-            </div>
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <button
+            onClick={onClose}
+            className="text-gray-600 hover:text-gray-900 text-lg font-medium"
+          >
+            ← Back to Applications
+          </button>
+          <div className="flex items-center space-x-4">
+            {isAddingNewJob && (
+              <span className="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+                Adding New Job
+              </span>
+            )}
           </div>
+        </div>
         </div>
 
       <div className="max-w-7xl mx-auto px-6 py-8">
@@ -194,16 +200,20 @@ export default function JobDetailPage({ job, onClose, onEdit }: JobDetailPagePro
               <div className="flex items-start justify-between mb-6">
                 <div>
                   <h1 className="text-5xl font-bold text-gray-900 mb-4">
-                    {job.position}
+                    {isAddingNewJob ? 'New Job Application' : job.position}
                   </h1>
                   <div className="flex items-center space-x-6 text-xl text-gray-600 mb-6">
                     <div className="flex items-center space-x-3">
                       <MapPinIcon className="w-6 h-6" />
-                      <span className="font-semibold">{job.location || 'Location not specified'}</span>
+                      <span className="font-semibold">
+                        {isAddingNewJob ? 'Add location...' : (job.location || 'Location not specified')}
+                      </span>
                     </div>
                     <div className="flex items-center space-x-3">
                       <ClockIcon className="w-6 h-6" />
-                      <span className="font-semibold">Saved {job.appliedDate || 'recently'}</span>
+                      <span className="font-semibold">
+                        {isAddingNewJob ? 'Just created' : `Saved ${job.appliedDate || 'recently'}`}
+                      </span>
                     </div>
                   </div>
                   
@@ -211,7 +221,9 @@ export default function JobDetailPage({ job, onClose, onEdit }: JobDetailPagePro
                   <div className="flex items-center space-x-8">
                     <div className="flex items-center space-x-3">
                       <BuildingOfficeIcon className="w-6 h-6 text-gray-500" />
-                      <span className="text-lg font-semibold text-gray-900">{job.company}</span>
+                      <span className="text-lg font-semibold text-gray-900">
+                        {isAddingNewJob ? 'Add company name...' : job.company}
+                      </span>
                     </div>
                     {job.salary && (
                       <div className="flex items-center space-x-3">

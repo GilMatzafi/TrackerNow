@@ -17,6 +17,7 @@ interface JobColumnProps {
   jobDropZone?: { columnId: JobStatus; position: number } | null;
   onJobEdit?: (job: Job) => void;
   onJobDelete?: (jobId: number) => void;
+  onAddJob?: (status: JobStatus) => void;
   onColumnDragStart?: (e: React.DragEvent) => void;
   onColumnDrop?: (e: React.DragEvent) => void;
   onColumnDragOver?: (e: React.DragEvent) => void;
@@ -36,6 +37,7 @@ export default function JobColumn({
   jobDropZone,
   onJobEdit,
   onJobDelete,
+  onAddJob,
   onColumnDragStart,
   onColumnDrop,
   onColumnDragOver,
@@ -104,18 +106,15 @@ export default function JobColumn({
               {config.title} <span className="text-gray-500 font-normal ml-3 text-lg">{jobs.length}</span>
             </h3>
           </div>
-          <div className="flex items-center space-x-1">
-            <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-              </svg>
-            </button>
-            <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-              </svg>
-            </button>
-          </div>
+          <button 
+            onClick={() => onAddJob?.(config.id)}
+            className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors cursor-pointer"
+            title={`Add new ${config.title.toLowerCase()}`}
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            </svg>
+          </button>
         </div>
 
         {/* Jobs List */}
