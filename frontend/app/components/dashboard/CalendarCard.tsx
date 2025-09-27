@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { useCalendarEvents, CalendarEvent } from '../../hooks/useCalendarEvents';
+import { useCalendarEvents } from '../../hooks/useCalendarEvents';
+import { CalendarEvent } from '../../services/calendarEvents';
 
 // Custom launch animation styles
 const launchModalStyles = `
@@ -46,7 +47,9 @@ export default function CalendarCard({ className = "" }: CalendarCardProps) {
     const style = document.createElement('style');
     style.textContent = launchModalStyles;
     document.head.appendChild(style);
-    return () => document.head.removeChild(style);
+    return () => {
+      document.head.removeChild(style);
+    };
   }, []);
   
   const currentYear = currentDate.getFullYear();

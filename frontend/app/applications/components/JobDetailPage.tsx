@@ -13,6 +13,7 @@ import {
   CurrencyDollarIcon
 } from '@heroicons/react/24/outline';
 import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
+import { Job, Contact } from '../../types/job';
 
 // Custom launch animation styles
 const launchModalStyles = `
@@ -50,33 +51,6 @@ const launchModalStyles = `
   }
 `;
 
-interface Job {
-  id: string;
-  company: string;
-  position: string;
-  location?: string;
-  salary?: string;
-  note?: string;
-  tags?: string[];
-  status?: string;
-  appliedDate?: string;
-  interviewTime?: string;
-  companyLogo?: string;
-  isReferral?: boolean;
-  referrerName?: string;
-  companyDescription?: string;
-  positionDescription?: string;
-  cv?: string;
-  contacts?: Contact[];
-}
-
-interface Contact {
-  id: string;
-  type: string;
-  name: string;
-  email: string;
-  linkedin: string;
-}
 
 interface JobDetailPageProps {
   job: Job;
@@ -212,7 +186,7 @@ export default function JobDetailPage({ job, onClose, onEdit, isAddingNewJob = f
                     <div className="flex items-center space-x-3">
                       <ClockIcon className="w-6 h-6" />
                       <span className="font-semibold">
-                        {isAddingNewJob ? 'Just created' : `Saved ${job.appliedDate || 'recently'}`}
+                        {isAddingNewJob ? 'Just created' : `Saved ${job.applied_date || 'recently'}`}
                       </span>
                     </div>
                   </div>
@@ -231,10 +205,10 @@ export default function JobDetailPage({ job, onClose, onEdit, isAddingNewJob = f
                         <span className="text-lg font-semibold text-gray-900">{job.salary}</span>
                       </div>
                     )}
-                    {job.appliedDate && (
+                    {job.applied_date && (
                       <div className="flex items-center space-x-3">
                         <ClockIcon className="w-6 h-6 text-gray-500" />
-                        <span className="text-lg font-semibold text-gray-900">{job.appliedDate}</span>
+                        <span className="text-lg font-semibold text-gray-900">{job.applied_date}</span>
                       </div>
                     )}
                   </div>
@@ -255,7 +229,7 @@ export default function JobDetailPage({ job, onClose, onEdit, isAddingNewJob = f
                 <div>
                   <h3 className="text-2xl font-bold text-gray-900 mb-6">About {job.company}</h3>
                   <p className="text-xl text-gray-700 leading-relaxed mb-6">
-                    {job.companyDescription || `Join our dynamic team at ${job.company} in an environment that fosters teamwork, nurtures career development, celebrates diversity, and rewards innovation. We offer competitive compensation and excellent employee programs.`}
+                    {job.company_description || `Join our dynamic team at ${job.company} in an environment that fosters teamwork, nurtures career development, celebrates diversity, and rewards innovation. We offer competitive compensation and excellent employee programs.`}
                   </p>
                   
                   <div className="space-y-4">

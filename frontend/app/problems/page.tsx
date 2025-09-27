@@ -29,12 +29,14 @@ export default function ProblemsPage() {
     setShowForm(true);
   };
 
-  const handleUpdateProblem = async (updatedProblem: Problem) => {
-    const { id, ...updateData } = updatedProblem;
-    const success = await updateProblem(id, updateData);
-    if (success) {
-      setShowForm(false);
-      setEditingProblem(null);
+  const handleUpdateProblem = async (updatedProblem: Problem | Omit<Problem, 'id'>) => {
+    if ('id' in updatedProblem) {
+      const { id, ...updateData } = updatedProblem;
+      const success = await updateProblem(id, updateData);
+      if (success) {
+        setShowForm(false);
+        setEditingProblem(null);
+      }
     }
   };
 
@@ -53,7 +55,8 @@ export default function ProblemsPage() {
   const [selectedStatus, setSelectedStatus] = useState<'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETED' | 'NEEDS_REVISIT' | null>(null);
 
   const handleAddNew = (difficulty: 'EASY' | 'MEDIUM' | 'HARD' | 'REVIEW') => {
-    setSelectedDifficulty(difficulty);
+    // For REVIEW column, don't pre-select difficulty - let user choose
+    setSelectedDifficulty(difficulty === 'REVIEW' ? null : difficulty);
     setSelectedStatus(difficulty === 'REVIEW' ? 'NEEDS_REVISIT' : 'NOT_STARTED');
     setEditingProblem(null); // Clear editing problem for new problem
     setShowForm(true);
@@ -63,7 +66,7 @@ export default function ProblemsPage() {
     <>
       <ProtectedRoute>
         <div className="min-h-screen bg-gray-50">
-          <TopNavbar user={user} onLogout={logout} />
+          <TopNavbar user={user ? { name: `${user.first_name} ${user.last_name}`, email: user.email } : undefined} onLogout={logout} />
           <main className="py-8">
             <div className="max-w-[1600px] mx-auto px-6 sm:px-8 lg:px-12" style={{ marginLeft: '290px', marginRight: 'unset' }}>
                     {/* Header */}
@@ -124,7 +127,7 @@ export default function ProblemsPage() {
           problem={editingProblem}
           onSubmit={editingProblem ? handleUpdateProblem : handleAddProblem}
           onCancel={handleCancelForm}
-          initialDifficulty={selectedDifficulty === 'REVIEW' ? 'HARD' : selectedDifficulty || undefined}
+          initialDifficulty={selectedDifficulty === 'REVIEW' ? undefined : selectedDifficulty || undefined}
           initialStatus={selectedStatus || undefined}
         />
       )}

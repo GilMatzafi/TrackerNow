@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Problem } from '../../types/problem';
 import DeleteConfirmDialog from './DeleteConfirmDialog';
+import { Circle, Play, CheckCircle, RotateCcw, HelpCircle } from 'lucide-react';
 
 interface ProblemsListProps {
   problems: Problem[];
@@ -69,15 +70,15 @@ export default function ProblemsList({ problems, onEdit, onDelete, onAddNew }: P
   const getStatusInfo = (status: string) => {
     switch (status) {
       case 'NOT_STARTED':
-        return { label: 'Not Started', icon: '⭕', color: 'text-gray-600', bgColor: 'bg-gray-50' };
+        return { label: 'Not Started', icon: Circle, color: 'text-gray-600', bgColor: 'bg-gray-50' };
       case 'IN_PROGRESS':
-        return { label: 'In Progress', icon: '🔄', color: 'text-blue-600', bgColor: 'bg-blue-50' };
+        return { label: 'In Progress', icon: Play, color: 'text-blue-600', bgColor: 'bg-blue-50' };
       case 'COMPLETED':
-        return { label: 'Completed', icon: '✅', color: 'text-green-600', bgColor: 'bg-green-50' };
+        return { label: 'Completed', icon: CheckCircle, color: 'text-green-600', bgColor: 'bg-green-50' };
       case 'NEEDS_REVISIT':
-        return { label: 'Needs Revisit', icon: '🔄', color: 'text-orange-600', bgColor: 'bg-orange-50' };
+        return { label: 'Needs Revisit', icon: RotateCcw, color: 'text-orange-600', bgColor: 'bg-orange-50' };
       default:
-        return { label: 'Unknown', icon: '❓', color: 'text-gray-600', bgColor: 'bg-gray-50' };
+        return { label: 'Unknown', icon: HelpCircle, color: 'text-gray-600', bgColor: 'bg-gray-50' };
     }
   };
 
@@ -133,7 +134,7 @@ export default function ProblemsList({ problems, onEdit, onDelete, onAddNew }: P
     { 
       title: 'Easy', 
       problems: easyProblems, 
-      difficulty: 'EASY',
+      difficulty: 'EASY' as const,
       count: easyProblems.length,
       addText: 'Add Easy Problem',
       statusGroups: groupProblemsByStatus(easyProblems)
@@ -141,7 +142,7 @@ export default function ProblemsList({ problems, onEdit, onDelete, onAddNew }: P
     { 
       title: 'Medium', 
       problems: mediumProblems, 
-      difficulty: 'MEDIUM',
+      difficulty: 'MEDIUM' as const,
       count: mediumProblems.length,
       addText: 'Add Medium Problem',
       statusGroups: groupProblemsByStatus(mediumProblems)
@@ -149,7 +150,7 @@ export default function ProblemsList({ problems, onEdit, onDelete, onAddNew }: P
     { 
       title: 'Hard', 
       problems: hardProblems, 
-      difficulty: 'HARD',
+      difficulty: 'HARD' as const,
       count: hardProblems.length,
       addText: 'Add Hard Problem',
       statusGroups: groupProblemsByStatus(hardProblems)
@@ -157,7 +158,7 @@ export default function ProblemsList({ problems, onEdit, onDelete, onAddNew }: P
     { 
       title: 'Review', 
       problems: reviewProblems, 
-      difficulty: 'REVIEW',
+      difficulty: 'REVIEW' as const,
       count: reviewProblems.length,
       addText: 'Add Review Problem',
       statusGroups: groupProblemsByStatus(reviewProblems)
@@ -174,7 +175,7 @@ export default function ProblemsList({ problems, onEdit, onDelete, onAddNew }: P
             >
               {/* Header */}
               <div className="flex items-start justify-between mb-4">
-          <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors duration-200 line-clamp-2">
+          <h3 className="text-2xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors duration-200 line-clamp-2">
             {problem.name}
           </h3>
           <div className="flex space-x-2 ml-3">
@@ -207,13 +208,13 @@ export default function ProblemsList({ problems, onEdit, onDelete, onAddNew }: P
               {problem.topics.slice(0, 3).map((topic, index) => (
                       <span
                         key={index}
-                  className="inline-flex items-center px-3 py-1.5 rounded-md text-sm font-medium bg-gray-100 text-gray-700"
+                  className="inline-flex items-center px-3 py-1.5 rounded-md text-base font-medium bg-gray-100 text-gray-700"
                       >
                         {topic}
                       </span>
                     ))}
               {problem.topics.length > 3 && (
-                <span className="inline-flex items-center px-3 py-1.5 rounded-md text-sm font-medium bg-gray-100 text-gray-700">
+                <span className="inline-flex items-center px-3 py-1.5 rounded-md text-base font-medium bg-gray-100 text-gray-700">
                   +{problem.topics.length - 3}
                 </span>
               )}
@@ -222,19 +223,19 @@ export default function ProblemsList({ problems, onEdit, onDelete, onAddNew }: P
               )}
 
               {/* Details */}
-        <div className="space-y-3 text-base text-gray-600">
+        <div className="space-y-3 text-lg text-gray-600">
                 <div className="flex items-center">
             <svg className="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
-            <span className="font-medium">{formatDate(problem.created_at)}</span>
+            <span className="font-semibold text-lg">{formatDate(problem.created_at)}</span>
                 </div>
                 {problem.time_minutes && (
                   <div className="flex items-center">
               <svg className="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-              <span className="font-medium">{problem.time_minutes} min</span>
+              <span className="font-semibold text-lg">{problem.time_minutes} min</span>
                   </div>
                 )}
                 {problem.link && (
@@ -246,7 +247,7 @@ export default function ProblemsList({ problems, onEdit, onDelete, onAddNew }: P
                       href={problem.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                className="text-blue-600 hover:text-blue-800 hover:underline font-medium transition-colors duration-200 truncate"
+                className="text-blue-600 hover:text-blue-800 hover:underline font-semibold text-lg transition-colors duration-200 truncate"
                     >
                       View Problem
                     </a>
@@ -257,7 +258,7 @@ export default function ProblemsList({ problems, onEdit, onDelete, onAddNew }: P
               {/* Notes */}
               {problem.notes && (
           <div className="mt-4 pt-4 border-t border-gray-100">
-            <p className="text-base text-gray-600 line-clamp-2 leading-relaxed">{problem.notes}</p>
+            <p className="text-lg text-gray-600 line-clamp-2 leading-relaxed">{problem.notes}</p>
                 </div>
               )}
             </div>
@@ -279,31 +280,22 @@ export default function ProblemsList({ problems, onEdit, onDelete, onAddNew }: P
               <div className={`${colors.header} px-12 py-10 rounded-t-xl border-b border-gray-200`}>
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-4xl font-bold text-gray-900">{column.title}</h3>
-                    <p className="text-xl text-gray-600 font-medium">{column.count} {column.count === 1 ? 'problem' : 'problems'}</p>
+                    <h3 className="text-4xl font-bold text-gray-900">
+                      {column.title} <span className="text-gray-500 font-normal ml-3 text-2xl">{column.count}</span>
+                    </h3>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-white/50 rounded-lg transition-all duration-200">
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-                      </svg>
-                    </button>
-                  </div>
+                  <button 
+                    onClick={() => onAddNew(column.difficulty)}
+                    className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-300 cursor-pointer group"
+                    title={`Add new ${column.title.toLowerCase()} problem`}
+                  >
+                    <svg className="w-8 h-8 transition-transform duration-300 group-hover:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                  </button>
                 </div>
               </div>
 
-              {/* Add New Button */}
-              <div className="p-10 border-b border-gray-100">
-                <button 
-                  onClick={() => onAddNew(column.difficulty)}
-                  className="w-full flex items-center justify-center px-6 py-4 bg-black text-white rounded-lg font-semibold text-lg hover:bg-gray-800 transition-all duration-200 cursor-pointer"
-                >
-                  <svg className="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                  </svg>
-                  Add New
-                </button>
-              </div>
 
               {/* Problems List */}
               <div className="p-10 min-h-[1000px]">
@@ -327,7 +319,10 @@ export default function ProblemsList({ problems, onEdit, onDelete, onAddNew }: P
                         <div key={status} className="space-y-4">
                           {/* Status Header */}
                           <div className={`flex items-center gap-2 px-4 py-3 rounded-lg ${statusInfo.bgColor}`}>
-                            <span className="text-lg">{statusInfo.icon}</span>
+                            {(() => {
+                              const IconComponent = statusInfo.icon;
+                              return IconComponent ? <IconComponent className={`w-5 h-5 ${statusInfo.color}`} /> : null;
+                            })()}
                             <span className={`font-semibold text-sm ${statusInfo.color}`}>
                               {statusInfo.label}
                             </span>

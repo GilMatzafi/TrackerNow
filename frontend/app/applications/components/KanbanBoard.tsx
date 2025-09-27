@@ -8,12 +8,11 @@ import ErrorState from './ErrorState';
 import { useJobs } from '../../hooks/useJobs';
 import { useDragDrop } from '../../hooks/useDragDrop';
 import { COLUMN_CONFIGS } from '../constants/columns';
-import { Job, JobStatus } from '../../types/job';
+import { Job, JobStatus, JobCreate } from '../../types/job';
 
 export default function KanbanBoard() {
   const [viewingJob, setViewingJob] = useState<Job | null>(null);
   const [isDetailPageOpen, setIsDetailPageOpen] = useState(false);
-  const [isAddJobOpen, setIsAddJobOpen] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState<JobStatus>('saved');
   
   // Use the real API data
@@ -21,10 +20,11 @@ export default function KanbanBoard() {
     jobs, 
     loading, 
     error, 
+    createJob,
     updateJob, 
     deleteJob,
     getJobsByStatus,
-    fetchJobs
+    refreshJobs
   } = useJobs();
   
   // Use drag and drop hook
@@ -85,27 +85,40 @@ export default function KanbanBoard() {
   const handleCloseDetailPage = () => {
     setIsDetailPageOpen(false);
     setViewingJob(null);
+    setSelectedStatus('saved');
   };
 
   const handleAddJob = (status: JobStatus) => {
     setSelectedStatus(status);
-    setIsAddJobOpen(true);
+    // Create a new job template and open JobDetailPage
+    const newJob: Job = {
+      id: 0, // Temporary ID for new jobs
+      company: '',
+      position: '',
+      location: '',
+      salary: '',
+      company_description: '',
+      description: '',
+      position_description: '',
+      notes: '',
+      tags: [],
+      status: status,
+      applied_date: new Date().toISOString().split('T')[0],
+      job_link: '',
+      company_logo: '',
+      is_referral: false,
+      referrer_name: '',
+      interview_time: '',
+      cv_link: '',
+      contacts: [],
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      user_id: 0
+    };
+    setViewingJob(newJob);
+    setIsDetailPageOpen(true);
   };
 
-  const handleCloseAddJob = () => {
-    setIsAddJobOpen(false);
-    setSelectedStatus('saved');
-  };
-
-  const handleCreateJob = async (jobData: JobCreate) => {
-    try {
-      await createJob(jobData);
-      setIsAddJobOpen(false);
-      setSelectedStatus('saved');
-    } catch (error) {
-      console.error('Failed to create job:', error);
-    }
-  };
 
   // Loading state
   if (loading) {
@@ -114,7 +127,7 @@ export default function KanbanBoard() {
 
   // Error state
   if (error) {
-    return <ErrorState error={error} onRetry={fetchJobs} />;
+    return <ErrorState error={error} onRetry={refreshJobs} />;
   }
 
   return (
@@ -156,15 +169,7 @@ export default function KanbanBoard() {
           job={viewingJob}
           onClose={handleCloseDetailPage}
           onEdit={handleJobEdit}
-        />
-      )}
-
-      {/* Add Job Modal */}
-      {isAddJobOpen && (
-        <JobForm
-          initialStatus={selectedStatus}
-          onSubmit={handleCreateJob}
-          onCancel={handleCloseAddJob}
+          isAddingNewJob={viewingJob.id === 0}
         />
       )}
     </div>

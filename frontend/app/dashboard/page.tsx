@@ -14,7 +14,6 @@ import ActivityChart from '../components/dashboard/ActivityChart';
 import ApplicationsTable from '../components/dashboard/ApplicationsTable';
 import ApplicationSuccessRate from '../components/dashboard/ApplicationSuccessRate';
 import ApplicationTrends from '../components/dashboard/ApplicationTrends';
-import CompanyPerformance from '../components/dashboard/CompanyPerformance';
 import ReferralAnalysis from '../components/dashboard/ReferralAnalysis';
 import { useOnboardingTasks } from '../hooks/useOnboardingTasks';
 import { useProblems } from '../hooks/useProblems';
@@ -98,7 +97,7 @@ function DashboardContent() {
     <ProtectedRoute>
       <PomodoroProvider>
         <div className="min-h-screen bg-gray-50">
-          <TopNavbar user={user} onLogout={logout} />
+          <TopNavbar user={user ? { name: `${user.first_name} ${user.last_name}`, email: user.email } : undefined} onLogout={logout} />
             <main className="py-8">
             <div className="max-w-none mx-auto px-4 sm:px-6 lg:px-8">
               
@@ -163,7 +162,7 @@ function DashboardContent() {
               </div>
 
               {/* Application Analytics Row */}
-              <div className="grid grid-cols-1 lg:grid-cols-4 gap-2 mt-1 auto-rows-[800px] mb-2">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-2 mt-1 auto-rows-[800px] mb-2">
                 {/* Application Success Rate */}
                 <div className="bg-white rounded-3xl p-12 shadow-sm border border-gray-200 lg:col-span-1">
                   <ApplicationSuccessRate jobs={jobs} />
@@ -172,11 +171,6 @@ function DashboardContent() {
                 {/* Application Trends */}
                 <div className="bg-white rounded-3xl p-12 shadow-sm border border-gray-200 lg:col-span-1">
                   <ApplicationTrends jobs={jobs} />
-                </div>
-                
-                {/* Company Performance */}
-                <div className="bg-white rounded-3xl p-12 shadow-sm border border-gray-200 lg:col-span-1">
-                  <CompanyPerformance jobs={jobs} />
                 </div>
                 
                 {/* Referral Analysis */}

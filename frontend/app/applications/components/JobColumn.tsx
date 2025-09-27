@@ -108,10 +108,10 @@ export default function JobColumn({
           </div>
           <button 
             onClick={() => onAddJob?.(config.id)}
-            className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors cursor-pointer"
+            className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-300 cursor-pointer group"
             title={`Add new ${config.title.toLowerCase()}`}
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-8 h-8 transition-transform duration-300 group-hover:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
             </svg>
           </button>
@@ -120,11 +120,23 @@ export default function JobColumn({
         {/* Jobs List */}
         <div className="space-y-4 min-h-[600px]">
           {jobs.length === 0 ? (
-            <EmptyState
-              title={config.emptyStateTitle}
-              description={config.emptyStateDescription}
-              icon={config.icon}
-            />
+            <div>
+              {/* Drop zone for empty column */}
+              {jobDropZone?.columnId === config.id && jobDropZone?.position === 0 && renderDropZone(0)}
+              
+              <div
+                onDragOver={(e) => onJobDragOver?.(e, config.id, 0)}
+                onDragLeave={onJobDragLeave}
+                onDrop={(e) => onJobDrop?.(e, config.id, 0)}
+                className="min-h-[400px] flex items-center justify-center"
+              >
+                <EmptyState
+                  title={config.emptyStateTitle}
+                  description={config.emptyStateDescription}
+                  icon={config.icon}
+                />
+              </div>
+            </div>
           ) : (
             jobs.map((job, index) => (
               <div key={job.id}>
