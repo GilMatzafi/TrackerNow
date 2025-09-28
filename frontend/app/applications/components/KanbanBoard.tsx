@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import JobColumn from './JobColumn';
 import JobDetailPage from './JobDetailPage';
-import JobApplicationForm from '../../components/applications/JobApplicationForm';
+import JobApplicationForm from './JobApplicationForm';
 import LoadingState from './LoadingState';
 import ErrorState from './ErrorState';
 import { useJobs } from '../../hooks/useJobs';

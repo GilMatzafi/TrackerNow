@@ -24,6 +24,11 @@ export interface Job {
   updated_at: string;
   user_id: number;
   contacts?: Contact[];
+  // Company details
+  company_size?: string;
+  founded?: string;
+  industry?: string;
+  website?: string;
 }
 
 export interface Contact {
@@ -62,6 +67,11 @@ export interface JobCreate {
   application_url?: string;
   completion_method?: string;
   contacts?: ContactCreate[];
+  // Company details
+  company_size?: string;
+  founded?: string;
+  industry?: string;
+  website?: string;
 }
 
 export interface JobUpdate {
@@ -86,6 +96,11 @@ export interface JobUpdate {
   application_url?: string;
   completion_method?: string;
   contacts?: ContactCreate[];
+  // Company details
+  company_size?: string;
+  founded?: string;
+  industry?: string;
+  website?: string;
 }
 
 export interface ContactCreate {

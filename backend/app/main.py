@@ -10,6 +10,7 @@ from app.routers.onboarding_tasks import router as onboarding_tasks_router
 from app.routers.calendar_events import router as calendar_events_router
 from app.routers.timer_settings import router as timer_settings_router
 from app.routers.jobs import router as jobs_router
+from app.routers.job_extraction import router as job_extraction_router
 
 # Import models to ensure they are registered
 from app.models import User, RefreshToken, Problem, Pomodoro, PomodoroSession, OnboardingTask, CalendarEvent, TimerSettings, Job, Contact
@@ -38,3 +39,4 @@ app.include_router(onboarding_tasks_router, prefix="/onboarding-tasks", tags=["o
 app.include_router(calendar_events_router, prefix="/calendar-events", tags=["calendar-events"])
 app.include_router(timer_settings_router, prefix="/timer-settings", tags=["timer-settings"])
 app.include_router(jobs_router, prefix="/jobs", tags=["jobs"])
+app.include_router(job_extraction_router, prefix="/api", tags=["job-extraction"])

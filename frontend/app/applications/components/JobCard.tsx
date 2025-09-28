@@ -16,7 +16,7 @@ export default function JobCard({
   position,
   location,
   salary,
-  note,
+  notes,
   tags = [],
   status,
   applied_date,
@@ -45,14 +45,17 @@ export default function JobCard({
         position,
         location,
         salary,
-        note,
+        notes,
         tags,
         status,
         applied_date,
         interview_time,
         company_logo,
         is_referral,
-        referrer_name
+        referrer_name,
+        created_at: '',
+        updated_at: '',
+        user_id: 0
       } as Job);
     }
   };
@@ -110,14 +113,14 @@ export default function JobCard({
       )}
 
       {/* Note */}
-      {note && (
+      {notes && (
         <div className="mb-4">
-          <p className="text-base text-gray-700 line-clamp-2">{note}</p>
+          <p className="text-base text-gray-700 line-clamp-2">{notes}</p>
         </div>
       )}
 
       {/* Tags */}
-      {tags.length > 0 && (
+      {tags && tags.length > 0 && (
         <div className="flex flex-wrap gap-2 mb-4">
           {tags.map((tag, index) => (
             <span

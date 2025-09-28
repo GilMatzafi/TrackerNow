@@ -24,7 +24,7 @@ import OnboardingTasksCard from '../components/dashboard/OnboardingTasksCard';
 import MotivationalQuotesCard from '../components/dashboard/MotivationalQuotesCard';
 import TimeTrackerCard from '../components/dashboard/TimeTrackerCard';
 import CalendarCard from '../components/dashboard/CalendarCard';
-import JobApplicationForm from '../components/applications/JobApplicationForm';
+import JobApplicationForm from '../applications/components/JobApplicationForm';
 import { JobCreate } from '../types/job';
 
 function DashboardContent() {

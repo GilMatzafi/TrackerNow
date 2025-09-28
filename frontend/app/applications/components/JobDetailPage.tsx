@@ -1,19 +1,16 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import { 
-  StarIcon, 
-  MapPinIcon, 
-  ClockIcon, 
-  PencilIcon,
-  CheckCircleIcon,
-  ChevronDownIcon,
-  ChevronUpIcon,
-  BuildingOfficeIcon,
-  CurrencyDollarIcon
-} from '@heroicons/react/24/outline';
-import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
-import { Job, Contact } from '../../types/job';
+import { useEffect } from 'react';
+import { Job } from '../../types/job';
+
+// Import all the new section components
+import JobHeaderSection from './sections/JobHeaderSection';
+import CompanyOverviewSection from './sections/CompanyOverviewSection';
+import JobDescriptionSection from './sections/JobDescriptionSection';
+import SkillsSidebar from './sections/SkillsSidebar';
+import ContactSection from './sections/ContactSection';
+import DocumentsSection from './sections/DocumentsSection';
+import ApplicationDetailsSection from './sections/ApplicationDetailsSection';
 
 // Custom launch animation styles
 const launchModalStyles = `
@@ -51,7 +48,6 @@ const launchModalStyles = `
   }
 `;
 
-
 interface JobDetailPageProps {
   job: Job;
   onClose: () => void;
@@ -60,11 +56,6 @@ interface JobDetailPageProps {
 }
 
 export default function JobDetailPage({ job, onClose, onEdit, isAddingNewJob = false }: JobDetailPageProps) {
-  const [isGuidanceExpanded, setIsGuidanceExpanded] = useState(false);
-  const [guidanceProgress, setGuidanceProgress] = useState(0);
-  const [isStarred, setIsStarred] = useState(false);
-  const [isSkillsExpanded, setIsSkillsExpanded] = useState(true);
-
   // Add launch animation styles to document head
   useEffect(() => {
     const style = document.createElement('style');
@@ -75,51 +66,6 @@ export default function JobDetailPage({ job, onClose, onEdit, isAddingNewJob = f
       document.head.removeChild(style);
     };
   }, []);
-
-  const hardSkills = [
-    { name: 'Plumbing', count: 3 },
-    { name: 'Installation', count: 2 },
-    { name: 'Problem Solving', count: 1 },
-    { name: 'Career Development', count: 1 },
-    { name: 'Drainage Systems', count: 1 },
-    { name: 'Plumbing Codes', count: 1 },
-    { name: 'Blueprints', count: 1 },
-    { name: 'Safety Standards', count: 1 },
-    { name: 'Mechanical Installations', count: 1 }
-  ];
-
-  const softSkills = [
-    'Independently',
-    'Innovation',
-    'Innovative',
-    'Problem Solving',
-    'Professionalism',
-    'Teamwork',
-    'Communication',
-    'Leadership',
-    'Adaptability'
-  ];
-
-  const guidanceSteps = [
-    {
-      id: 1,
-      title: 'Review the Job Position details',
-      description: 'Look through the highlighted skills and keywords to see if the job matches your experience',
-      completed: false
-    },
-    {
-      id: 2,
-      title: 'Check company culture fit',
-      description: 'Research the company values and work environment',
-      completed: false
-    },
-    {
-      id: 3,
-      title: 'Prepare your application',
-      description: 'Tailor your resume and cover letter to match the job requirements',
-      completed: false
-    }
-  ];
 
   return (
     <div 
@@ -148,513 +94,56 @@ export default function JobDetailPage({ job, onClose, onEdit, isAddingNewJob = f
         
         {/* Header */}
         <div className="bg-white border-b border-gray-200 px-6 py-4">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <button
-            onClick={onClose}
-            className="text-gray-600 hover:text-gray-900 text-lg font-medium"
-          >
-            ← Back to Applications
-          </button>
-          <div className="flex items-center space-x-4">
-            {isAddingNewJob ? (
-              <span className="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
-                Adding New Job
-              </span>
-            ) : (
-              <span className={`px-4 py-2 rounded-full text-sm font-medium ${
-                job.status === 'applied' ? 'bg-green-100 text-green-800' :
-                job.status === 'interview' ? 'bg-yellow-100 text-yellow-800' :
-                job.status === 'offered' ? 'bg-purple-100 text-purple-800' :
-                job.status === 'rejected' ? 'bg-red-100 text-red-800' :
-                'bg-gray-100 text-gray-800'
-              }`}>
-                {job.status.charAt(0).toUpperCase() + job.status.slice(1)}
-              </span>
-            )}
-          </div>
-        </div>
-        </div>
-
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Content */}
-          <div className="lg:col-span-2 space-y-8">
-            {/* Job Header */}
-            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-200">
-              <div className="flex items-start justify-between mb-6">
-                <div>
-                  <h1 className="text-5xl font-bold text-gray-900 mb-4">
-                    {isAddingNewJob ? 'New Job Application' : job.position}
-                  </h1>
-                  <div className="flex items-center space-x-6 text-xl text-gray-600 mb-6">
-                    <div className="flex items-center space-x-3">
-                      <MapPinIcon className="w-6 h-6" />
-                      <span className="font-semibold">
-                        {isAddingNewJob ? 'Add location...' : (job.location || 'Location not specified')}
-                      </span>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <ClockIcon className="w-6 h-6" />
-                      <span className="font-semibold">
-                        {isAddingNewJob ? 'Just created' : `Saved ${job.applied_date || 'recently'}`}
-                      </span>
-                    </div>
-                  </div>
-                  
-                  {/* Job Details */}
-                  <div className="flex items-center space-x-8">
-                    <div className="flex items-center space-x-3">
-                      <BuildingOfficeIcon className="w-6 h-6 text-gray-500" />
-                      <span className="text-lg font-semibold text-gray-900">
-                        {isAddingNewJob ? 'Add company name...' : job.company}
-                      </span>
-                    </div>
-                    {job.salary && (
-                      <div className="flex items-center space-x-3">
-                        <CurrencyDollarIcon className="w-6 h-6 text-gray-500" />
-                        <span className="text-lg font-semibold text-gray-900">{job.salary}</span>
-                      </div>
-                    )}
-                    {job.applied_date && (
-                      <div className="flex items-center space-x-3">
-                        <ClockIcon className="w-6 h-6 text-gray-500" />
-                        <span className="text-lg font-semibold text-gray-900">{job.applied_date}</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <div className="flex space-x-2">
-                  {[...Array(5)].map((_, i) => (
-                    <StarIcon key={i} className="w-8 h-8 text-gray-300" />
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Company Overview */}
-            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-200">
-              <h2 className="text-3xl font-bold text-gray-900 mb-8">Company Overview</h2>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-6">About {job.company}</h3>
-                  <p className="text-xl text-gray-700 leading-relaxed mb-6">
-                    {job.company_description || `Join our dynamic team at ${job.company} in an environment that fosters teamwork, nurtures career development, celebrates diversity, and rewards innovation. We offer competitive compensation and excellent employee programs.`}
-                  </p>
-                  
-                  <div className="space-y-4">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                      <span className="text-lg text-gray-700 font-medium">Industry-leading technology solutions</span>
-                    </div>
-                    <div className="flex items-center space-x-4">
-                      <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                      <span className="text-lg text-gray-700 font-medium">Innovative and collaborative culture</span>
-                    </div>
-                    <div className="flex items-center space-x-4">
-                      <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                      <span className="text-lg text-gray-700 font-medium">Professional growth opportunities</span>
-                    </div>
-                    <div className="flex items-center space-x-4">
-                      <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                      <span className="text-lg text-gray-700 font-medium">Competitive benefits package</span>
-                    </div>
-                  </div>
-                </div>
-                
-                <div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-6">Company Details</h3>
-                  <div className="space-y-5">
-                    <div>
-                      <span className="text-lg font-semibold text-gray-600">Company Size:</span>
-                      <p className="text-xl text-gray-900 font-medium">
-                        {job.company === 'Google' ? '150,000+ employees' :
-                         job.company === 'Apple' ? '160,000+ employees' :
-                         job.company === 'Microsoft' ? '220,000+ employees' :
-                         job.company === 'Meta' ? '77,000+ employees' :
-                         '500-1000 employees'}
-                      </p>
-                    </div>
-                    <div>
-                      <span className="text-lg font-semibold text-gray-600">Founded:</span>
-                      <p className="text-xl text-gray-900 font-medium">
-                        {job.company === 'Google' ? '1998' :
-                         job.company === 'Apple' ? '1976' :
-                         job.company === 'Microsoft' ? '1975' :
-                         job.company === 'Meta' ? '2004' :
-                         '2010'}
-                      </p>
-                    </div>
-                    <div>
-                      <span className="text-lg font-semibold text-gray-600">Industry:</span>
-                      <p className="text-xl text-gray-900 font-medium">
-                        {job.company === 'Google' ? 'Technology & Internet' :
-                         job.company === 'Apple' ? 'Consumer Electronics' :
-                         job.company === 'Microsoft' ? 'Software & Cloud' :
-                         job.company === 'Meta' ? 'Social Media & VR' :
-                         'Technology'}
-                      </p>
-                    </div>
-                    <div>
-                      <span className="text-lg font-semibold text-gray-600">Website:</span>
-                      <a 
-                        href={`https://www.${job.company.toLowerCase()}.com`} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="text-xl text-blue-600 hover:text-blue-800 font-medium"
-                      >
-                        www.{job.company.toLowerCase()}.com
-                      </a>
-                    </div>
-                    <div>
-                      <span className="text-lg font-semibold text-gray-600">Headquarters:</span>
-                      <p className="text-xl text-gray-900 font-medium">
-                        {job.location || 
-                         (job.company === 'Google' ? 'Mountain View, CA' :
-                          job.company === 'Apple' ? 'Cupertino, CA' :
-                          job.company === 'Microsoft' ? 'Redmond, WA' :
-                          job.company === 'Meta' ? 'Menlo Park, CA' :
-                          'San Francisco, CA')}
-                      </p>
-                    </div>
-                    {job.salary && (
-                      <div>
-                        <span className="text-lg font-semibold text-gray-600">Salary Range:</span>
-                        <p className="text-xl text-gray-900 font-medium">{job.salary}</p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-
-
-            {/* Job Description */}
-            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-200">
-              <div className="flex items-center justify-between mb-8">
-                <h2 className="text-3xl font-bold text-gray-900">Job Description</h2>
-                <button className="p-3 hover:bg-gray-100 rounded-lg transition-colors">
-                  <PencilIcon className="w-6 h-6 text-gray-400" />
-                </button>
-              </div>
-              
-              <div className="prose prose-xl max-w-none">
-                {job.position_description ? (
-                  <div className="text-xl text-gray-700 leading-relaxed whitespace-pre-wrap">
-                    {job.position_description}
-                  </div>
-                ) : (
-                  <>
-                    <p className="text-xl text-gray-700 leading-relaxed mb-8">
-                      Join our dynamic team at {job.company} in an environment that fosters 
-                      <span className="bg-yellow-100 px-2 py-1 rounded font-semibold">teamwork</span>, 
-                      <span className="bg-yellow-100 px-2 py-1 rounded font-semibold">nurtures career development</span>, 
-                      <span className="bg-yellow-100 px-2 py-1 rounded font-semibold">celebrates diversity</span>, and 
-                      <span className="bg-yellow-100 px-2 py-1 rounded font-semibold">rewards innovation</span>. 
-                      We offer competitive compensation and excellent employee programs.
-                    </p>
-
-                    <h3 className="text-2xl font-bold text-gray-900 mb-6">Position Summary</h3>
-                    <p className="text-xl text-gray-700 leading-relaxed mb-8">
-                      We are seeking a skilled professional for immediate hire, focusing on projects, 
-                      installations, and commercial service work.
-                    </p>
-
-                    <h3 className="text-2xl font-bold text-gray-900 mb-6">Responsibilities</h3>
-                    <ul className="list-disc list-inside space-y-3 text-xl text-gray-700">
-                      <li>Interpret <span className="bg-yellow-100 px-2 py-1 rounded font-semibold">blueprints</span> to determine the layout for systems, including fixture placement and routing.</li>
-                      <li>Execute precise cuts in walls and floors for accommodation.</li>
-                      <li>Conduct thorough testing of systems for leaks using various methods, ensuring readiness for inspections.</li>
-                      <li>Commit to the highest <span className="bg-yellow-100 px-2 py-1 rounded font-semibold">safety standards</span> and company protocols.</li>
-                    </ul>
-
-                    <h3 className="text-2xl font-bold text-gray-900 mb-6 mt-10">Qualifications</h3>
-                    <ul className="list-disc list-inside space-y-3 text-xl text-gray-700">
-                      <li>Certified professional with proven experience.</li>
-                      <li>Proven experience in both residential and commercial tasks.</li>
-                      <li>Professionalism in service work, with a strong sense of respect and courtesy.</li>
-                      <li>Knowledgeable in <span className="bg-yellow-100 px-2 py-1 rounded font-semibold">mechanical installations</span> and familiar with local codes.</li>
-                      <li>Possession of a valid driver's license.</li>
-                      <li>Strong mathematical and <span className="bg-yellow-100 px-2 py-1 rounded font-semibold">problem solving</span> abilities.</li>
-                      <li>Capable of working <span className="bg-yellow-100 px-2 py-1 rounded font-semibold">independently</span> with little oversight and as part of a <span className="bg-yellow-100 px-2 py-1 rounded font-semibold">team</span>.</li>
-                      <li>Must own some tools/equipment and be able to manage the physical demands.</li>
-                    </ul>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Skills Sidebar */}
-          <div className="space-y-6">
-            {/* Hard Skills */}
-            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-2xl font-bold text-gray-900">Hard Skills</h3>
-                <div className="flex items-center space-x-3">
-                  <div className="w-4 h-4 bg-green-500 rounded-full"></div>
-                  <span className="text-lg font-semibold text-gray-600">On</span>
-                </div>
-              </div>
-              
-              <div className="space-y-4">
-                {hardSkills.slice(0, isSkillsExpanded ? hardSkills.length : 6).map((skill, index) => (
-                  <div key={index} className="flex items-center justify-between">
-                    <span className="text-lg font-medium text-gray-700">{skill.name}</span>
-                    <div className="flex items-center space-x-3">
-                      <div className="w-20 h-3 bg-gray-200 rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-green-500 transition-all duration-300"
-                          style={{ width: `${(skill.count / 3) * 100}%` }}
-                        ></div>
-                      </div>
-                      <span className="text-base text-gray-500 w-6 font-semibold">{skill.count}</span>
-                    </div>
-                  </div>
-                ))}
-                
-                {!isSkillsExpanded && (
-                  <button
-                    onClick={() => setIsSkillsExpanded(true)}
-                    className="text-lg text-blue-600 hover:text-blue-800 font-semibold"
-                  >
-                    Show all {hardSkills.length}
-                  </button>
-                )}
-              </div>
-            </div>
-
-            {/* Soft Skills */}
-            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-2xl font-bold text-gray-900">Soft Skills</h3>
-                <div className="flex items-center space-x-3">
-                  <div className="w-4 h-4 bg-purple-500 rounded-full"></div>
-                  <span className="text-lg font-semibold text-gray-600">On</span>
-                </div>
-              </div>
-              
-              <div className="space-y-4">
-                {softSkills.slice(0, isSkillsExpanded ? softSkills.length : 6).map((skill, index) => (
-                  <div key={index} className="flex items-center justify-between">
-                    <span className="text-lg font-medium text-gray-700">{skill}</span>
-                    <div className="w-20 h-3 bg-gray-200 rounded-full overflow-hidden">
-                      <div className="h-full bg-purple-500 w-3/4"></div>
-                    </div>
-                  </div>
-                ))}
-                
-                {!isSkillsExpanded && (
-                  <button
-                    onClick={() => setIsSkillsExpanded(true)}
-                    className="text-lg text-blue-600 hover:text-blue-800 font-semibold"
-                  >
-                    Show all {softSkills.length}
-                  </button>
-                )}
-              </div>
-            </div>
-
-            {/* Contact Person / Referral Information */}
-            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">
-                {job.is_referral ? 'Referral Information' : 'Contact Person'}
-              </h3>
-              
-              {job.is_referral && job.referrer_name ? (
-                <div className="space-y-5">
-                  <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
-                    <div className="flex items-center">
-                      <div className="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
-                      <span className="text-lg font-semibold text-green-800">This application is through a referral</span>
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <label className="block text-lg font-semibold text-gray-600 mb-3">
-                      Referrer Name
-                    </label>
-                    <div className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-lg text-gray-900">
-                      {job.referrer_name}
-                    </div>
-                  </div>
-                </div>
+          <div className="max-w-7xl mx-auto flex items-center justify-between">
+            <button
+              onClick={onClose}
+              className="text-gray-600 hover:text-gray-900 text-lg font-medium"
+            >
+              ← Back to Applications
+            </button>
+            <div className="flex items-center space-x-4">
+              {isAddingNewJob ? (
+                <span className="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+                  Adding New Job
+                </span>
               ) : (
-                <div className="space-y-5">
-                  <div>
-                    <label className="block text-lg font-semibold text-gray-600 mb-3">
-                      Name
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Contact person name"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg text-gray-900"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-lg font-semibold text-gray-600 mb-3">
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      placeholder="contact@company.com"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg text-gray-900"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-lg font-semibold text-gray-600 mb-3">
-                      LinkedIn
-                    </label>
-                    <input
-                      type="url"
-                      placeholder="https://linkedin.com/in/username"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg text-gray-900"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-lg font-semibold text-gray-600 mb-3">
-                      Role
-                    </label>
-                    <select className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg text-gray-900">
-                      <option value="">Select role</option>
-                      <option value="HR">HR</option>
-                      <option value="Technical">Technical</option>
-                      <option value="Manager">Manager</option>
-                      <option value="Recruiter">Recruiter</option>
-                      <option value="Other">Other</option>
-                    </select>
-                  </div>
-                </div>
+                <span className={`px-4 py-2 rounded-full text-sm font-medium ${
+                  job.status === 'applied' ? 'bg-green-100 text-green-800' :
+                  job.status === 'interview' ? 'bg-yellow-100 text-yellow-800' :
+                  job.status === 'offered' ? 'bg-purple-100 text-purple-800' :
+                  job.status === 'rejected' ? 'bg-red-100 text-red-800' :
+                  'bg-gray-100 text-gray-800'
+                }`}>
+                  {job.status.charAt(0).toUpperCase() + job.status.slice(1)}
+                </span>
               )}
             </div>
-
-            {/* Resume/CV Upload */}
-            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Documents</h3>
-              
-              <div className="space-y-5">
-                <div>
-                  <label className="block text-lg font-semibold text-gray-600 mb-3">
-                    Resume/CV
-                  </label>
-                  {job.cv ? (
-                    <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                      <div className="flex items-center">
-                        <svg className="w-6 h-6 text-green-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                        <div>
-                          <p className="text-lg font-semibold text-green-800">{job.cv}</p>
-                          <p className="text-sm text-green-600">Resume uploaded successfully</p>
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gray-400 transition-colors">
-                      <div className="space-y-3">
-                        <svg className="mx-auto h-16 w-16 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-                          <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                        <div className="text-lg text-gray-600">
-                          <span className="font-semibold text-gray-500">No resume uploaded</span>
-                        </div>
-                        <p className="text-base text-gray-500">PDF, DOC, DOCX up to 10MB</p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-                
-                <div>
-                  <label className="block text-lg font-semibold text-gray-600 mb-3">
-                    Cover Letter
-                  </label>
-                  {job.cover_letter ? (
-                    <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                      <div className="flex items-center">
-                        <svg className="w-6 h-6 text-green-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                        <div>
-                          <p className="text-lg font-semibold text-green-800">{job.cover_letter}</p>
-                          <p className="text-sm text-green-600">Cover letter uploaded successfully</p>
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gray-400 transition-colors">
-                      <div className="space-y-3">
-                        <svg className="mx-auto h-16 w-16 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-                          <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                        <div className="text-lg text-gray-600">
-                          <span className="font-semibold text-gray-500">No cover letter uploaded</span>
-                        </div>
-                        <p className="text-base text-gray-500">PDF, DOC, DOCX up to 10MB</p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Application Completion Details */}
-            {(job.application_url || job.completion_method) && (
-              <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">Application Details</h3>
-                
-                <div className="space-y-5">
-                  {job.application_url && (
-                    <div>
-                      <label className="block text-lg font-semibold text-gray-600 mb-3">
-                        Application URL
-                      </label>
-                      <div className="w-full px-4 py-3 bg-blue-50 border border-blue-200 rounded-lg">
-                        <a 
-                          href={job.application_url} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="text-lg text-blue-600 hover:text-blue-800 font-medium break-all"
-                        >
-                          {job.application_url}
-                        </a>
-                      </div>
-                    </div>
-                  )}
-                  
-                  {job.completion_method && (
-                    <div>
-                      <label className="block text-lg font-semibold text-gray-600 mb-3">
-                        Completion Method
-                      </label>
-                      <div className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg">
-                        <span className="text-lg text-gray-900 font-medium capitalize">
-                          {job.completion_method.replace('_', ' ')}
-                        </span>
-                      </div>
-                    </div>
-                  )}
-                  
-                  {job.note && (
-                    <div>
-                      <label className="block text-lg font-semibold text-gray-600 mb-3">
-                        Notes
-                      </label>
-                      <div className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg">
-                        <p className="text-lg text-gray-900 whitespace-pre-wrap">{job.note}</p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-
           </div>
         </div>
-      </div>
+
+        <div className="max-w-7xl mx-auto px-6 py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Main Content */}
+            <div className="lg:col-span-2 space-y-8">
+              {/* Job Header */}
+              <JobHeaderSection job={job} isAddingNewJob={isAddingNewJob} />
+
+              {/* Company Overview */}
+              <CompanyOverviewSection job={job} />
+
+              {/* Job Description */}
+              <JobDescriptionSection job={job} />
+            </div>
+
+            {/* Skills Sidebar */}
+            <div className="space-y-6">
+              <SkillsSidebar />
+              <ContactSection job={job} />
+              <DocumentsSection job={job} />
+              <ApplicationDetailsSection job={job} />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
