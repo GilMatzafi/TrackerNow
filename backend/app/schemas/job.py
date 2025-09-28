@@ -49,6 +49,9 @@ class JobBase(BaseModel):
     is_referral: bool = Field(default=False, description="Whether this is a referral")
     referrer_name: Optional[str] = Field(None, description="Name of the person who referred")
     cv: Optional[str] = Field(None, description="CV/Resume file path or URL")
+    cover_letter: Optional[str] = Field(None, description="Cover letter file path or URL")
+    application_url: Optional[str] = Field(None, description="Application URL (LinkedIn or career page)")
+    completion_method: Optional[str] = Field(None, description="How the application was completed (linkedin, career_page, email, other)")
 
 
 class JobCreate(JobBase):
@@ -71,6 +74,9 @@ class JobUpdate(BaseModel):
     is_referral: Optional[bool] = None
     referrer_name: Optional[str] = None
     cv: Optional[str] = None
+    cover_letter: Optional[str] = None
+    application_url: Optional[str] = None
+    completion_method: Optional[str] = None
 
 
 class JobResponse(JobBase):

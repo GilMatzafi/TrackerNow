@@ -29,7 +29,10 @@ class JobService:
             position_description=job_data.position_description,
             is_referral=job_data.is_referral,
             referrer_name=job_data.referrer_name,
-            cv=job_data.cv
+            cv=job_data.cv,
+            cover_letter=job_data.cover_letter,
+            application_url=job_data.application_url,
+            completion_method=job_data.completion_method
         )
         
         self.db.add(job)

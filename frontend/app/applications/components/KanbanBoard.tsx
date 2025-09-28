@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import JobColumn from './JobColumn';
 import JobDetailPage from './JobDetailPage';
+import JobApplicationForm from '../../components/applications/JobApplicationForm';
 import LoadingState from './LoadingState';
 import ErrorState from './ErrorState';
 import { useJobs } from '../../hooks/useJobs';
@@ -13,6 +14,7 @@ import { Job, JobStatus, JobCreate } from '../../types/job';
 export default function KanbanBoard() {
   const [viewingJob, setViewingJob] = useState<Job | null>(null);
   const [isDetailPageOpen, setIsDetailPageOpen] = useState(false);
+  const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState<JobStatus>('saved');
   
   // Use the real API data
@@ -90,33 +92,25 @@ export default function KanbanBoard() {
 
   const handleAddJob = (status: JobStatus) => {
     setSelectedStatus(status);
-    // Create a new job template and open JobDetailPage
-    const newJob: Job = {
-      id: 0, // Temporary ID for new jobs
-      company: '',
-      position: '',
-      location: '',
-      salary: '',
-      company_description: '',
-      description: '',
-      position_description: '',
-      notes: '',
-      tags: [],
-      status: status,
-      applied_date: new Date().toISOString().split('T')[0],
-      job_link: '',
-      company_logo: '',
-      is_referral: false,
-      referrer_name: '',
-      interview_time: '',
-      cv_link: '',
-      contacts: [],
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-      user_id: 0
-    };
-    setViewingJob(newJob);
-    setIsDetailPageOpen(true);
+    setIsFormOpen(true);
+  };
+
+  const handleFormSubmit = async (jobData: JobCreate) => {
+    try {
+      await createJob({
+        ...jobData,
+        status: selectedStatus
+      });
+      setIsFormOpen(false);
+    } catch (error) {
+      console.error('Error creating job:', error);
+      throw error; // Re-throw to let the form handle the error
+    }
+  };
+
+  const handleCloseForm = () => {
+    setIsFormOpen(false);
+    setSelectedStatus('saved');
   };
 
 
@@ -170,6 +164,15 @@ export default function KanbanBoard() {
           onClose={handleCloseDetailPage}
           onEdit={handleJobEdit}
           isAddingNewJob={viewingJob.id === 0}
+        />
+      )}
+
+      {/* Job Application Form Modal */}
+      {isFormOpen && (
+        <JobApplicationForm
+          onClose={handleCloseForm}
+          onSubmit={handleFormSubmit}
+          initialData={{ status: selectedStatus }}
         />
       )}
     </div>

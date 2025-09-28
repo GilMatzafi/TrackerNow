@@ -24,6 +24,8 @@ import OnboardingTasksCard from '../components/dashboard/OnboardingTasksCard';
 import MotivationalQuotesCard from '../components/dashboard/MotivationalQuotesCard';
 import TimeTrackerCard from '../components/dashboard/TimeTrackerCard';
 import CalendarCard from '../components/dashboard/CalendarCard';
+import JobApplicationForm from '../components/applications/JobApplicationForm';
+import { JobCreate } from '../types/job';
 
 function DashboardContent() {
   const { user, logout, refreshUser } = useAuth();
@@ -52,8 +54,12 @@ function DashboardContent() {
     jobs, 
     loading: jobsLoading, 
     error: jobsError,
-    jobStats
+    jobStats,
+    createJob
   } = useJobs();
+
+  // Form state
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
 
 
@@ -91,6 +97,16 @@ function DashboardContent() {
       status: job.status,
       date: job.applied_date || job.created_at
     }))
+  };
+
+  const handleFormSubmit = async (jobData: JobCreate) => {
+    try {
+      await createJob(jobData);
+      setIsFormOpen(false);
+    } catch (error) {
+      console.error('Error creating job:', error);
+      throw error; // Re-throw to let the form handle the error
+    }
   };
 
   return (
@@ -193,6 +209,25 @@ function DashboardContent() {
               </div>
             </div>
           </main>
+
+          {/* Floating Action Button */}
+          <button
+            onClick={() => setIsFormOpen(true)}
+            className="fixed bottom-8 right-8 w-16 h-16 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center z-40 group"
+            title="Add New Job Application"
+          >
+            <svg className="w-8 h-8 transition-transform duration-300 group-hover:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            </svg>
+          </button>
+
+          {/* Job Application Form Modal */}
+          {isFormOpen && (
+            <JobApplicationForm
+              onClose={() => setIsFormOpen(false)}
+              onSubmit={handleFormSubmit}
+            />
+          )}
         </div>
       </PomodoroProvider>
     </ProtectedRoute>

@@ -32,8 +32,13 @@ class Job(Base):
     is_referral = Column(Boolean, default=False)
     referrer_name = Column(String(255), nullable=True)
     
-    # CV/Resume
+    # CV/Resume and Cover Letter
     cv = Column(String(500), nullable=True)  # File path or URL
+    cover_letter = Column(String(500), nullable=True)  # File path or URL
+    
+    # Application completion details
+    application_url = Column(String(500), nullable=True)  # LinkedIn or career page URL
+    completion_method = Column(String(50), nullable=True)  # 'linkedin', 'career_page', 'email', 'other'
     
     # Timestamps
     created_at = Column(DateTime, default=func.now())

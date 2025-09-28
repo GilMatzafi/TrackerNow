@@ -16,7 +16,10 @@ export interface Job {
   referrer_name?: string;
   company_description?: string;
   position_description?: string;
-  cv_link?: string;
+  cv?: string;
+  cover_letter?: string;
+  application_url?: string;
+  completion_method?: string;
   created_at: string;
   updated_at: string;
   user_id: number;
@@ -54,7 +57,10 @@ export interface JobCreate {
   referrer_name?: string;
   company_description?: string;
   position_description?: string;
-  cv_link?: string;
+  cv?: string;
+  cover_letter?: string;
+  application_url?: string;
+  completion_method?: string;
   contacts?: ContactCreate[];
 }
 
@@ -75,7 +81,10 @@ export interface JobUpdate {
   referrer_name?: string;
   company_description?: string;
   position_description?: string;
-  cv_link?: string;
+  cv?: string;
+  cover_letter?: string;
+  application_url?: string;
+  completion_method?: string;
   contacts?: ContactCreate[];
 }
 

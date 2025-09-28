@@ -156,9 +156,19 @@ export default function JobDetailPage({ job, onClose, onEdit, isAddingNewJob = f
             ← Back to Applications
           </button>
           <div className="flex items-center space-x-4">
-            {isAddingNewJob && (
+            {isAddingNewJob ? (
               <span className="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
                 Adding New Job
+              </span>
+            ) : (
+              <span className={`px-4 py-2 rounded-full text-sm font-medium ${
+                job.status === 'applied' ? 'bg-green-100 text-green-800' :
+                job.status === 'interview' ? 'bg-yellow-100 text-yellow-800' :
+                job.status === 'offered' ? 'bg-purple-100 text-purple-800' :
+                job.status === 'rejected' ? 'bg-red-100 text-red-800' :
+                'bg-gray-100 text-gray-800'
+              }`}>
+                {job.status.charAt(0).toUpperCase() + job.status.slice(1)}
               </span>
             )}
           </div>
@@ -257,24 +267,62 @@ export default function JobDetailPage({ job, onClose, onEdit, isAddingNewJob = f
                   <div className="space-y-5">
                     <div>
                       <span className="text-lg font-semibold text-gray-600">Company Size:</span>
-                      <p className="text-xl text-gray-900 font-medium">500-1000 employees</p>
+                      <p className="text-xl text-gray-900 font-medium">
+                        {job.company === 'Google' ? '150,000+ employees' :
+                         job.company === 'Apple' ? '160,000+ employees' :
+                         job.company === 'Microsoft' ? '220,000+ employees' :
+                         job.company === 'Meta' ? '77,000+ employees' :
+                         '500-1000 employees'}
+                      </p>
                     </div>
                     <div>
                       <span className="text-lg font-semibold text-gray-600">Founded:</span>
-                      <p className="text-xl text-gray-900 font-medium">2010</p>
+                      <p className="text-xl text-gray-900 font-medium">
+                        {job.company === 'Google' ? '1998' :
+                         job.company === 'Apple' ? '1976' :
+                         job.company === 'Microsoft' ? '1975' :
+                         job.company === 'Meta' ? '2004' :
+                         '2010'}
+                      </p>
                     </div>
                     <div>
                       <span className="text-lg font-semibold text-gray-600">Industry:</span>
-                      <p className="text-xl text-gray-900 font-medium">Technology</p>
+                      <p className="text-xl text-gray-900 font-medium">
+                        {job.company === 'Google' ? 'Technology & Internet' :
+                         job.company === 'Apple' ? 'Consumer Electronics' :
+                         job.company === 'Microsoft' ? 'Software & Cloud' :
+                         job.company === 'Meta' ? 'Social Media & VR' :
+                         'Technology'}
+                      </p>
                     </div>
                     <div>
                       <span className="text-lg font-semibold text-gray-600">Website:</span>
-                      <a href="#" className="text-xl text-blue-600 hover:text-blue-800 font-medium">www.{job.company.toLowerCase()}.com</a>
+                      <a 
+                        href={`https://www.${job.company.toLowerCase()}.com`} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-xl text-blue-600 hover:text-blue-800 font-medium"
+                      >
+                        www.{job.company.toLowerCase()}.com
+                      </a>
                     </div>
                     <div>
                       <span className="text-lg font-semibold text-gray-600">Headquarters:</span>
-                      <p className="text-xl text-gray-900 font-medium">{job.location || 'San Francisco, CA'}</p>
+                      <p className="text-xl text-gray-900 font-medium">
+                        {job.location || 
+                         (job.company === 'Google' ? 'Mountain View, CA' :
+                          job.company === 'Apple' ? 'Cupertino, CA' :
+                          job.company === 'Microsoft' ? 'Redmond, WA' :
+                          job.company === 'Meta' ? 'Menlo Park, CA' :
+                          'San Francisco, CA')}
+                      </p>
                     </div>
+                    {job.salary && (
+                      <div>
+                        <span className="text-lg font-semibold text-gray-600">Salary Range:</span>
+                        <p className="text-xl text-gray-900 font-medium">{job.salary}</p>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -292,40 +340,48 @@ export default function JobDetailPage({ job, onClose, onEdit, isAddingNewJob = f
               </div>
               
               <div className="prose prose-xl max-w-none">
-                <p className="text-xl text-gray-700 leading-relaxed mb-8">
-                  Join our dynamic team at {job.company} in an environment that fosters 
-                  <span className="bg-yellow-100 px-2 py-1 rounded font-semibold">teamwork</span>, 
-                  <span className="bg-yellow-100 px-2 py-1 rounded font-semibold">nurtures career development</span>, 
-                  <span className="bg-yellow-100 px-2 py-1 rounded font-semibold">celebrates diversity</span>, and 
-                  <span className="bg-yellow-100 px-2 py-1 rounded font-semibold">rewards innovation</span>. 
-                  We offer competitive compensation and excellent employee programs.
-                </p>
+                {job.position_description ? (
+                  <div className="text-xl text-gray-700 leading-relaxed whitespace-pre-wrap">
+                    {job.position_description}
+                  </div>
+                ) : (
+                  <>
+                    <p className="text-xl text-gray-700 leading-relaxed mb-8">
+                      Join our dynamic team at {job.company} in an environment that fosters 
+                      <span className="bg-yellow-100 px-2 py-1 rounded font-semibold">teamwork</span>, 
+                      <span className="bg-yellow-100 px-2 py-1 rounded font-semibold">nurtures career development</span>, 
+                      <span className="bg-yellow-100 px-2 py-1 rounded font-semibold">celebrates diversity</span>, and 
+                      <span className="bg-yellow-100 px-2 py-1 rounded font-semibold">rewards innovation</span>. 
+                      We offer competitive compensation and excellent employee programs.
+                    </p>
 
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">Position Summary</h3>
-                <p className="text-xl text-gray-700 leading-relaxed mb-8">
-                  We are seeking a skilled professional for immediate hire, focusing on projects, 
-                  installations, and commercial service work.
-                </p>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-6">Position Summary</h3>
+                    <p className="text-xl text-gray-700 leading-relaxed mb-8">
+                      We are seeking a skilled professional for immediate hire, focusing on projects, 
+                      installations, and commercial service work.
+                    </p>
 
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">Responsibilities</h3>
-                <ul className="list-disc list-inside space-y-3 text-xl text-gray-700">
-                  <li>Interpret <span className="bg-yellow-100 px-2 py-1 rounded font-semibold">blueprints</span> to determine the layout for systems, including fixture placement and routing.</li>
-                  <li>Execute precise cuts in walls and floors for accommodation.</li>
-                  <li>Conduct thorough testing of systems for leaks using various methods, ensuring readiness for inspections.</li>
-                  <li>Commit to the highest <span className="bg-yellow-100 px-2 py-1 rounded font-semibold">safety standards</span> and company protocols.</li>
-                </ul>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-6">Responsibilities</h3>
+                    <ul className="list-disc list-inside space-y-3 text-xl text-gray-700">
+                      <li>Interpret <span className="bg-yellow-100 px-2 py-1 rounded font-semibold">blueprints</span> to determine the layout for systems, including fixture placement and routing.</li>
+                      <li>Execute precise cuts in walls and floors for accommodation.</li>
+                      <li>Conduct thorough testing of systems for leaks using various methods, ensuring readiness for inspections.</li>
+                      <li>Commit to the highest <span className="bg-yellow-100 px-2 py-1 rounded font-semibold">safety standards</span> and company protocols.</li>
+                    </ul>
 
-                <h3 className="text-2xl font-bold text-gray-900 mb-6 mt-10">Qualifications</h3>
-                <ul className="list-disc list-inside space-y-3 text-xl text-gray-700">
-                  <li>Certified professional with proven experience.</li>
-                  <li>Proven experience in both residential and commercial tasks.</li>
-                  <li>Professionalism in service work, with a strong sense of respect and courtesy.</li>
-                  <li>Knowledgeable in <span className="bg-yellow-100 px-2 py-1 rounded font-semibold">mechanical installations</span> and familiar with local codes.</li>
-                  <li>Possession of a valid driver's license.</li>
-                  <li>Strong mathematical and <span className="bg-yellow-100 px-2 py-1 rounded font-semibold">problem solving</span> abilities.</li>
-                  <li>Capable of working <span className="bg-yellow-100 px-2 py-1 rounded font-semibold">independently</span> with little oversight and as part of a <span className="bg-yellow-100 px-2 py-1 rounded font-semibold">team</span>.</li>
-                  <li>Must own some tools/equipment and be able to manage the physical demands.</li>
-                </ul>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-6 mt-10">Qualifications</h3>
+                    <ul className="list-disc list-inside space-y-3 text-xl text-gray-700">
+                      <li>Certified professional with proven experience.</li>
+                      <li>Proven experience in both residential and commercial tasks.</li>
+                      <li>Professionalism in service work, with a strong sense of respect and courtesy.</li>
+                      <li>Knowledgeable in <span className="bg-yellow-100 px-2 py-1 rounded font-semibold">mechanical installations</span> and familiar with local codes.</li>
+                      <li>Possession of a valid driver's license.</li>
+                      <li>Strong mathematical and <span className="bg-yellow-100 px-2 py-1 rounded font-semibold">problem solving</span> abilities.</li>
+                      <li>Capable of working <span className="bg-yellow-100 px-2 py-1 rounded font-semibold">independently</span> with little oversight and as part of a <span className="bg-yellow-100 px-2 py-1 rounded font-semibold">team</span>.</li>
+                      <li>Must own some tools/equipment and be able to manage the physical demands.</li>
+                    </ul>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -400,98 +456,201 @@ export default function JobDetailPage({ job, onClose, onEdit, isAddingNewJob = f
               </div>
             </div>
 
-            {/* Contact Person */}
+            {/* Contact Person / Referral Information */}
             <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Contact Person</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-6">
+                {job.is_referral ? 'Referral Information' : 'Contact Person'}
+              </h3>
               
-              <div className="space-y-5">
-                <div>
-                  <label className="block text-lg font-semibold text-gray-600 mb-3">
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Contact person name"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
-                  />
+              {job.is_referral && job.referrer_name ? (
+                <div className="space-y-5">
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+                    <div className="flex items-center">
+                      <div className="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
+                      <span className="text-lg font-semibold text-green-800">This application is through a referral</span>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-lg font-semibold text-gray-600 mb-3">
+                      Referrer Name
+                    </label>
+                    <div className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-lg text-gray-900">
+                      {job.referrer_name}
+                    </div>
+                  </div>
                 </div>
-                
-                <div>
-                  <label className="block text-lg font-semibold text-gray-600 mb-3">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    placeholder="contact@company.com"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
-                  />
+              ) : (
+                <div className="space-y-5">
+                  <div>
+                    <label className="block text-lg font-semibold text-gray-600 mb-3">
+                      Name
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Contact person name"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg text-gray-900"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-lg font-semibold text-gray-600 mb-3">
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      placeholder="contact@company.com"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg text-gray-900"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-lg font-semibold text-gray-600 mb-3">
+                      LinkedIn
+                    </label>
+                    <input
+                      type="url"
+                      placeholder="https://linkedin.com/in/username"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg text-gray-900"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-lg font-semibold text-gray-600 mb-3">
+                      Role
+                    </label>
+                    <select className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg text-gray-900">
+                      <option value="">Select role</option>
+                      <option value="HR">HR</option>
+                      <option value="Technical">Technical</option>
+                      <option value="Manager">Manager</option>
+                      <option value="Recruiter">Recruiter</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
                 </div>
-                
-                <div>
-                  <label className="block text-lg font-semibold text-gray-600 mb-3">
-                    LinkedIn
-                  </label>
-                  <input
-                    type="url"
-                    placeholder="https://linkedin.com/in/username"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-lg font-semibold text-gray-600 mb-3">
-                    Role
-                  </label>
-                  <select className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg">
-                    <option value="">Select role</option>
-                    <option value="HR">HR</option>
-                    <option value="Technical">Technical</option>
-                    <option value="Manager">Manager</option>
-                    <option value="Recruiter">Recruiter</option>
-                    <option value="Other">Other</option>
-                  </select>
-                </div>
-              </div>
+              )}
             </div>
 
             {/* Resume/CV Upload */}
             <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Resume/CV</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-6">Documents</h3>
               
               <div className="space-y-5">
                 <div>
                   <label className="block text-lg font-semibold text-gray-600 mb-3">
-                    Upload Resume
+                    Resume/CV
                   </label>
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gray-400 transition-colors">
-                    <div className="space-y-3">
-                      <svg className="mx-auto h-16 w-16 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                      <div className="text-lg text-gray-600">
-                        <label htmlFor="file-upload" className="relative cursor-pointer bg-white rounded-md font-semibold text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
-                          <span>Upload a file</span>
-                          <input id="file-upload" name="file-upload" type="file" className="sr-only" accept=".pdf,.doc,.docx" />
-                        </label>
-                        <span className="pl-1">or drag and drop</span>
+                  {job.cv ? (
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                      <div className="flex items-center">
+                        <svg className="w-6 h-6 text-green-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        <div>
+                          <p className="text-lg font-semibold text-green-800">{job.cv}</p>
+                          <p className="text-sm text-green-600">Resume uploaded successfully</p>
+                        </div>
                       </div>
-                      <p className="text-base text-gray-500">PDF, DOC, DOCX up to 10MB</p>
                     </div>
-                  </div>
+                  ) : (
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gray-400 transition-colors">
+                      <div className="space-y-3">
+                        <svg className="mx-auto h-16 w-16 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                          <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                        <div className="text-lg text-gray-600">
+                          <span className="font-semibold text-gray-500">No resume uploaded</span>
+                        </div>
+                        <p className="text-base text-gray-500">PDF, DOC, DOCX up to 10MB</p>
+                      </div>
+                    </div>
+                  )}
                 </div>
                 
                 <div>
                   <label className="block text-lg font-semibold text-gray-600 mb-3">
                     Cover Letter
                   </label>
-                  <textarea
-                    rows={4}
-                    placeholder="Write your cover letter here..."
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
-                  />
+                  {job.cover_letter ? (
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                      <div className="flex items-center">
+                        <svg className="w-6 h-6 text-green-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        <div>
+                          <p className="text-lg font-semibold text-green-800">{job.cover_letter}</p>
+                          <p className="text-sm text-green-600">Cover letter uploaded successfully</p>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gray-400 transition-colors">
+                      <div className="space-y-3">
+                        <svg className="mx-auto h-16 w-16 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                          <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                        <div className="text-lg text-gray-600">
+                          <span className="font-semibold text-gray-500">No cover letter uploaded</span>
+                        </div>
+                        <p className="text-base text-gray-500">PDF, DOC, DOCX up to 10MB</p>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
+
+            {/* Application Completion Details */}
+            {(job.application_url || job.completion_method) && (
+              <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+                <h3 className="text-2xl font-bold text-gray-900 mb-6">Application Details</h3>
+                
+                <div className="space-y-5">
+                  {job.application_url && (
+                    <div>
+                      <label className="block text-lg font-semibold text-gray-600 mb-3">
+                        Application URL
+                      </label>
+                      <div className="w-full px-4 py-3 bg-blue-50 border border-blue-200 rounded-lg">
+                        <a 
+                          href={job.application_url} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-lg text-blue-600 hover:text-blue-800 font-medium break-all"
+                        >
+                          {job.application_url}
+                        </a>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {job.completion_method && (
+                    <div>
+                      <label className="block text-lg font-semibold text-gray-600 mb-3">
+                        Completion Method
+                      </label>
+                      <div className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg">
+                        <span className="text-lg text-gray-900 font-medium capitalize">
+                          {job.completion_method.replace('_', ' ')}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {job.note && (
+                    <div>
+                      <label className="block text-lg font-semibold text-gray-600 mb-3">
+                        Notes
+                      </label>
+                      <div className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg">
+                        <p className="text-lg text-gray-900 whitespace-pre-wrap">{job.note}</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
 
           </div>
         </div>
